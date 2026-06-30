@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" data-app-mode="player">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#263759">
+<meta name="color-scheme" content="dark">
+<title>TotoWrap</title>
+<script>if (/Android/i.test(navigator.userAgent)) document.documentElement.classList.add('android-glass-fallback');</script>
+<link rel="apple-touch-icon" sizes="180x180" href="imgs/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="imgs/icon-192.png">
+<script>
+if (/(?:^|[?&])admin(?:=|&|$)/.test(location.search)) {
+  location.replace('admin/' + location.hash);
+}
+</script>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preload" as="image" href="imgs/tunacan.png">
+<link rel="preload" as="image" href="imgs/Edoardo.png">
+<link rel="preload" as="image" href="imgs/crazylogo.png">
+<link rel="stylesheet" href="style.css?missing-penalty-red=1">
+<link rel="stylesheet" href="final-recap.css?shared-standings-renderer=1">
+<link rel="stylesheet" href="desktop-preview.css?official-desktop=1">
+<meta name="apple-mobile-web-app-title" content="TotoWrap">
+</head>
+<body class="desktop-preview-active">
+<div id="boot-loader" aria-label="Loading TotoWrap">
+  <div class="boot-content">
+    <div class="boot-logo-stage" aria-hidden="true">
+      <div class="boot-logo-layer is-visible" data-boot-logo-layer="regular">
+        <img src="imgs/tunacan.png" alt="" class="boot-logo-image boot-logo-regular is-rotating">
+      </div>
+      <div class="boot-logo-layer" data-boot-logo-layer="edoardo">
+        <img src="imgs/Edoardo.png" alt="" class="boot-logo-image boot-logo-edoardo" data-boot-edoardo-logo>
+      </div>
+    </div>
+    <p class="boot-phrase is-loading" data-boot-phrase></p>
+  </div>
+</div>
+<script src="boot.js?crazy-penalty=1"></script>
+<div id="app"></div>
+<div id="toast"></div>
+<script src="finalstandings-export.js?shared-renderer=1"></script>
+<script type="module" src="app.js?shared-standings-renderer=1"></script>
+<script src="final-recap.js?shared-standings-renderer=1"></script>
+</body>
+</html>
