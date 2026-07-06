@@ -1,7 +1,10 @@
 import fs from "fs";
 
+import { normalizeTime, getGameDate } from "./utils.js";
+
+import aliases from "./player-aliases.json" with { type: "json" };
+
 const CHAT_FILE = "./input/_chat.txt";
-const DAY_START_HOUR = 5;
 
 const text = fs.readFileSync(CHAT_FILE, "utf8");
 
@@ -12,32 +15,8 @@ const messages = text.split(
 
 console.log(`Messaggi trovati: ${messages.length}`);
 
-function getGameDate(date, hour) {
-
-    const gameDate = new Date(date);
-
-    if (hour < DAY_START_HOUR) {
-        gameDate.setDate(gameDate.getDate() - 1);
-    }
-
-    return gameDate.toISOString().slice(0,10);
-
-}
-
 const GUESS_REGEX = /^(\d{1,2}[:.]\d{2})\s+(.+)$/gm;
 const MIN_GUESSES = 4;
-
-function normalizeTime(time) {
-
-    let normalized = time
-        .replace(".", ":")
-        .replace("h", ":");
-
-    const [hour, minute] = normalized.split(":");
-
-    return `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`;
-
-}
 
 function extractGuesses(text) {
 
@@ -49,17 +28,20 @@ function extractGuesses(text) {
     for (const match of matches) {
 
         const time = normalizeTime(match[1]);
+
         const player = match[2].trim();
 
-        if (player.toLowerCase().endsWith(" out")) {
+        const canonicalName = canonicalPlayerName(player);
 
-            const realName = player.slice(0, -4).trim();
+        if (canonicalName.toLowerCase().endsWith(" out")) {
+
+            const realName = canonicalName.slice(0, -4).trim();
 
             outs[realName] = time;
 
         } else {
 
-            guesses[player] = time;
+            guesses[canonicalName] = time;
 
         }
 
@@ -79,6 +61,14 @@ function confidence(count){
     if(count >= 4) return "MEDIUM";
 
     return "LOW";
+
+}
+
+function canonicalPlayerName(name) {
+
+    const key = name.trim().toLowerCase();
+
+    return aliases[key] || name.trim();
 
 }
 
@@ -122,6 +112,8 @@ console.log(`Messaggi di Edoardo: ${edoardoMessages.length}`);
 
 const days = [];
 
+const daysByDate = {};
+
 for(const msg of edoardoMessages){
 
     const result = extractGuesses(msg.text);
@@ -143,6 +135,16 @@ for(const msg of edoardoMessages){
 
         outs: result.outs
 
+    });
+
+    if (!daysByDate[msg.gameDate]) {
+    daysByDate[msg.gameDate] = [];
+    }
+
+    daysByDate[msg.gameDate].push({
+        messageDate: msg.messageDate,
+        guesses: Object.keys(result.guesses).length,
+        outs: Object.keys(result.outs).length
     });
 
 }
@@ -178,10 +180,70 @@ console.log(`Pronostici: ${totalGuesses}`);
 console.log(`Out: ${totalOuts}`);
 console.log("==========");
 
+console.log("");
+console.log("==========");
+console.log("Giornate duplicate");
+console.log("==========");
+
+let duplicateCount = 0;
+
+for (const [date, entries] of Object.entries(daysByDate)) {
+
+    if (entries.length <= 1)
+        continue;
+
+    duplicateCount++;
+
+    console.log(`\n${date}`);
+
+    entries.forEach((entry, index) => {
+
+        console.log(
+            `  [${index + 1}] ${entry.guesses} pronostici, ${entry.outs} out - ${entry.messageDate}`
+        );
+
+    });
+
+}
+
+console.log("");
+console.log(`Totale giornate duplicate: ${duplicateCount}`);
+
+const players = new Map();
+
+for (const day of days) {
+
+    for (const player of Object.keys(day.guesses)) {
+
+        const id = player
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/\s+/g, "-");
+
+        players.set(id, {
+            id,
+            name: player
+        });
+
+    }
+
+}
+
+fs.writeFileSync(
+    "./output/players.json",
+    JSON.stringify(
+        [...players.values()].sort((a, b) => a.name.localeCompare(b.name)),
+        null,
+        2
+    )
+);
+
+console.log("players.json creato!");
+
 fs.writeFileSync(
     "./output/days.json",
     JSON.stringify(days, null, 2)
 );
 
-console.log("");
 console.log("days.json creato!");
