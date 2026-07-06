@@ -1,0 +1,10 @@
+{
+  "name": "totoswrap-importer",
+  "version": "0.1.0",
+  "description": "Season importer for TotoSWrap",
+  "main": "extract-days.js",
+  "type": "module",
+  "scripts": {
+    "start": "node extract-days.js"
+  }
+}
