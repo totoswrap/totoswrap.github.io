@@ -5,6 +5,11 @@
   "main": "extract-days.js",
   "type": "module",
   "scripts": {
-    "start": "node extract-days.js"
+    "start": "node scripts/extract-days.js",
+    "setup": "node setup-firestore.js",
+    "validate": "node validate-days.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^14.1.0"
   }
 }
