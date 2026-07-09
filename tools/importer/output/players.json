@@ -1,1 +1,82 @@
-{}
+[
+  {
+    "id": "alessandro",
+    "name": "Alessandro"
+  },
+  {
+    "id": "veronica",
+    "name": "Veronica"
+  },
+  {
+    "id": "marco",
+    "name": "Marco"
+  },
+  {
+    "id": "jai",
+    "name": "Jai"
+  },
+  {
+    "id": "isabel",
+    "name": "Isabel"
+  },
+  {
+    "id": "giulia",
+    "name": "Giulia"
+  },
+  {
+    "id": "edoardo",
+    "name": "Edoardo"
+  },
+  {
+    "id": "conor",
+    "name": "Conor"
+  },
+  {
+    "id": "roberta",
+    "name": "Roberta"
+  },
+  {
+    "id": "flaminia",
+    "name": "Flaminia"
+  },
+  {
+    "id": "alessandro-l",
+    "name": "Alessandro L"
+  },
+  {
+    "id": "alessandro-m",
+    "name": "Alessandro M"
+  },
+  {
+    "id": "sara",
+    "name": "Sara"
+  },
+  {
+    "id": "tiberio",
+    "name": "Tiberio"
+  },
+  {
+    "id": "lawrence",
+    "name": "Lawrence"
+  },
+  {
+    "id": "lior",
+    "name": "Lior"
+  },
+  {
+    "id": "francesca",
+    "name": "Francesca"
+  },
+  {
+    "id": "euridilla",
+    "name": "Euridilla"
+  },
+  {
+    "id": "maria-claudia",
+    "name": "Maria Claudia"
+  },
+  {
+    "id": "nicolas",
+    "name": "Nicolas"
+  }
+]

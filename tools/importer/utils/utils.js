@@ -20,6 +20,26 @@ export function getGameDate(date, hour) {
         gameDate.setDate(gameDate.getDate() - 1);
     }
 
-    return gameDate.toISOString().slice(0,10);
+    return gameDate.toISOString().slice(0, 10);
+
+}
+
+export function confidence(count) {
+
+    if (count >= 10) return "VERY_HIGH";
+    if (count >= 6) return "HIGH";
+    if (count >= 4) return "MEDIUM";
+
+    return "LOW";
+
+}
+
+export function playerId(name) {
+
+    return name
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s+/g, "-");
 
 }

@@ -2,16 +2,21 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-import { normalizeTime, getGameDate } from "../utils/utils.js";
-import aliases from "../config/player-aliases.json" with { type: "json" };
+import { extractGuesses } from "../utils/guess-parser.js";
+import {
+    getGameDate,
+    confidence,
+    playerId
+} from "../utils/utils.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const CHAT_FILE = path.join(__dirname, "../input/_chat.txt");
+const text = fs.readFileSync(CHAT_FILE, "utf8");
 const DAYS_FILE = path.join(__dirname, "../output/days.json");
 const PLAYERS_FILE = path.join(__dirname, "../output/players.json");
-const text = fs.readFileSync(CHAT_FILE, "utf8");
+const MIN_GUESSES = 4;
 
 // divide il file nei singoli messaggi WhatsApp
 const messages = text.split(
@@ -20,92 +25,7 @@ const messages = text.split(
 
 console.log(`Messaggi trovati: ${messages.length}`);
 
-const GUESS_REGEX = /^(\d{1,2}[:.]\d{2})\s+(.+)$/gm;
-const MIN_GUESSES = 4;
-
-function extractGuesses(text) {
-
-    const guesses = {};
-    const outs = {};
-
-    const matches = [...text.matchAll(GUESS_REGEX)];
-
-    for (const match of matches) {
-
-        const time = normalizeTime(match[1]);
-
-        const player = match[2].trim();
-
-        const canonicalName = canonicalPlayerName(player);
-
-        if (canonicalName.toLowerCase().endsWith(" out")) {
-
-            const realName = canonicalName.slice(0, -4).trim();
-
-            outs[realName] = time;
-
-        } else {
-
-            guesses[canonicalName] = time;
-
-        }
-
-    }
-
-    return {
-        guesses,
-        outs
-    };
-
-}
-
-function confidence(count){
-
-    if(count >= 10) return "VERY_HIGH";
-    if(count >= 6) return "HIGH";
-    if(count >= 4) return "MEDIUM";
-
-    return "LOW";
-
-}
-
-function canonicalPlayerName(name) {
-
-    const key = name.trim().toLowerCase();
-
-    return aliases[key] || name.trim();
-
-}
-
-let edoardoMessages = [];
-
-const WINNER_KEYWORDS = [
-    "win",
-    "wins",
-    "winner",
-    "won",
-    "exact",
-    "seconds"
-];
-
-const possibleWinnerMessages = edoardoMessages.filter(msg =>
-    WINNER_KEYWORDS.some(keyword =>
-        msg.text.toLowerCase().includes(keyword)
-    )
-);
-
-console.log("");
-console.log("==========");
-console.log("MESSAGGI POSSIBILI VINCITORI");
-console.log("==========");
-
-for (const msg of possibleWinnerMessages) {
-
-    console.log("");
-    console.log(msg.gameDate);
-    console.log(msg.text);
-
-}
+const edoardoMessages = [];
 
 for (const message of messages) {
 
@@ -171,7 +91,7 @@ for(const msg of edoardoMessages){
     });
 
     if (!daysByDate[msg.gameDate]) {
-    daysByDate[msg.gameDate] = [];
+        daysByDate[msg.gameDate] = [];
     }
 
     daysByDate[msg.gameDate].push({
@@ -248,11 +168,7 @@ for (const day of days) {
 
     for (const player of Object.keys(day.guesses)) {
 
-        const id = player
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .replace(/\s+/g, "-");
+        const id = playerId(player);
 
         players.set(id, {
             id,
@@ -263,7 +179,12 @@ for (const day of days) {
 
 }
 
-fs.writeFileSync(PLAYERS_FILE, JSON.stringify(players, null, 2));
+const playersList = [...players.values()];
+
+fs.writeFileSync(
+    PLAYERS_FILE,
+    JSON.stringify(playersList, null, 2)
+);
 
 console.log("players.json creato!");
 
