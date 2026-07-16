@@ -6,7 +6,8 @@ import { extractGuesses } from "../utils/guess-parser.js";
 import {
     getGameDate,
     confidence,
-    playerId
+    playerId,
+    detectUnit
 } from "../utils/utils.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -52,11 +53,14 @@ for (const message of messages) {
         `20${year}-${month}-${day}T${hour}:${minute}:${second}`
     );
 
+    const text = message.substring(match[0].length).trim();
+
     edoardoMessages.push({
         author,
         messageDate: date.toISOString(),
         gameDate: getGameDate(date, Number(hour)),
-        text: message.substring(match[0].length).trim()
+        unit: detectUnit(text),
+        text
     });
 
 }
@@ -78,15 +82,36 @@ for(const msg of edoardoMessages){
 
     days.push({
 
+        id: `${msg.gameDate}-${msg.unit}`,
+
         gameDate: msg.gameDate,
 
-        messageDate: msg.messageDate,
+        unit: msg.unit,
 
-        confidence: confidence(count),
+        metadata: {
+            createdBy: "importer",
+            importVersion: 1
+        },
 
-        guesses: result.guesses,
+        import: {
 
-        outs: result.outs
+            messageDate: msg.messageDate,
+
+            confidence: confidence(count),
+
+            guesses: result.guesses,
+
+        },
+
+        result: {
+
+            winner: null,
+
+            wrapTime: null,
+
+            exactWinner: false
+
+        }
 
     });
 
@@ -96,8 +121,7 @@ for(const msg of edoardoMessages){
 
     daysByDate[msg.gameDate].push({
         messageDate: msg.messageDate,
-        guesses: Object.keys(result.guesses).length,
-        outs: Object.keys(result.outs).length
+        guesses: Object.keys(result.guesses).length
     });
 
 }
@@ -110,19 +134,19 @@ console.log("");
 
 for(const day of days){
 
-    console.log(day.gameDate,
-        `(${Object.keys(day.guesses).length} pronostici)`,
-        day.confidence);
+    console.log(
+        day.gameDate,
+        `(${Object.keys(day.import.guesses).length} pronostici)`,
+        day.import.confidence
+    );
 
 }
 
 let totalGuesses = 0;
-let totalOuts = 0;
 
 for (const day of days) {
 
-    totalGuesses += Object.keys(day.guesses).length;
-    totalOuts += Object.keys(day.outs).length;
+    totalGuesses += Object.keys(day.import.guesses).length;
 
 }
 
@@ -130,7 +154,6 @@ console.log("");
 console.log("==========");
 console.log(`Giornate: ${days.length}`);
 console.log(`Pronostici: ${totalGuesses}`);
-console.log(`Out: ${totalOuts}`);
 console.log("==========");
 
 console.log("");
@@ -152,7 +175,7 @@ for (const [date, entries] of Object.entries(daysByDate)) {
     entries.forEach((entry, index) => {
 
         console.log(
-            `  [${index + 1}] ${entry.guesses} pronostici, ${entry.outs} out - ${entry.messageDate}`
+            `  [${index + 1}] ${entry.guesses} pronostici - ${entry.messageDate}`
         );
 
     });
@@ -166,7 +189,7 @@ const players = new Map();
 
 for (const day of days) {
 
-    for (const player of Object.keys(day.guesses)) {
+    for (const player of Object.keys(day.import.guesses)) {
 
         const id = playerId(player);
 

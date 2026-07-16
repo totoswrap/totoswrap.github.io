@@ -43,3 +43,30 @@ export function playerId(name) {
         .replace(/\s+/g, "-");
 
 }
+
+export function detectUnit(text) {
+
+    const upper = text.toUpperCase();
+
+    if (upper.startsWith("MAIN"))
+        return "main";
+
+    if (
+        upper.startsWith("SECOND") ||
+        upper.startsWith("SPLINT") ||
+        upper.startsWith("SPLINTER")
+    )
+        return "second";
+
+    return "main";
+
+}
+
+export function seasonId(gameDate) {
+
+    if (gameDate <= "2026-06-29")
+        return "season1";
+
+    return "season2";
+
+}

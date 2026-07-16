@@ -16,7 +16,7 @@ for (const day of days) {
 
     const problems = [];
 
-    const players = Object.keys(day.guesses);
+    const players = Object.keys(day.import.guesses);
 
     if (players.length < 8) {
         problems.push(`solo ${players.length} giocatori`);

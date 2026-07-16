@@ -6,7 +6,6 @@ const GUESS_REGEX = /^(\d{1,2}[:.]\d{2})\s+(.+)$/gm;
 export function extractGuesses(text) {
 
     const guesses = {};
-    const outs = {};
 
     const matches = [...text.matchAll(GUESS_REGEX)];
 
@@ -16,25 +15,18 @@ export function extractGuesses(text) {
 
         const player = match[2].trim();
 
+        if (player.toLowerCase().endsWith(" out")) {
+            continue;
+        }
+
         const canonicalName = canonicalPlayerName(player);
 
-        if (canonicalName.toLowerCase().endsWith(" out")) {
-
-            const realName = canonicalName.slice(0, -4).trim();
-
-            outs[realName] = time;
-
-        } else {
-
-            guesses[canonicalName] = time;
-
-        }
+        guesses[canonicalName] = time;
 
     }
 
     return {
-        guesses,
-        outs
+        guesses
     };
 
 }

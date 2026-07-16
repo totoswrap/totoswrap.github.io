@@ -6,9 +6,10 @@
   "type": "module",
   "scripts": {
     "start": "node scripts/extract-days.js",
-    "setup": "node setup-firestore.js",
-    "validate": "node validate-days.js",
-    "import": "node scripts/import-firestore.js"
+    "setup": "node firestore/setup-firestore.js",
+    "validate": "node scripts/validate-days.js",
+    "import": "node scripts/import-firestore.js",
+    "results": "node scripts/update-results.js"
   },
   "dependencies": {
     "firebase-admin": "^14.1.0"
