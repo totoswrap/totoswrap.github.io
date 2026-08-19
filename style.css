@@ -143,6 +143,10 @@ body::before {
   pointer-events: none;
 }
 
+body.desktop-preview-active::before {
+  display: none;
+}
+
 #app {
   position: relative;
   z-index: 2;
