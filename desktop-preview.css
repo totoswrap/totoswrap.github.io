@@ -422,7 +422,3 @@ body.desktop-preview-active #app > .desktop-live-bar,
     max-width: 1040px;
   }
 }
-
-body.desktop-preview-active::before {
-  display: none !important;
-}
