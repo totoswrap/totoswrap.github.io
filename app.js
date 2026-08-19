@@ -187,35 +187,15 @@ async function waitForRenderedApp() {
 async function scheduleBootLoaderHide() {
   if (!isBootContentReady()) return;
   if (_bootHideQueued) return;
-
   _bootHideQueued = true;
-
-  const fadeStartAt = Math.max(
-    0,
-    BOOT_TOTAL_MS - BOOT_FADE_MS
-  );
-
-  const remaining = Math.max(
-    0,
-    fadeStartAt - (Date.now() - BOOT_STARTED_AT)
-  );
-
-  // The boot loader is decorative: never let image/rendering
-  // checks keep it above the application indefinitely.
-  await waitMs(remaining);
-
+  const fadeStartAt = Math.max(0, BOOT_TOTAL_MS - BOOT_FADE_MS);
+  const remaining = Math.max(0, fadeStartAt - (Date.now() - BOOT_STARTED_AT));
+  await Promise.all([waitMs(remaining), waitWithTimeout(waitForRenderedApp(), BOOT_RENDER_WAIT_TIMEOUT_MS)]);
   const loader = document.getElementById('boot-loader');
   if (!loader) return;
-
   loader.classList.add('done');
-
-  document.dispatchEvent(
-    new CustomEvent('totowrap:boot-fade-started')
-  );
-
-  setTimeout(() => {
-    loader.remove();
-  }, BOOT_FADE_MS + 100);
+  document.dispatchEvent(new CustomEvent('totowrap:boot-fade-started'));
+  setTimeout(() => loader.remove(), BOOT_FADE_MS + 100);
 }
 
 function waitForBootFadeStarted() {
