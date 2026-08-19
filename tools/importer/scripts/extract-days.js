@@ -195,7 +195,8 @@ for (const day of days) {
 
         players.set(id, {
             id,
-            name: player
+            name: player,
+            face: player
         });
 
     }

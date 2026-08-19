@@ -9,7 +9,10 @@
     "setup": "node firestore/setup-firestore.js",
     "validate": "node scripts/validate-days.js",
     "import": "node scripts/import-firestore.js",
-    "results": "node scripts/update-results.js"
+    "results": "node scripts/update-results.js",
+    "state1": "node scripts/build-state.js",
+    "state2": "node scripts/init-state.js",
+    "state:import": "node scripts/import-state.js"
   },
   "dependencies": {
     "firebase-admin": "^14.1.0"

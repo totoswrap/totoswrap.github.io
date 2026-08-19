@@ -1,0 +1,104 @@
+{
+  "playerRoster": [
+    {
+      "name": "Alessandro L",
+      "face": "Alessandro L"
+    },
+    {
+      "name": "Veronica",
+      "face": "Veronica"
+    },
+    {
+      "name": "Marco",
+      "face": "Marco"
+    },
+    {
+      "name": "Jai",
+      "face": "Jai"
+    },
+    {
+      "name": "Isabel",
+      "face": "Isabel"
+    },
+    {
+      "name": "Giulia",
+      "face": "Giulia"
+    },
+    {
+      "name": "Edoardo",
+      "face": "Edoardo"
+    },
+    {
+      "name": "Conor",
+      "face": "Conor"
+    },
+    {
+      "name": "Roberta",
+      "face": "Roberta"
+    },
+    {
+      "name": "Flaminia",
+      "face": "Flaminia"
+    },
+    {
+      "name": "Alessandro M",
+      "face": "Alessandro M"
+    },
+    {
+      "name": "Sara",
+      "face": "Sara"
+    },
+    {
+      "name": "Tiberio",
+      "face": "Tiberio"
+    },
+    {
+      "name": "Lawrence",
+      "face": "Lawrence"
+    },
+    {
+      "name": "Lior",
+      "face": "Lior"
+    },
+    {
+      "name": "Francesca",
+      "face": "Francesca"
+    },
+    {
+      "name": "Euridilla",
+      "face": "Euridilla"
+    },
+    {
+      "name": "Maria Claudia",
+      "face": "Maria Claudia"
+    },
+    {
+      "name": "Nicolas",
+      "face": "Nicolas"
+    }
+  ],
+  "scores": {
+    "Alessandro L": 0,
+    "Veronica": 0,
+    "Marco": 0,
+    "Jai": 0,
+    "Isabel": 0,
+    "Giulia": 0,
+    "Edoardo": 0,
+    "Conor": 0,
+    "Roberta": 0,
+    "Flaminia": 0,
+    "Alessandro M": 0,
+    "Sara": 0,
+    "Tiberio": 0,
+    "Lawrence": 0,
+    "Lior": 0,
+    "Francesca": 0,
+    "Euridilla": 0,
+    "Maria Claudia": 0,
+    "Nicolas": 0
+  },
+  "days": [],
+  "today": null,
+  "_version": 1
+}

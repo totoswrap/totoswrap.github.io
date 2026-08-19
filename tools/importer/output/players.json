@@ -1,82 +1,97 @@
 [
   {
     "id": "alessandro-l",
-    "name": "Alessandro L"
+    "name": "Alessandro L",
+    "face": "Alessandro L"
   },
   {
     "id": "veronica",
-    "name": "Veronica"
+    "name": "Veronica",
+    "face": "Veronica"
   },
   {
     "id": "marco",
-    "name": "Marco"
+    "name": "Marco",
+    "face": "Marco"
   },
   {
     "id": "jai",
-    "name": "Jai"
+    "name": "Jai",
+    "face": "Jai"
   },
   {
     "id": "isabel",
-    "name": "Isabel"
+    "name": "Isabel",
+    "face": "Isabel"
   },
   {
     "id": "giulia",
-    "name": "Giulia"
+    "name": "Giulia",
+    "face": "Giulia"
   },
   {
     "id": "edoardo",
-    "name": "Edoardo"
+    "name": "Edoardo",
+    "face": "Edoardo"
   },
   {
     "id": "conor",
-    "name": "Conor"
+    "name": "Conor",
+    "face": "Conor"
   },
   {
     "id": "roberta",
-    "name": "Roberta"
-  },
-  {
-    "id": "alessandro",
-    "name": "Alessandro"
+    "name": "Roberta",
+    "face": "Roberta"
   },
   {
     "id": "flaminia",
-    "name": "Flaminia"
+    "name": "Flaminia",
+    "face": "Flaminia"
   },
   {
     "id": "alessandro-m",
-    "name": "Alessandro M"
+    "name": "Alessandro M",
+    "face": "Alessandro M"
   },
   {
     "id": "sara",
-    "name": "Sara"
+    "name": "Sara",
+    "face": "Sara"
   },
   {
     "id": "tiberio",
-    "name": "Tiberio"
+    "name": "Tiberio",
+    "face": "Tiberio"
   },
   {
     "id": "lawrence",
-    "name": "Lawrence"
+    "name": "Lawrence",
+    "face": "Lawrence"
   },
   {
     "id": "lior",
-    "name": "Lior"
+    "name": "Lior",
+    "face": "Lior"
   },
   {
     "id": "francesca",
-    "name": "Francesca"
+    "name": "Francesca",
+    "face": "Francesca"
   },
   {
     "id": "euridilla",
-    "name": "Euridilla"
+    "name": "Euridilla",
+    "face": "Euridilla"
   },
   {
     "id": "maria-claudia",
-    "name": "Maria Claudia"
+    "name": "Maria Claudia",
+    "face": "Maria Claudia"
   },
   {
     "id": "nicolas",
-    "name": "Nicolas"
+    "name": "Nicolas",
+    "face": "Nicolas"
   }
 ]
