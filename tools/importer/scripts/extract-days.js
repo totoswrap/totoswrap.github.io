@@ -21,7 +21,7 @@ const MIN_GUESSES = 4;
 
 // divide il file nei singoli messaggi WhatsApp
 const messages = text.split(
-    /\n(?=\[\d{2}\/\d{2}\/\d{2}, \d{2}:\d{2}:\d{2}\])/
+    /\n(?=[\u200e\u200f\u202a-\u202e\u2066-\u2069]*\[\d{2}\/\d{2}\/\d{2}, \d{2}:\d{2}:\d{2}\])/
 );
 
 console.log(`Messaggi trovati: ${messages.length}`);
@@ -31,7 +31,7 @@ const edoardoMessages = [];
 for (const message of messages) {
 
     const match = message.match(
-        /^\[(\d{2})\/(\d{2})\/(\d{2}), (\d{2}):(\d{2}):(\d{2})\] (.*?):/
+        /^[\u200e\u200f\u202a-\u202e\u2066-\u2069]*\[(\d{2})\/(\d{2})\/(\d{2}), (\d{2}):(\d{2}):(\d{2})\] (.*?):/
     );
 
     if (!match) continue;
@@ -58,7 +58,12 @@ for (const message of messages) {
     edoardoMessages.push({
         author,
         messageDate: date.toISOString(),
-        gameDate: getGameDate(date, Number(hour)),
+        gameDate: getGameDate(
+            `20${year}`,
+            month,
+            day,
+            hour
+        ),
         unit: detectUnit(text),
         text
     });

@@ -1,0 +1,234 @@
+{
+  "days": [],
+  "playerRoster": [
+    {
+      "name": "Alessandro L",
+      "face": "Alessandro L"
+    },
+    {
+      "name": "Veronica",
+      "face": "Veronica"
+    },
+    {
+      "face": "Marco",
+      "name": "Marco"
+    },
+    {
+      "face": "Jai",
+      "name": "Jai"
+    },
+    {
+      "face": "Isabel",
+      "name": "Isabel"
+    },
+    {
+      "face": "Giulia",
+      "name": "Giulia"
+    },
+    {
+      "face": "Edoardo",
+      "name": "Edoardo"
+    },
+    {
+      "face": "Conor",
+      "name": "Conor"
+    },
+    {
+      "name": "Roberta",
+      "face": "Roberta"
+    },
+    {
+      "face": "Flaminia",
+      "name": "Flaminia"
+    },
+    {
+      "name": "Alessandro M",
+      "face": "Alessandro M"
+    },
+    {
+      "name": "Sara",
+      "face": "Sara"
+    },
+    {
+      "name": "Tiberio",
+      "face": "Tiberio"
+    },
+    {
+      "name": "Lawrence",
+      "face": "Lawrence"
+    },
+    {
+      "name": "Lior",
+      "face": "Lior"
+    },
+    {
+      "name": "Francesca",
+      "face": "Francesca"
+    },
+    {
+      "face": "Euridilla",
+      "name": "Euridilla"
+    },
+    {
+      "name": "Maria Claudia",
+      "face": "Maria Claudia"
+    },
+    {
+      "name": "Nicolas",
+      "face": "Nicolas"
+    },
+    {
+      "name": "Ivana"
+    },
+    {
+      "name": "Chiara"
+    }
+  ],
+  "scores": {
+    "Euridilla": 0,
+    "Ivana": 0,
+    "Conor": 0,
+    "Sara": 0,
+    "Flaminia": 1,
+    "Isabel": 0,
+    "Alessandro L": 0,
+    "Maria Claudia": 0,
+    "Lawrence": 0,
+    "Veronica": 0,
+    "Marco": 0,
+    "Jai": 0,
+    "Roberta": 0,
+    "Giulia": 0,
+    "Francesca": 0,
+    "Edoardo": 0,
+    "Alessandro M": 0,
+    "Tiberio": 0,
+    "Chiara": 0,
+    "Lior": 0,
+    "Nicolas": 0
+  },
+  "today": {
+    "addedPlayers": [
+      "Ivana"
+    ],
+    "date": "2026-08-17",
+    "winner": "Flaminia",
+    "noWinner": false,
+    "points": 1,
+    "betCloseAt": "12:00",
+    "estWrap": "18:00",
+    "penalties": [],
+    "winners": [
+      {
+        "name": "Flaminia"
+      }
+    ],
+    "approvedDate": "2026-08-17",
+    "approvedAt": "09:58:19",
+    "guesses": [
+      {
+        "name": "Conor",
+        "date": "2026-08-17",
+        "time": "17:55"
+      },
+      {
+        "time": "17:57",
+        "date": "2026-08-17",
+        "name": "Veronica"
+      },
+      {
+        "time": "17:58",
+        "date": "2026-08-17",
+        "name": "Francesca"
+      },
+      {
+        "name": "Edoardo",
+        "date": "2026-08-17",
+        "time": "18:00"
+      },
+      {
+        "time": "18:04",
+        "name": "Ivana",
+        "date": "2026-08-17"
+      },
+      {
+        "name": "Marco",
+        "date": "2026-08-17",
+        "time": "18:10"
+      },
+      {
+        "time": "18:15",
+        "date": "2026-08-17",
+        "name": "Giulia"
+      },
+      {
+        "date": "2026-08-17",
+        "name": "Isabel",
+        "time": "18:21"
+      },
+      {
+        "name": "Lior",
+        "date": "2026-08-17",
+        "time": "18:30"
+      },
+      {
+        "time": "18:37",
+        "date": "2026-08-17",
+        "name": "Maria Claudia"
+      },
+      {
+        "date": "2026-08-17",
+        "name": "Roberta",
+        "time": "18:39"
+      },
+      {
+        "time": "18:49",
+        "date": "2026-08-17",
+        "name": "Flaminia"
+      },
+      {
+        "time": null,
+        "date": null,
+        "name": "Alessandro L"
+      },
+      {
+        "name": "Jai",
+        "date": null,
+        "time": null
+      },
+      {
+        "name": "Alessandro M",
+        "date": null,
+        "time": null
+      },
+      {
+        "name": "Sara",
+        "date": null,
+        "time": null
+      },
+      {
+        "name": "Tiberio",
+        "date": null,
+        "time": null
+      },
+      {
+        "date": null,
+        "name": "Lawrence",
+        "time": null
+      },
+      {
+        "name": "Euridilla",
+        "date": null,
+        "time": null
+      },
+      {
+        "date": null,
+        "name": "Nicolas",
+        "time": null
+      }
+    ],
+    "estWrapDate": "2026-08-19",
+    "wrapTime": "19:05:55"
+  },
+  "_version": 15
+}

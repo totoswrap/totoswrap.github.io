@@ -1,0 +1,146 @@
+{
+  "errors": [],
+  "warnings": [
+    {
+      "id": "2026-04-13-main",
+      "type": "winner-mismatch",
+      "message": "Ufficiale: Flaminia | Calcolato: no-winner",
+      "official": "Flaminia",
+      "calculated": "no-winner"
+    },
+    {
+      "id": "2026-04-21-main",
+      "type": "winner-mismatch",
+      "message": "Ufficiale: Giulia | Calcolato: Euridilla",
+      "official": "Giulia",
+      "calculated": "Euridilla"
+    },
+    {
+      "id": "2026-04-22-main",
+      "type": "winner-mismatch",
+      "message": "Ufficiale: Edoardo | Calcolato: Lawrence [EXACT]",
+      "official": "Edoardo",
+      "calculated": "Lawrence [EXACT]"
+    },
+    {
+      "id": "2026-04-28-main",
+      "type": "winner-mismatch",
+      "message": "Ufficiale: Roberta | Calcolato: no-winner",
+      "official": "Roberta",
+      "calculated": "no-winner"
+    },
+    {
+      "id": "2026-04-29-main",
+      "type": "winner-mismatch",
+      "message": "Ufficiale: Veronica | Calcolato: Isabel",
+      "official": "Veronica",
+      "calculated": "Isabel"
+    },
+    {
+      "id": "2026-04-30-main",
+      "type": "winner-mismatch",
+      "message": "Ufficiale: Edoardo | Calcolato: Giulia",
+      "official": "Edoardo",
+      "calculated": "Giulia"
+    },
+    {
+      "id": "2026-06-09-main",
+      "type": "winner-mismatch",
+      "message": "Ufficiale: Sara | Calcolato: Tiberio [EXACT]",
+      "official": "Sara",
+      "calculated": "Tiberio [EXACT]"
+    },
+    {
+      "id": "2026-06-10-main",
+      "type": "winner-mismatch",
+      "message": "Ufficiale: Isabel | Calcolato: no-winner",
+      "official": "Isabel",
+      "calculated": "no-winner"
+    },
+    {
+      "id": "2026-06-12-second",
+      "type": "winner-mismatch",
+      "message": "Ufficiale: Edoardo | Calcolato: no-winner",
+      "official": "Edoardo",
+      "calculated": "no-winner"
+    },
+    {
+      "id": "2026-06-25-main",
+      "type": "winner-mismatch",
+      "message": "Ufficiale: Roberta | Calcolato: Francesca",
+      "official": "Roberta",
+      "calculated": "Francesca"
+    },
+    {
+      "id": "2026-06-26-main",
+      "type": "winner-mismatch",
+      "message": "Ufficiale: Nicolas | Calcolato: Lior",
+      "official": "Nicolas",
+      "calculated": "Lior"
+    },
+    {
+      "id": "2026-07-01-main",
+      "type": "winner-mismatch",
+      "message": "Ufficiale: Veronica | Calcolato: no-winner",
+      "official": "Veronica",
+      "calculated": "no-winner"
+    },
+    {
+      "id": "2026-07-02-main",
+      "type": "winner-mismatch",
+      "message": "Ufficiale: Nicolas | Calcolato: Veronica",
+      "official": "Nicolas",
+      "calculated": "Veronica"
+    },
+    {
+      "id": "2026-07-31-main",
+      "type": "winner-mismatch",
+      "message": "Ufficiale: Flaminia | Calcolato: no-winner",
+      "official": "Flaminia",
+      "calculated": "no-winner"
+    }
+  ],
+  "info": [
+    {
+      "id": "2026-07-13-second",
+      "type": "duplicate-day",
+      "message": "2 versioni trovate; usata la versione scelta in day-selections.json",
+      "selectedMessageDate": "2026-07-13T20:11:16.000Z",
+      "guesses": 15
+    },
+    {
+      "id": "2026-07-20-main",
+      "type": "duplicate-day",
+      "message": "2 versioni trovate; usata la versione scelta in day-selections.json",
+      "selectedMessageDate": "2026-07-20T14:05:26.000Z",
+      "guesses": 14
+    },
+    {
+      "id": "2026-08-21-main",
+      "type": "duplicate-day",
+      "message": "2 versioni trovate; usata la versione scelta in day-selections.json",
+      "selectedMessageDate": "2026-08-22T00:22:13.000Z",
+      "guesses": 8
+    },
+    {
+      "id": "2026-03-17-main",
+      "type": "no-game",
+      "message": "Giornata esclusa perché winners.json contiene no-game"
+    },
+    {
+      "id": "2026-03-17-main",
+      "type": "ignored-wrap",
+      "message": "wrap-times.json contiene un wrap per una giornata marcata no-game: verrà ignorato"
+    },
+    {
+      "id": "2026-03-18-main",
+      "type": "no-game",
+      "message": "Giornata esclusa perché winners.json contiene no-game"
+    },
+    {
+      "id": "2026-03-18-main",
+      "type": "ignored-wrap",
+      "message": "wrap-times.json contiene un wrap per una giornata marcata no-game: verrà ignorato"
+    }
+  ]
+}

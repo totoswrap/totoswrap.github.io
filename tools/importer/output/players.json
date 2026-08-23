@@ -93,5 +93,15 @@
     "id": "nicolas",
     "name": "Nicolas",
     "face": "Nicolas"
+  },
+  {
+    "id": "ivana",
+    "name": "Ivana",
+    "face": "Ivana"
+  },
+  {
+    "id": "chiara",
+    "name": "Chiara",
+    "face": "Chiara"
   }
 ]

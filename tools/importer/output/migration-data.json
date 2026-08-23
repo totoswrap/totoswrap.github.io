@@ -1,0 +1,5153 @@
+{
+  "metadata": {
+    "generatedAt": "2026-08-23T21:12:48.320Z",
+    "source": "calculated-results.json",
+    "games": 109,
+    "players": 21,
+    "ledgerTotalPoints": 126
+  },
+  "days": [
+    {
+      "id": "2026-03-12-main",
+      "gameDate": "2026-03-12",
+      "unit": "main",
+      "guesses": {
+        "Giulia": "21:00",
+        "Isabel": "21:46",
+        "Marco": "21:50",
+        "Alessandro L": "21:58",
+        "Lawrence": "21:59",
+        "Conor": "22:04",
+        "Veronica": "22:15",
+        "Jai": "22:23"
+      },
+      "wrapTime": "21:49",
+      "result": {
+        "winner": "Marco",
+        "winners": [
+          "Marco"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Marco",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "MANUAL",
+        "originalMessageDate": null,
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-03-13-main",
+      "gameDate": "2026-03-13",
+      "unit": "main",
+      "guesses": {
+        "Isabel": "02:27",
+        "Alessandro L": "02:47",
+        "Lawrence": "02:52",
+        "Marco": "02:55",
+        "Conor": "03:01",
+        "Edoardo": "03:03",
+        "Veronica": "03:07",
+        "Giulia": "03:15"
+      },
+      "wrapTime": "03:34",
+      "result": {
+        "winner": "Giulia",
+        "winners": [
+          "Giulia"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Giulia",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "MANUAL",
+        "originalMessageDate": null,
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-03-16-main",
+      "gameDate": "2026-03-16",
+      "unit": "main",
+      "guesses": {
+        "Alessandro L": "15:27",
+        "Edoardo": "16:41",
+        "Isabel": "16:50",
+        "Lawrence": "16:54",
+        "Giulia": "16:56",
+        "Marco": "17:00",
+        "Veronica": "17:07",
+        "Conor": "17:10"
+      },
+      "wrapTime": "16:34",
+      "result": {
+        "winner": "Edoardo",
+        "winners": [
+          "Edoardo"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Edoardo",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "MANUAL",
+        "originalMessageDate": null,
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-03-20-main",
+      "gameDate": "2026-03-20",
+      "unit": "main",
+      "guesses": {
+        "Marco": "10:07",
+        "Alessandro L": "14:24",
+        "Lawrence": "15:28",
+        "Isabel": "16:22",
+        "Edoardo": "16:30",
+        "Veronica": "16:43",
+        "Jai": "16:46",
+        "Conor": "16:57",
+        "Giulia": "17:00"
+      },
+      "wrapTime": "17:03",
+      "result": {
+        "winner": "Giulia",
+        "winners": [
+          "Giulia"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Giulia",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "MANUAL",
+        "originalMessageDate": null,
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-03-23-main",
+      "gameDate": "2026-03-23",
+      "unit": "main",
+      "guesses": {
+        "Alessandro L": "16:47",
+        "Veronica": "16:53",
+        "Marco": "16:54",
+        "Jai": "17:00",
+        "Isabel": "17:06",
+        "Giulia": "17:23",
+        "Edoardo": "17:24",
+        "Conor": "17:35"
+      },
+      "wrapTime": "17:11",
+      "result": {
+        "winner": "Isabel",
+        "winners": [
+          "Isabel"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Isabel",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "HIGH",
+        "originalMessageDate": "2026-03-23T10:48:21.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-03-24-main",
+      "gameDate": "2026-03-24",
+      "unit": "main",
+      "guesses": {
+        "Isabel": "18:41",
+        "Giulia": "18:43",
+        "Alessandro L": "18:49",
+        "Edoardo": "18:53",
+        "Marco": "18:57",
+        "Jai": "19:00",
+        "Lawrence": "19:10",
+        "Conor": "19:18"
+      },
+      "wrapTime": "18:39",
+      "result": {
+        "winner": "Isabel",
+        "winners": [
+          "Isabel"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Isabel",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "MANUAL",
+        "originalMessageDate": null,
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-03-25-main",
+      "gameDate": "2026-03-25",
+      "unit": "main",
+      "guesses": {
+        "Alessandro L": "00:17",
+        "Conor": "00:35",
+        "Flaminia": "00:48",
+        "Marco": "00:50",
+        "Jai": "01:00"
+      },
+      "wrapTime": "01:12",
+      "result": {
+        "winner": "Jai",
+        "winners": [
+          "Jai"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Jai",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "MANUAL",
+        "originalMessageDate": null,
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-03-26-main",
+      "gameDate": "2026-03-26",
+      "unit": "main",
+      "guesses": {
+        "Veronica": "21:53",
+        "Conor": "22:50",
+        "Giulia": "22:51",
+        "Marco": "23:01",
+        "Flaminia": "23:03",
+        "Edoardo": "23:05"
+      },
+      "wrapTime": "23:24",
+      "result": {
+        "winner": "Edoardo",
+        "winners": [
+          "Edoardo"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Edoardo",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "MANUAL",
+        "originalMessageDate": null,
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-03-27-main",
+      "gameDate": "2026-03-27",
+      "unit": "main",
+      "guesses": {
+        "Roberta": "21:50",
+        "Edoardo": "22:30",
+        "Jai": "22:40",
+        "Veronica": "22:44",
+        "Conor": "22:45",
+        "Marco": "22:50",
+        "Alessandro L": "22:54",
+        "Giulia": "22:59",
+        "Isabel": "23:06",
+        "Flaminia": "23:14"
+      },
+      "wrapTime": "22:32",
+      "result": {
+        "winner": "Edoardo",
+        "winners": [
+          "Edoardo"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Edoardo",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-03-27T17:10:36.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-03-30-main",
+      "gameDate": "2026-03-30",
+      "unit": "main",
+      "guesses": {
+        "Lawrence": "16:20",
+        "Isabel": "16:45",
+        "Roberta": "17:10",
+        "Conor": "17:30",
+        "Giulia": "17:31",
+        "Marco": "17:33",
+        "Flaminia": "17:44",
+        "Edoardo": "17:47"
+      },
+      "wrapTime": "16:13",
+      "result": {
+        "winner": "Lawrence",
+        "winners": [
+          "Lawrence"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Lawrence",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "MANUAL",
+        "originalMessageDate": null,
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-03-31-main",
+      "gameDate": "2026-03-31",
+      "unit": "main",
+      "guesses": {
+        "Conor": "22:50",
+        "Alessandro L": "23:16",
+        "Veronica": "23:47",
+        "Roberta": "23:50",
+        "Edoardo": "23:53",
+        "Lawrence": "23:56",
+        "Giulia": "23:57",
+        "Flaminia": "23:58",
+        "Isabel": "00:01"
+      },
+      "wrapTime": "23:32",
+      "result": {
+        "winner": "Veronica",
+        "winners": [
+          "Veronica"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Veronica",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "MANUAL",
+        "originalMessageDate": null,
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-01-main",
+      "gameDate": "2026-04-01",
+      "unit": "main",
+      "guesses": {
+        "Marco": "01:15",
+        "Roberta": "01:25",
+        "Alessandro L": "01:38",
+        "Giulia": "01:43",
+        "Alessandro M": "01:47",
+        "Flaminia": "01:48",
+        "Edoardo": "01:52",
+        "Conor": "01:55",
+        "Veronica": "01:57"
+      },
+      "wrapTime": "02:00",
+      "result": {
+        "winner": "Veronica",
+        "winners": [
+          "Veronica"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Veronica",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "HIGH",
+        "originalMessageDate": "2026-04-01T22:48:31.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-02-main",
+      "gameDate": "2026-04-02",
+      "unit": "main",
+      "guesses": {
+        "Marco": "04:00",
+        "Conor": "04:50",
+        "Isabel": "04:57",
+        "Edoardo": "04:59",
+        "Flaminia": "05:02",
+        "Roberta": "05:05",
+        "Alessandro L": "05:12"
+      },
+      "wrapTime": "03:50",
+      "result": {
+        "winner": "Marco",
+        "winners": [
+          "Marco"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Marco",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "MANUAL",
+        "originalMessageDate": null,
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-03-main",
+      "gameDate": "2026-04-03",
+      "unit": "main",
+      "guesses": {
+        "Conor": "03:00",
+        "Marco": "03:30",
+        "Roberta": "03:45",
+        "Flaminia": "03:57",
+        "Alessandro L": "03:58",
+        "Sara": "04:07",
+        "Isabel": "04:12",
+        "Giulia": "04:17",
+        "Alessandro M": "04:20",
+        "Tiberio": "04:59"
+      },
+      "wrapTime": "04:55",
+      "result": {
+        "winner": "Tiberio",
+        "winners": [
+          "Tiberio"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Tiberio",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-04-04T01:27:19.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-07-main",
+      "gameDate": "2026-04-07",
+      "unit": "main",
+      "guesses": {
+        "Flaminia": "01:07",
+        "Marco": "01:25",
+        "Alessandro L": "01:27",
+        "Veronica": "01:37",
+        "Roberta": "01:47",
+        "Isabel": "01:49",
+        "Conor": "01:50",
+        "Lawrence": "01:58",
+        "Tiberio": "02:00",
+        "Giulia": "02:03",
+        "Edoardo": "02:19"
+      },
+      "wrapTime": "00:52",
+      "result": {
+        "winner": "Flaminia",
+        "winners": [
+          "Flaminia"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Flaminia",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-04-07T20:34:22.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-07-second",
+      "gameDate": "2026-04-07",
+      "unit": "second",
+      "guesses": {
+        "Alessandro L": "02:17",
+        "Roberta": "03:20",
+        "Tiberio": "03:31",
+        "Veronica": "04:13",
+        "Marco": "04:25",
+        "Giulia": "04:27",
+        "Alessandro M": "04:31",
+        "Conor": "04:35",
+        "Isabel": "04:36",
+        "Lawrence": "04:38",
+        "Edoardo": "04:44",
+        "Flaminia": "05:00"
+      },
+      "wrapTime": "04:32",
+      "result": {
+        "winner": "Alessandro M",
+        "winners": [
+          "Alessandro M"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Alessandro M",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-04-07T21:34:48.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-08-main",
+      "gameDate": "2026-04-08",
+      "unit": "main",
+      "guesses": {
+        "Lawrence": "03:12",
+        "Veronica": "03:33",
+        "Isabel": "03:36",
+        "Jai": "03:50",
+        "Roberta": "04:00",
+        "Lior": "04:10",
+        "Edoardo": "04:20",
+        "Giulia": "04:23",
+        "Alessandro M": "04:26",
+        "Tiberio": "04:35"
+      },
+      "wrapTime": "03:15",
+      "result": {
+        "winner": "Lawrence",
+        "winners": [
+          "Lawrence"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Lawrence",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-04-09T00:10:31.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-09-main",
+      "gameDate": "2026-04-09",
+      "unit": "main",
+      "guesses": {
+        "Jai": "03:30",
+        "Isabel": "03:41",
+        "Alessandro L": "03:46",
+        "Tiberio": "03:52",
+        "Veronica": "03:57",
+        "Marco": "03:59",
+        "Edoardo": "04:00",
+        "Sara": "04:15",
+        "Alessandro M": "04:18",
+        "Francesca": "04:20",
+        "Roberta": "04:25",
+        "Conor": "04:40",
+        "Lior": "04:45",
+        "Flaminia": "04:51"
+      },
+      "wrapTime": "04:37",
+      "result": {
+        "winner": "Conor",
+        "winners": [
+          "Conor"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Conor",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-04-10T01:28:30.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-10-main",
+      "gameDate": "2026-04-10",
+      "unit": "main",
+      "guesses": {
+        "Flaminia": "02:41",
+        "Jai": "02:50",
+        "Isabel": "03:00",
+        "Sara": "03:37",
+        "Edoardo": "03:43",
+        "Lawrence": "03:46",
+        "Veronica": "03:47",
+        "Tiberio": "03:52",
+        "Roberta": "03:55",
+        "Marco": "04:01",
+        "Giulia": "04:13",
+        "Conor": "04:20",
+        "Lior": "04:30",
+        "Alessandro L": "04:33",
+        "Francesca": "04:51"
+      },
+      "wrapTime": "03:17",
+      "result": {
+        "winner": "Isabel",
+        "winners": [
+          "Isabel"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Isabel",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-04-10T23:21:36.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-13-main",
+      "gameDate": "2026-04-13",
+      "unit": "main",
+      "guesses": {
+        "Jai": "15:50",
+        "Marco": "16:45",
+        "Conor": "17:10",
+        "Roberta": "17:13",
+        "Lawrence": "17:25",
+        "Euridilla": "17:32",
+        "Francesca": "17:42",
+        "Lior": "17:50",
+        "Maria Claudia": "17:54",
+        "Isabel": "17:57",
+        "Edoardo": "17:59",
+        "Tiberio": "18:03",
+        "Giulia": "18:04",
+        "Flaminia": "18:06"
+      },
+      "wrapTime": "18:50",
+      "result": {
+        "winner": "Flaminia",
+        "winners": [
+          "Flaminia"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Flaminia",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-04-13T14:17:47.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-14-main",
+      "gameDate": "2026-04-14",
+      "unit": "main",
+      "guesses": {
+        "Alessandro L": "00:48",
+        "Sara": "01:17",
+        "Lawrence": "01:24",
+        "Tiberio": "01:27",
+        "Francesca": "01:35",
+        "Maria Claudia": "01:36",
+        "Euridilla": "01:42",
+        "Flaminia": "01:44",
+        "Roberta": "01:47",
+        "Marco": "01:50",
+        "Giulia": "01:51",
+        "Isabel": "01:53",
+        "Conor": "01:58",
+        "Lior": "02:00",
+        "Veronica": "02:17"
+      },
+      "wrapTime": "01:55",
+      "result": {
+        "winner": "Isabel",
+        "winners": [
+          "Isabel"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Isabel",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-04-14T22:51:03.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-15-main",
+      "gameDate": "2026-04-15",
+      "unit": "main",
+      "guesses": {
+        "Alessandro L": "23:12",
+        "Edoardo": "23:15",
+        "Sara": "23:37",
+        "Veronica": "23:47",
+        "Tiberio": "23:50",
+        "Roberta": "23:52",
+        "Isabel": "23:54",
+        "Euridilla": "23:58",
+        "Lior": "00:00",
+        "Flaminia": "00:07",
+        "Conor": "00:10",
+        "Lawrence": "00:25",
+        "Marco": "00:30",
+        "Francesca": "01:10"
+      },
+      "wrapTime": "23:38",
+      "result": {
+        "winner": "Sara",
+        "winners": [
+          "Sara"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Sara",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "MANUAL",
+        "originalMessageDate": null,
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-16-main",
+      "gameDate": "2026-04-16",
+      "unit": "main",
+      "guesses": {
+        "Marco": "22:00",
+        "Lawrence": "23:54",
+        "Conor": "00:15",
+        "Roberta": "00:20",
+        "Euridilla": "00:23",
+        "Veronica": "00:33",
+        "Francesca": "00:38",
+        "Sara": "00:43",
+        "Alessandro L": "00:47",
+        "Giulia": "00:59",
+        "Edoardo": "01:05",
+        "Tiberio": "01:10",
+        "Maria Claudia": "01:23",
+        "Flaminia": "01:57"
+      },
+      "wrapTime": "00:32",
+      "result": {
+        "winner": "Veronica",
+        "winners": [
+          "Veronica"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Veronica",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-04-16T20:07:43.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-17-main",
+      "gameDate": "2026-04-17",
+      "unit": "main",
+      "guesses": {
+        "Roberta": "00:56",
+        "Lawrence": "01:14",
+        "Alessandro L": "01:48",
+        "Marco": "02:20",
+        "Sara": "02:27",
+        "Giulia": "02:33",
+        "Euridilla": "02:45",
+        "Conor": "02:50",
+        "Edoardo": "03:00",
+        "Isabel": "03:11",
+        "Veronica": "03:17",
+        "Francesca": "03:28",
+        "Maria Claudia": "03:34",
+        "Jai": "03:50",
+        "Tiberio": "03:55"
+      },
+      "wrapTime": "03:53",
+      "result": {
+        "winner": "Tiberio",
+        "winners": [
+          "Tiberio"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Tiberio",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-04-17T23:14:46.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-20-main",
+      "gameDate": "2026-04-20",
+      "unit": "main",
+      "guesses": {
+        "Euridilla": "16:29",
+        "Francesca": "16:40",
+        "Alessandro L": "16:45",
+        "Sara": "17:03",
+        "Conor": "17:10",
+        "Edoardo": "17:21",
+        "Isabel": "17:23",
+        "Lior": "17:35",
+        "Giulia": "17:42",
+        "Maria Claudia": "17:44",
+        "Tiberio": "17:47",
+        "Roberta": "17:51",
+        "Lawrence": "17:56",
+        "Flaminia": "17:58",
+        "Marco": "18:00",
+        "Veronica": "18:03"
+      },
+      "wrapTime": "17:39",
+      "result": {
+        "winner": "Giulia",
+        "winners": [
+          "Giulia"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Giulia",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-04-20T12:50:45.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-21-main",
+      "gameDate": "2026-04-21",
+      "unit": "main",
+      "guesses": {
+        "Tiberio": "17:08",
+        "Sara": "17:37",
+        "Conor": "17:50",
+        "Francesca": "17:54",
+        "Isabel": "18:03",
+        "Edoardo": "18:06",
+        "Jai": "18:10",
+        "Roberta": "18:14",
+        "Marco": "18:15",
+        "Alessandro L": "18:18",
+        "Euridilla": "18:19",
+        "Giulia": "18:23",
+        "Lawrence": "18:24",
+        "Maria Claudia": "18:26",
+        "Veronica": "18:27",
+        "Lior": "18:30",
+        "Flaminia": "18:31"
+      },
+      "wrapTime": "18:21",
+      "result": {
+        "winner": "Giulia",
+        "winners": [
+          "Giulia"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Giulia",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-04-21T13:09:13.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-22-main",
+      "gameDate": "2026-04-22",
+      "unit": "main",
+      "guesses": {
+        "Flaminia": "17:57",
+        "Marco": "18:15",
+        "Roberta": "18:16",
+        "Francesca": "18:26",
+        "Maria Claudia": "18:29",
+        "Lior": "18:30",
+        "Alessandro L": "18:31",
+        "Isabel": "18:32",
+        "Euridilla": "18:34",
+        "Tiberio": "18:36",
+        "Veronica": "18:37",
+        "Lawrence": "18:41",
+        "Edoardo": "18:42"
+      },
+      "wrapTime": "18:41",
+      "result": {
+        "winner": "Edoardo",
+        "winners": [
+          "Edoardo"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Edoardo",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-04-22T15:28:56.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-23-main",
+      "gameDate": "2026-04-23",
+      "unit": "main",
+      "guesses": {
+        "Tiberio": "17:00",
+        "Alessandro L": "17:10",
+        "Isabel": "18:00",
+        "Flaminia": "18:03",
+        "Veronica": "18:13",
+        "Conor": "18:15",
+        "Maria Claudia": "18:18",
+        "Francesca": "18:28",
+        "Lawrence": "18:29",
+        "Giulia": "18:30",
+        "Euridilla": "18:32",
+        "Roberta": "18:34",
+        "Marco": "18:40",
+        "Edoardo": "18:41"
+      },
+      "wrapTime": "18:55",
+      "result": {
+        "winner": "Edoardo",
+        "winners": [
+          "Edoardo"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Edoardo",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-04-23T14:31:41.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-24-main",
+      "gameDate": "2026-04-24",
+      "unit": "main",
+      "guesses": {
+        "Sara": "17:50",
+        "Euridilla": "18:20",
+        "Isabel": "18:24",
+        "Lior": "18:26",
+        "Roberta": "18:27",
+        "Alessandro L": "18:28",
+        "Flaminia": "18:29",
+        "Edoardo": "18:30",
+        "Marco": "18:35",
+        "Lawrence": "18:41",
+        "Francesca": "18:42",
+        "Tiberio": "18:45",
+        "Veronica": "18:47",
+        "Giulia": "18:48"
+      },
+      "wrapTime": "17:33",
+      "result": {
+        "winner": "Sara",
+        "winners": [
+          "Sara"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Sara",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-04-24T14:35:54.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-27-main",
+      "gameDate": "2026-04-27",
+      "unit": "main",
+      "guesses": {
+        "Marco": "18:00",
+        "Flaminia": "18:03",
+        "Roberta": "18:07",
+        "Giulia": "18:17",
+        "Maria Claudia": "18:23",
+        "Alessandro L": "18:24",
+        "Lawrence": "18:26",
+        "Conor": "18:27",
+        "Lior": "18:28",
+        "Euridilla": "18:32",
+        "Francesca": "18:36",
+        "Veronica": "18:53",
+        "Tiberio": "20:06"
+      },
+      "wrapTime": "19:20",
+      "result": {
+        "winner": "Veronica",
+        "winners": [
+          "Veronica"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Veronica",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-04-27T14:50:59.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-28-main",
+      "gameDate": "2026-04-28",
+      "unit": "main",
+      "guesses": {
+        "Roberta": "18:11",
+        "Conor": "18:15",
+        "Lior": "18:20",
+        "Marco": "18:25",
+        "Alessandro L": "18:31",
+        "Edoardo": "18:38",
+        "Lawrence": "18:43",
+        "Sara": "18:47",
+        "Francesca": "18:48",
+        "Tiberio": "18:59",
+        "Isabel": "19:00",
+        "Giulia": "19:01",
+        "Veronica": "19:07",
+        "Maria Claudia": "19:13"
+      },
+      "wrapTime": "17:35",
+      "result": {
+        "winner": "Roberta",
+        "winners": [
+          "Roberta"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Roberta",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-04-28T14:51:20.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-28-second",
+      "gameDate": "2026-04-28",
+      "unit": "second",
+      "guesses": {
+        "Maria Claudia": "18:10",
+        "Sara": "18:12",
+        "Francesca": "18:16",
+        "Lawrence": "18:24",
+        "Isabel": "18:26",
+        "Giulia": "18:27",
+        "Tiberio": "18:29",
+        "Marco": "18:30",
+        "Edoardo": "18:31",
+        "Veronica": "18:43",
+        "Lior": "19:00",
+        "Roberta": "19:11",
+        "Conor": "19:15",
+        "Alessandro L": "19:20"
+      },
+      "wrapTime": "19:05",
+      "result": {
+        "winner": "Lior",
+        "winners": [
+          "Lior"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Lior",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-04-28T14:51:21.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-29-main",
+      "gameDate": "2026-04-29",
+      "unit": "main",
+      "guesses": {
+        "Conor": "18:10",
+        "Alessandro L": "18:13",
+        "Isabel": "18:18",
+        "Veronica": "18:23",
+        "Sara": "18:27",
+        "Maria Claudia": "18:31",
+        "Roberta": "18:37",
+        "Giulia": "18:40",
+        "Francesca": "18:46",
+        "Lior": "18:50",
+        "Flaminia": "18:53",
+        "Edoardo": "18:56",
+        "Lawrence": "18:59",
+        "Tiberio": "19:00",
+        "Euridilla": "19:15"
+      },
+      "wrapTime": "18:20",
+      "result": {
+        "winner": "Veronica",
+        "winners": [
+          "Veronica"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Veronica",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-04-29T12:33:28.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-29-second",
+      "gameDate": "2026-04-29",
+      "unit": "second",
+      "guesses": {
+        "Roberta": "20:14",
+        "Lior": "22:00",
+        "Lawrence": "22:05",
+        "Tiberio": "22:06",
+        "Sara": "22:12",
+        "Alessandro L": "22:13",
+        "Edoardo": "22:22",
+        "Conor": "22:30",
+        "Giulia": "22:40",
+        "Veronica": "22:47",
+        "Isabel": "22:48",
+        "Francesca": "22:56",
+        "Maria Claudia": "22:58",
+        "Flaminia": "23:02",
+        "Euridilla": "23:13"
+      },
+      "wrapTime": "21:35",
+      "result": {
+        "winner": "Lior",
+        "winners": [
+          "Lior"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Lior",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-04-29T15:36:03.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-04-30-main",
+      "gameDate": "2026-04-30",
+      "unit": "main",
+      "guesses": {
+        "Alessandro L": "16:45",
+        "Lior": "16:55",
+        "Maria Claudia": "17:03",
+        "Roberta": "17:11",
+        "Lawrence": "17:12",
+        "Sara": "17:17",
+        "Isabel": "17:22",
+        "Euridilla": "17:24",
+        "Marco": "17:25",
+        "Tiberio": "17:30",
+        "Francesca": "17:36",
+        "Flaminia": "17:48",
+        "Giulia": "17:59",
+        "Edoardo": "18:04",
+        "Veronica": "18:07",
+        "Conor": "18:11"
+      },
+      "wrapTime": "18:01",
+      "result": {
+        "winner": "Edoardo",
+        "winners": [
+          "Edoardo"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Edoardo",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-04-30T11:56:41.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-05-25-main",
+      "gameDate": "2026-05-25",
+      "unit": "main",
+      "guesses": {
+        "Francesca": "15:55",
+        "Sara": "16:05",
+        "Isabel": "16:18",
+        "Edoardo": "16:33",
+        "Euridilla": "16:45",
+        "Lawrence": "16:48",
+        "Alessandro L": "16:49",
+        "Lior": "16:55",
+        "Tiberio": "16:56",
+        "Giulia": "16:57",
+        "Conor": "17:00",
+        "Veronica": "17:07",
+        "Roberta": "17:14",
+        "Marco": "17:45"
+      },
+      "wrapTime": "17:28",
+      "result": {
+        "winner": "Roberta",
+        "winners": [
+          "Roberta"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Roberta",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-05-25T12:57:45.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-05-26-main",
+      "gameDate": "2026-05-26",
+      "unit": "main",
+      "guesses": {
+        "Roberta": "00:02",
+        "Flaminia": "00:28",
+        "Tiberio": "00:31",
+        "Conor": "00:40",
+        "Isabel": "00:47",
+        "Euridilla": "00:50",
+        "Marco": "00:55",
+        "Francesca": "00:56",
+        "Giulia": "00:58",
+        "Lior": "01:08",
+        "Edoardo": "01:13",
+        "Veronica": "01:23"
+      },
+      "wrapTime": "00:28",
+      "result": {
+        "winner": "Flaminia",
+        "winners": [
+          "Flaminia"
+        ],
+        "exactWinner": true,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Flaminia",
+          "points": 2,
+          "reason": "exact-win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-05-26T17:30:12.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-05-27-main",
+      "gameDate": "2026-05-27",
+      "unit": "main",
+      "guesses": {
+        "Roberta": "00:14",
+        "Alessandro L": "00:26",
+        "Sara": "00:28",
+        "Conor": "00:31",
+        "Marco": "00:39",
+        "Francesca": "00:42",
+        "Isabel": "00:46",
+        "Giulia": "00:49",
+        "Lior": "00:50",
+        "Tiberio": "00:52",
+        "Euridilla": "00:53",
+        "Flaminia": "00:59",
+        "Veronica": "01:03",
+        "Edoardo": "01:04"
+      },
+      "wrapTime": "00:38",
+      "result": {
+        "winner": "Marco",
+        "winners": [
+          "Marco"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Marco",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-05-27T21:53:14.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-05-28-main",
+      "gameDate": "2026-05-28",
+      "unit": "main",
+      "guesses": {
+        "Sara": "21:37",
+        "Roberta": "21:57",
+        "Isabel": "22:00",
+        "Edoardo": "22:04",
+        "Flaminia": "22:07",
+        "Lior": "22:15",
+        "Tiberio": "22:16",
+        "Marco": "22:25",
+        "Alessandro L": "22:28",
+        "Francesca": "22:29",
+        "Euridilla": "22:30",
+        "Giulia": "22:31",
+        "Veronica": "22:33"
+      },
+      "wrapTime": "22:30",
+      "result": {
+        "winner": "Euridilla",
+        "winners": [
+          "Euridilla"
+        ],
+        "exactWinner": true,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Euridilla",
+          "points": 2,
+          "reason": "exact-win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-05-28T14:57:55.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-05-29-main",
+      "gameDate": "2026-05-29",
+      "unit": "main",
+      "guesses": {
+        "Giulia": "20:22",
+        "Marco": "20:25",
+        "Euridilla": "20:26",
+        "Francesca": "20:28",
+        "Lior": "20:30",
+        "Roberta": "20:32",
+        "Sara": "20:37",
+        "Tiberio": "20:45",
+        "Veronica": "20:47",
+        "Edoardo": "21:03",
+        "Flaminia": "21:18",
+        "Isabel": "21:25",
+        "Conor": "02:47"
+      },
+      "wrapTime": "21:33",
+      "result": {
+        "winner": "Isabel",
+        "winners": [
+          "Isabel"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Isabel",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-05-29T17:08:42.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-02-main",
+      "gameDate": "2026-06-02",
+      "unit": "main",
+      "guesses": {
+        "Flaminia": "02:30",
+        "Lior": "03:40",
+        "Marco": "04:00",
+        "Alessandro L": "04:10",
+        "Roberta": "04:20",
+        "Tiberio": "04:25",
+        "Lawrence": "04:28",
+        "Euridilla": "04:30",
+        "Sara": "04:37",
+        "Nicolas": "04:49",
+        "Francesca": "04:52",
+        "Giulia": "05:01"
+      },
+      "wrapTime": "02:26",
+      "result": {
+        "winner": "Flaminia",
+        "winners": [
+          "Flaminia"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Flaminia",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-06-02T22:43:39.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-03-main",
+      "gameDate": "2026-06-03",
+      "unit": "main",
+      "guesses": {
+        "Marco": "03:20",
+        "Roberta": "04:05",
+        "Sara": "04:25",
+        "Lior": "04:30",
+        "Giulia": "04:45",
+        "Francesca": "04:56",
+        "Nicolas": "04:58",
+        "Euridilla": "04:59",
+        "Tiberio": "05:00",
+        "Alessandro L": "05:12",
+        "Lawrence": "05:13",
+        "Flaminia": "05:14",
+        "Edoardo": "05:15",
+        "Isabel": "05:18"
+      },
+      "wrapTime": "05:19",
+      "result": {
+        "winner": "Isabel",
+        "winners": [
+          "Isabel"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Isabel",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-06-03T23:12:22.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-04-main",
+      "gameDate": "2026-06-04",
+      "unit": "main",
+      "guesses": {
+        "Sara": "04:27",
+        "Giulia": "04:37",
+        "Marco": "04:40",
+        "Edoardo": "04:42",
+        "Alessandro L": "04:45",
+        "Euridilla": "04:48",
+        "Roberta": "04:59",
+        "Nicolas": "05:00",
+        "Flaminia": "05:01",
+        "Isabel": "05:02",
+        "Francesca": "05:06",
+        "Veronica": "05:07",
+        "Lior": "05:10",
+        "Conor": "05:11",
+        "Tiberio": "05:15"
+      },
+      "wrapTime": "04:39",
+      "result": {
+        "winner": "Marco",
+        "winners": [
+          "Marco"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Marco",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-06-04T23:51:16.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-05-main",
+      "gameDate": "2026-06-05",
+      "unit": "main",
+      "guesses": {
+        "Lior": "03:00",
+        "Edoardo": "03:33",
+        "Lawrence": "03:55",
+        "Flaminia": "04:00",
+        "Conor": "04:07",
+        "Isabel": "04:12",
+        "Marco": "04:15",
+        "Sara": "04:27",
+        "Nicolas": "04:32",
+        "Euridilla": "04:44",
+        "Francesca": "04:56",
+        "Tiberio": "04:57",
+        "Giulia": "05:00"
+      },
+      "wrapTime": "03:19",
+      "result": {
+        "winner": "Edoardo",
+        "winners": [
+          "Edoardo"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Edoardo",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-06-05T23:53:35.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-08-main",
+      "gameDate": "2026-06-08",
+      "unit": "main",
+      "guesses": {
+        "Roberta": "17:51",
+        "Sara": "17:57",
+        "Lawrence": "17:59",
+        "Edoardo": "18:00",
+        "Alessandro L": "18:01",
+        "Euridilla": "18:03",
+        "Flaminia": "18:07",
+        "Marco": "18:10",
+        "Giulia": "18:13",
+        "Veronica": "18:17",
+        "Conor": "18:20",
+        "Francesca": "18:36",
+        "Nicolas": "18:40",
+        "Tiberio": "19:00"
+      },
+      "wrapTime": "17:57",
+      "result": {
+        "winner": "Sara",
+        "winners": [
+          "Sara"
+        ],
+        "exactWinner": true,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Sara",
+          "points": 2,
+          "reason": "exact-win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-06-08T12:26:46.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-09-main",
+      "gameDate": "2026-06-09",
+      "unit": "main",
+      "guesses": {
+        "Edoardo": "17:49",
+        "Euridilla": "17:50",
+        "Veronica": "17:53",
+        "Francesca": "17:57",
+        "Tiberio": "17:58",
+        "Sara": "17:59",
+        "Lawrence": "18:00",
+        "Flaminia": "18:01",
+        "Giulia": "18:03",
+        "Roberta": "18:05",
+        "Conor": "18:07",
+        "Isabel": "18:12",
+        "Marco": "18:15",
+        "Lior": "18:20",
+        "Nicolas": "18:21"
+      },
+      "wrapTime": "17:58",
+      "result": {
+        "winner": "Sara",
+        "winners": [
+          "Sara"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Sara",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-06-09T12:21:22.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-10-main",
+      "gameDate": "2026-06-10",
+      "unit": "main",
+      "guesses": {
+        "Conor": "17:00",
+        "Lawrence": "17:25",
+        "Giulia": "17:29",
+        "Flaminia": "17:31",
+        "Edoardo": "17:36",
+        "Roberta": "17:41",
+        "Lior": "17:48",
+        "Marco": "17:50",
+        "Veronica": "17:53",
+        "Euridilla": "17:56",
+        "Francesca": "17:57",
+        "Tiberio": "17:58",
+        "Sara": "17:59",
+        "Nicolas": "18:00",
+        "Isabel": "18:02"
+      },
+      "wrapTime": "18:54",
+      "result": {
+        "winner": "Isabel",
+        "winners": [
+          "Isabel"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Isabel",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-06-10T12:59:04.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-11-main",
+      "gameDate": "2026-06-11",
+      "unit": "main",
+      "guesses": {
+        "Roberta": "18:22",
+        "Isabel": "18:53",
+        "Lior": "18:55",
+        "Lawrence": "18:57",
+        "Edoardo": "18:58",
+        "Flaminia": "18:59",
+        "Nicolas": "19:00",
+        "Francesca": "19:06",
+        "Veronica": "19:07",
+        "Tiberio": "19:30",
+        "Giulia": "19:31",
+        "Conor": "20:00",
+        "Marco": "23:05"
+      },
+      "wrapTime": "18:44",
+      "result": {
+        "winner": "Isabel",
+        "winners": [
+          "Isabel"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Isabel",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-06-11T15:03:57.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-12-main",
+      "gameDate": "2026-06-12",
+      "unit": "main",
+      "guesses": {
+        "Lawrence": "17:38",
+        "Roberta": "19:25",
+        "Conor": "19:30",
+        "Edoardo": "19:33",
+        "Veronica": "19:43",
+        "Giulia": "19:45",
+        "Isabel": "19:48",
+        "Francesca": "19:56",
+        "Sara": "19:57",
+        "Tiberio": "19:58",
+        "Nicolas": "19:59",
+        "Marco": "20:00",
+        "Lior": "20:15"
+      },
+      "wrapTime": "19:35",
+      "result": {
+        "winner": "Edoardo",
+        "winners": [
+          "Edoardo"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Edoardo",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-06-12T10:58:42.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-12-second",
+      "gameDate": "2026-06-12",
+      "unit": "second",
+      "guesses": {
+        "Edoardo": "16:08",
+        "Isabel": "16:09",
+        "Nicolas": "16:30",
+        "Conor": "17:20",
+        "Euridilla": "17:30",
+        "Veronica": "17:37",
+        "Roberta": "17:45",
+        "Francesca": "17:57",
+        "Giulia": "18:01",
+        "Lawrence": "18:14",
+        "Flaminia": "19:00",
+        "Tiberio": "19:30"
+      },
+      "wrapTime": "14:04",
+      "result": {
+        "winner": "Edoardo",
+        "winners": [
+          "Edoardo"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Edoardo",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-06-12T10:46:53.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-15-main",
+      "gameDate": "2026-06-15",
+      "unit": "main",
+      "guesses": {
+        "Nicolas": "17:51",
+        "Giulia": "17:56",
+        "Flaminia": "17:58",
+        "Roberta": "17:59",
+        "Sara": "18:00",
+        "Euridilla": "18:05",
+        "Marco": "18:10",
+        "Tiberio": "18:15",
+        "Lior": "18:18",
+        "Conor": "18:30"
+      },
+      "wrapTime": "17:59",
+      "result": {
+        "winner": "Roberta",
+        "winners": [
+          "Roberta"
+        ],
+        "exactWinner": true,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Roberta",
+          "points": 2,
+          "reason": "exact-win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-06-15T15:10:56.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-16-main",
+      "gameDate": "2026-06-16",
+      "unit": "main",
+      "guesses": {
+        "Tiberio": "17:51",
+        "Sara": "17:52",
+        "Lawrence": "17:53",
+        "Marco": "17:54",
+        "Flaminia": "17:55",
+        "Euridilla": "17:56",
+        "Edoardo": "17:57",
+        "Giulia": "17:58",
+        "Conor": "17:59",
+        "Nicolas": "18:00",
+        "Francesca": "18:01",
+        "Roberta": "18:03",
+        "Veronica": "18:04",
+        "Isabel": "18:09",
+        "Lior": "18:20"
+      },
+      "wrapTime": "18:00",
+      "result": {
+        "winner": "Nicolas",
+        "winners": [
+          "Nicolas"
+        ],
+        "exactWinner": true,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Nicolas",
+          "points": 2,
+          "reason": "exact-win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-06-16T15:44:24.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-17-main",
+      "gameDate": "2026-06-17",
+      "unit": "main",
+      "guesses": {
+        "Nicolas": "17:48",
+        "Edoardo": "17:49",
+        "Euridilla": "17:51",
+        "Roberta": "17:54",
+        "Marco": "17:55",
+        "Giulia": "17:56",
+        "Sara": "17:57",
+        "Tiberio": "17:58",
+        "Francesca": "17:59",
+        "Flaminia": "18:00",
+        "Isabel": "18:01",
+        "Veronica": "18:03"
+      },
+      "wrapTime": "17:58",
+      "result": {
+        "winner": "Tiberio",
+        "winners": [
+          "Tiberio"
+        ],
+        "exactWinner": true,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Tiberio",
+          "points": 2,
+          "reason": "exact-win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-06-17T11:27:40.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-18-main",
+      "gameDate": "2026-06-18",
+      "unit": "main",
+      "guesses": {
+        "Nicolas": "22:29",
+        "Flaminia": "22:30",
+        "Edoardo": "22:43",
+        "Tiberio": "22:45",
+        "Roberta": "22:48",
+        "Marco": "22:50",
+        "Sara": "22:56",
+        "Francesca": "22:57",
+        "Lawrence": "22:58",
+        "Isabel": "23:00",
+        "Veronica": "23:06"
+      },
+      "wrapTime": "22:48",
+      "result": {
+        "winner": "Roberta",
+        "winners": [
+          "Roberta"
+        ],
+        "exactWinner": true,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Roberta",
+          "points": 2,
+          "reason": "exact-win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-06-18T20:27:26.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-19-main",
+      "gameDate": "2026-06-19",
+      "unit": "main",
+      "guesses": {
+        "Roberta": "03:10",
+        "Lawrence": "03:25",
+        "Flaminia": "03:30",
+        "Edoardo": "03:33",
+        "Isabel": "03:37",
+        "Sara": "03:40",
+        "Giulia": "03:47",
+        "Lior": "03:50",
+        "Francesca": "03:56",
+        "Tiberio": "04:00",
+        "Veronica": "04:07",
+        "Conor": "04:20",
+        "Nicolas": "04:21",
+        "Marco": "04:55"
+      },
+      "wrapTime": "04:58",
+      "result": {
+        "winner": "Marco",
+        "winners": [
+          "Marco"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Marco",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-06-19T22:31:58.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-22-main",
+      "gameDate": "2026-06-22",
+      "unit": "main",
+      "guesses": {
+        "Sara": "17:56",
+        "Francesca": "17:57",
+        "Edoardo": "17:58",
+        "Giulia": "17:59",
+        "Lior": "18:00",
+        "Flaminia": "18:01",
+        "Roberta": "18:03",
+        "Euridilla": "18:05",
+        "Isabel": "18:12",
+        "Tiberio": "18:15",
+        "Nicolas": "18:55",
+        "Veronica": "19:17"
+      },
+      "wrapTime": "17:59",
+      "result": {
+        "winner": "Giulia",
+        "winners": [
+          "Giulia"
+        ],
+        "exactWinner": true,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Giulia",
+          "points": 2,
+          "reason": "exact-win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-06-22T15:27:51.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-23-main",
+      "gameDate": "2026-06-23",
+      "unit": "main",
+      "guesses": {
+        "Marco": "17:53",
+        "Roberta": "17:56",
+        "Sara": "17:57",
+        "Flaminia": "17:58",
+        "Nicolas": "17:59",
+        "Giulia": "18:00",
+        "Lior": "18:12",
+        "Francesca": "18:36",
+        "Isabel": "18:54",
+        "Lawrence": "18:57",
+        "Edoardo": "19:00",
+        "Tiberio": "19:15"
+      },
+      "wrapTime": "17:33",
+      "result": {
+        "winner": "Marco",
+        "winners": [
+          "Marco"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Marco",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-06-23T15:19:35.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-24-main",
+      "gameDate": "2026-06-24",
+      "unit": "main",
+      "guesses": {
+        "Roberta": "04:39",
+        "Isabel": "04:46",
+        "Francesca": "04:52",
+        "Giulia": "04:55",
+        "Flaminia": "04:56",
+        "Lawrence": "04:57",
+        "Edoardo": "04:58",
+        "Nicolas": "04:59",
+        "Lior": "05:00",
+        "Marco": "05:03",
+        "Veronica": "05:17"
+      },
+      "wrapTime": "04:34",
+      "result": {
+        "winner": "Roberta",
+        "winners": [
+          "Roberta"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Roberta",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-06-24T22:06:52.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-25-main",
+      "gameDate": "2026-06-25",
+      "unit": "main",
+      "guesses": {
+        "Sara": "04:27",
+        "Tiberio": "04:30",
+        "Giulia": "04:37",
+        "Marco": "04:40",
+        "Francesca": "04:42",
+        "Roberta": "04:44",
+        "Flaminia": "04:47",
+        "Edoardo": "04:53",
+        "Lior": "04:58",
+        "Nicolas": "04:59",
+        "Veronica": "05:07"
+      },
+      "wrapTime": "04:43",
+      "result": {
+        "winner": "Roberta",
+        "winners": [
+          "Roberta"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Roberta",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-06-25T23:39:49.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-26-main",
+      "gameDate": "2026-06-26",
+      "unit": "main",
+      "guesses": {
+        "Marco": "03:30",
+        "Roberta": "03:50",
+        "Isabel": "03:28",
+        "Nicolas": "03:16",
+        "Giulia": "03:17",
+        "Edoardo": "03:18",
+        "Euridilla": "03:31",
+        "Lawrence": "03:43",
+        "Lior": "04:50",
+        "Francesca": "04:56",
+        "Conor": "03:30",
+        "Veronica": "03:37"
+      },
+      "wrapTime": "04:28",
+      "result": {
+        "winner": "Nicolas",
+        "winners": [
+          "Nicolas"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Nicolas",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-06-27T00:51:11.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-26-second",
+      "gameDate": "2026-06-26",
+      "unit": "second",
+      "guesses": {
+        "Nicolas": "03:16",
+        "Giulia": "03:17",
+        "Edoardo": "03:18",
+        "Isabel": "03:28",
+        "Conor": "03:30",
+        "Euridilla": "03:31",
+        "Veronica": "03:37",
+        "Lawrence": "03:43",
+        "Roberta": "03:50"
+      },
+      "wrapTime": "03:02",
+      "result": {
+        "winner": "Nicolas",
+        "winners": [
+          "Nicolas"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Nicolas",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "legacy",
+        "confidence": "MANUAL",
+        "originalMessageDate": null,
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-06-30-main",
+      "gameDate": "2026-06-30",
+      "unit": "main",
+      "guesses": {
+        "Conor": "17:20",
+        "Flaminia": "17:32",
+        "Roberta": "17:45",
+        "Marco": "17:50",
+        "Euridilla": "17:53",
+        "Sara": "17:57",
+        "Francesca": "17:58",
+        "Tiberio": "17:59",
+        "Nicolas": "18:00",
+        "Giulia": "18:01",
+        "Lior": "18:05",
+        "Veronica": "18:07",
+        "Edoardo": "18:28",
+        "Isabel": "18:30"
+      },
+      "wrapTime": "17:54",
+      "result": {
+        "winner": "Euridilla",
+        "winners": [
+          "Euridilla"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Euridilla",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-06-30T15:16:18.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-01-main",
+      "gameDate": "2026-07-01",
+      "unit": "main",
+      "guesses": {
+        "Tiberio": "18:15",
+        "Isabel": "18:18",
+        "Flaminia": "18:22",
+        "Lior": "18:23",
+        "Giulia": "18:24",
+        "Conor": "18:25",
+        "Francesca": "18:26",
+        "Euridilla": "18:27",
+        "Edoardo": "18:28",
+        "Roberta": "18:29",
+        "Nicolas": "18:30",
+        "Sara": "18:31",
+        "Marco": "18:32",
+        "Veronica": "18:33"
+      },
+      "wrapTime": "19:23",
+      "result": {
+        "winner": "Veronica",
+        "winners": [
+          "Veronica"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Veronica",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-01T12:25:14.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-02-main",
+      "gameDate": "2026-07-02",
+      "unit": "main",
+      "guesses": {
+        "Roberta": "16:58",
+        "Francesca": "17:10",
+        "Edoardo": "17:17",
+        "Tiberio": "17:25",
+        "Lior": "17:45",
+        "Flaminia": "17:47",
+        "Veronica": "17:53",
+        "Nicolas": "17:55",
+        "Marco": "18:00"
+      },
+      "wrapTime": "17:54",
+      "result": {
+        "winner": "Nicolas",
+        "winners": [
+          "Nicolas"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Nicolas",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "HIGH",
+        "originalMessageDate": "2026-07-02T14:40:01.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-02-second",
+      "gameDate": "2026-07-02",
+      "unit": "second",
+      "guesses": {
+        "Nicolas": "23:05",
+        "Lior": "23:10",
+        "Francesca": "23:24",
+        "Tiberio": "23:30",
+        "Marco": "00:00",
+        "Veronica": "00:13",
+        "Roberta": "00:14",
+        "Isabel": "00:19",
+        "Edoardo": "00:24",
+        "Flaminia": "00:47"
+      },
+      "wrapTime": "01:04",
+      "result": {
+        "winner": "Flaminia",
+        "winners": [
+          "Flaminia"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Flaminia",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-02T17:52:46.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-03-main",
+      "gameDate": "2026-07-03",
+      "unit": "main",
+      "guesses": {
+        "Roberta": "17:47",
+        "Tiberio": "17:54",
+        "Sara": "17:57",
+        "Francesca": "17:58",
+        "Nicolas": "17:59",
+        "Flaminia": "18:00",
+        "Lior": "18:30"
+      },
+      "wrapTime": "17:59",
+      "result": {
+        "winner": "Nicolas",
+        "winners": [
+          "Nicolas"
+        ],
+        "exactWinner": true,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Nicolas",
+          "points": 2,
+          "reason": "exact-win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "HIGH",
+        "originalMessageDate": "2026-07-03T15:46:12.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-03-second",
+      "gameDate": "2026-07-03",
+      "unit": "second",
+      "guesses": {
+        "Tiberio": "02:00",
+        "Sara": "02:44",
+        "Edoardo": "03:00",
+        "Lior": "03:30",
+        "Roberta": "03:47",
+        "Flaminia": "03:55",
+        "Francesca": "03:56",
+        "Veronica": "03:57",
+        "Nicolas": "04:00",
+        "Giulia": "04:01"
+      },
+      "wrapTime": "03:54",
+      "result": {
+        "winner": "Flaminia",
+        "winners": [
+          "Flaminia"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Flaminia",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-03T20:54:52.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-06-main",
+      "gameDate": "2026-07-06",
+      "unit": "main",
+      "guesses": {
+        "Tiberio": "17:15",
+        "Veronica": "17:47",
+        "Roberta": "17:49",
+        "Edoardo": "17:50",
+        "Giulia": "17:52",
+        "Conor": "17:53",
+        "Lior": "17:55",
+        "Sara": "17:57",
+        "Francesca": "17:58",
+        "Marco": "17:59",
+        "Nicolas": "18:00"
+      },
+      "wrapTime": "17:53",
+      "result": {
+        "winner": "Conor",
+        "winners": [
+          "Conor"
+        ],
+        "exactWinner": true,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Conor",
+          "points": 2,
+          "reason": "exact-win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-06T12:53:24.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-07-main",
+      "gameDate": "2026-07-07",
+      "unit": "main",
+      "guesses": {
+        "Nicolas": "00:47",
+        "Roberta": "00:53",
+        "Francesca": "00:56",
+        "Tiberio": "00:57",
+        "Edoardo": "00:58",
+        "Giulia": "00:59",
+        "Flaminia": "01:00",
+        "Sara": "01:01",
+        "Lior": "01:20"
+      },
+      "wrapTime": "01:00",
+      "result": {
+        "winner": "Flaminia",
+        "winners": [
+          "Flaminia"
+        ],
+        "exactWinner": true,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Flaminia",
+          "points": 2,
+          "reason": "exact-win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "HIGH",
+        "originalMessageDate": "2026-07-07T21:06:29.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-08-main",
+      "gameDate": "2026-07-08",
+      "unit": "main",
+      "guesses": {
+        "Francesca": "04:36",
+        "Isabel": "04:49",
+        "Lawrence": "04:53",
+        "Roberta": "04:55",
+        "Edoardo": "04:56",
+        "Veronica": "04:57",
+        "Giulia": "04:58",
+        "Nicolas": "04:59",
+        "Flaminia": "05:00",
+        "Lior": "05:05",
+        "Sara": "05:45",
+        "Euridilla": "05:55"
+      },
+      "wrapTime": "04:56",
+      "result": {
+        "winner": "Edoardo",
+        "winners": [
+          "Edoardo"
+        ],
+        "exactWinner": true,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Edoardo",
+          "points": 2,
+          "reason": "exact-win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-08T23:52:47.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-09-main",
+      "gameDate": "2026-07-09",
+      "unit": "main",
+      "guesses": {
+        "Lior": "04:49",
+        "Euridilla": "04:51",
+        "Nicolas": "04:54",
+        "Giulia": "04:55",
+        "Conor": "04:56",
+        "Veronica": "04:57",
+        "Edoardo": "04:58",
+        "Isabel": "04:59",
+        "Flaminia": "05:00",
+        "Francesca": "05:01",
+        "Roberta": "05:25"
+      },
+      "wrapTime": "05:00",
+      "result": {
+        "winner": "Flaminia",
+        "winners": [
+          "Flaminia"
+        ],
+        "exactWinner": true,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Flaminia",
+          "points": 2,
+          "reason": "exact-win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-09T23:35:06.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-10-main",
+      "gameDate": "2026-07-10",
+      "unit": "main",
+      "guesses": {
+        "Giulia": "04:56",
+        "Veronica": "04:57",
+        "Edoardo": "04:58",
+        "Francesca": "04:59",
+        "Roberta": "05:00",
+        "Flaminia": "05:02",
+        "Lior": "05:10",
+        "Nicolas": "05:11"
+      },
+      "wrapTime": "04:50",
+      "result": {
+        "winner": "Giulia",
+        "winners": [
+          "Giulia"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Giulia",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "HIGH",
+        "originalMessageDate": "2026-07-11T01:12:56.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-13-main",
+      "gameDate": "2026-07-13",
+      "unit": "main",
+      "guesses": {
+        "Flaminia": "16:30",
+        "Roberta": "16:50",
+        "Sara": "17:00",
+        "Tiberio": "17:01",
+        "Edoardo": "17:03",
+        "Isabel": "17:08",
+        "Nicolas": "17:10",
+        "Lawrence": "17:13",
+        "Euridilla": "17:15",
+        "Giulia": "17:17",
+        "Conor": "17:20",
+        "Maria Claudia": "17:22",
+        "Lior": "17:25",
+        "Veronica": "17:27"
+      },
+      "wrapTime": "17:26",
+      "result": {
+        "winner": "Lior",
+        "winners": [
+          "Lior"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Lior",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-13T13:46:35.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-13-second",
+      "gameDate": "2026-07-13",
+      "unit": "second",
+      "guesses": {
+        "Nicolas": "03:40",
+        "Roberta": "03:45",
+        "Maria Claudia": "03:58",
+        "Euridilla": "04:00",
+        "Lawrence": "04:15",
+        "Veronica": "04:17",
+        "Giulia": "04:27",
+        "Conor": "04:30",
+        "Lior": "04:45",
+        "Isabel": "04:48",
+        "Sara": "04:57",
+        "Francesca": "04:58",
+        "Edoardo": "04:59",
+        "Flaminia": "05:00",
+        "Tiberio": "05:01"
+      },
+      "wrapTime": "04:04",
+      "result": {
+        "winner": "Euridilla",
+        "winners": [
+          "Euridilla"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Euridilla",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-13T20:11:16.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-14-main",
+      "gameDate": "2026-07-14",
+      "unit": "main",
+      "guesses": {
+        "Roberta": "17:22",
+        "Conor": "17:35",
+        "Maria Claudia": "17:41",
+        "Giulia": "17:43",
+        "Edoardo": "17:45",
+        "Lawrence": "17:47",
+        "Sara": "17:50",
+        "Veronica": "17:53",
+        "Isabel": "17:54",
+        "Lior": "17:56",
+        "Tiberio": "17:59"
+      },
+      "wrapTime": "17:58",
+      "result": {
+        "winner": "Tiberio",
+        "winners": [
+          "Tiberio"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Tiberio",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-14T10:18:48.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-15-main",
+      "gameDate": "2026-07-15",
+      "unit": "main",
+      "guesses": {
+        "Euridilla": "19:50",
+        "Conor": "20:00",
+        "Roberta": "20:12",
+        "Isabel": "20:19",
+        "Edoardo": "20:20",
+        "Giulia": "20:23",
+        "Lior": "20:25",
+        "Veronica": "20:27",
+        "Lawrence": "20:29",
+        "Flaminia": "20:45",
+        "Francesca": "20:47"
+      },
+      "wrapTime": "20:48",
+      "result": {
+        "winner": "Francesca",
+        "winners": [
+          "Francesca"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Francesca",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-15T13:00:03.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-16-main",
+      "gameDate": "2026-07-16",
+      "unit": "main",
+      "guesses": {
+        "Tiberio": "20:00",
+        "Euridilla": "20:10",
+        "Maria Claudia": "20:13",
+        "Sara": "20:17",
+        "Roberta": "20:19",
+        "Francesca": "20:20",
+        "Conor": "20:28",
+        "Flaminia": "20:29",
+        "Giulia": "20:30",
+        "Lior": "20:33",
+        "Edoardo": "20:45"
+      },
+      "wrapTime": "21:01",
+      "result": {
+        "winner": "Edoardo",
+        "winners": [
+          "Edoardo"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Edoardo",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-16T18:01:48.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-17-main",
+      "gameDate": "2026-07-17",
+      "unit": "main",
+      "guesses": {
+        "Giulia": "22:00",
+        "Isabel": "22:40",
+        "Lawrence": "22:48",
+        "Tiberio": "22:57",
+        "Edoardo": "23:00",
+        "Roberta": "23:10",
+        "Francesca": "23:16",
+        "Conor": "23:20",
+        "Maria Claudia": "23:23",
+        "Flaminia": "23:45",
+        "Lior": "23:50",
+        "Veronica": "00:17"
+      },
+      "wrapTime": "23:23",
+      "result": {
+        "winner": "Maria Claudia",
+        "winners": [
+          "Maria Claudia"
+        ],
+        "exactWinner": true,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Maria Claudia",
+          "points": 2,
+          "reason": "exact-win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-17T19:12:15.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-20-main",
+      "gameDate": "2026-07-20",
+      "unit": "main",
+      "guesses": {
+        "Tiberio": "17:30",
+        "Euridilla": "17:47",
+        "Edoardo": "17:50",
+        "Giulia": "17:52",
+        "Isabel": "17:53",
+        "Flaminia": "17:54",
+        "Conor": "17:55",
+        "Maria Claudia": "17:56",
+        "Veronica": "17:57",
+        "Lior": "17:58",
+        "Marco": "17:59",
+        "Lawrence": "18:00",
+        "Francesca": "18:01",
+        "Roberta": "18:05"
+      },
+      "wrapTime": "17:52",
+      "result": {
+        "winner": "Giulia",
+        "winners": [
+          "Giulia"
+        ],
+        "exactWinner": true,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Giulia",
+          "points": 2,
+          "reason": "exact-win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-20T14:05:26.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-20-second",
+      "gameDate": "2026-07-20",
+      "unit": "second",
+      "guesses": {
+        "Tiberio": "16:30",
+        "Lior": "17:10",
+        "Veronica": "17:17",
+        "Lawrence": "17:20",
+        "Roberta": "17:26",
+        "Isabel": "17:35",
+        "Flaminia": "17:40",
+        "Giulia": "17:45",
+        "Marco": "17:50",
+        "Conor": "17:58",
+        "Edoardo": "18:01",
+        "Maria Claudia": "18:03",
+        "Francesca": "18:43"
+      },
+      "wrapTime": "16:23",
+      "result": {
+        "winner": "Tiberio",
+        "winners": [
+          "Tiberio"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Tiberio",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-20T14:05:36.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-21-main",
+      "gameDate": "2026-07-21",
+      "unit": "main",
+      "guesses": {
+        "Conor": "17:40",
+        "Edoardo": "17:50",
+        "Euridilla": "17:52",
+        "Veronica": "17:53",
+        "Giulia": "17:55",
+        "Isabel": "17:56",
+        "Francesca": "17:57",
+        "Lawrence": "17:58",
+        "Tiberio": "17:59",
+        "Roberta": "18:00",
+        "Maria Claudia": "18:07",
+        "Lior": "18:20",
+        "Flaminia": "18:30"
+      },
+      "wrapTime": "17:57",
+      "result": {
+        "winner": "Francesca",
+        "winners": [
+          "Francesca"
+        ],
+        "exactWinner": true,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Francesca",
+          "points": 2,
+          "reason": "exact-win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-21T13:00:33.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-22-main",
+      "gameDate": "2026-07-22",
+      "unit": "main",
+      "guesses": {
+        "Roberta": "19:12",
+        "Edoardo": "19:19",
+        "Veronica": "19:26",
+        "Francesca": "19:27",
+        "Sara": "19:28",
+        "Conor": "19:29",
+        "Lior": "19:35",
+        "Giulia": "19:37",
+        "Maria Claudia": "19:48"
+      },
+      "wrapTime": "19:34",
+      "result": {
+        "winner": "Lior",
+        "winners": [
+          "Lior"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Lior",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "HIGH",
+        "originalMessageDate": "2026-07-22T15:58:28.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-22-second",
+      "gameDate": "2026-07-22",
+      "unit": "second",
+      "guesses": {
+        "Edoardo": "17:00",
+        "Lior": "17:15",
+        "Francesca": "17:24",
+        "Giulia": "17:30",
+        "Sara": "17:35",
+        "Roberta": "17:48",
+        "Maria Claudia": "17:56"
+      },
+      "wrapTime": "17:55",
+      "result": {
+        "winner": "Maria Claudia",
+        "winners": [
+          "Maria Claudia"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Maria Claudia",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "HIGH",
+        "originalMessageDate": "2026-07-22T15:30:11.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-23-main",
+      "gameDate": "2026-07-23",
+      "unit": "main",
+      "guesses": {
+        "Roberta": "20:42",
+        "Maria Claudia": "20:43",
+        "Edoardo": "20:45",
+        "Isabel": "20:51",
+        "Flaminia": "20:55",
+        "Lior": "20:58",
+        "Francesca": "20:57",
+        "Giulia": "21:00",
+        "Conor": "21:02",
+        "Marco": "21:03",
+        "Tiberio": "21:10"
+      },
+      "wrapTime": "19:54",
+      "result": {
+        "winner": null,
+        "winners": [],
+        "exactWinner": false,
+        "noWinner": true,
+        "crazyDay": false
+      },
+      "pointChanges": [],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-23T16:43:05.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-24-main",
+      "gameDate": "2026-07-24",
+      "unit": "main",
+      "guesses": {
+        "Tiberio": "23:20",
+        "Lior": "23:40",
+        "Isabel": "23:45",
+        "Maria Claudia": "23:49",
+        "Lawrence": "23:50",
+        "Roberta": "23:56",
+        "Giulia": "00:00",
+        "Conor": "00:05",
+        "Euridilla": "00:10",
+        "Sara": "00:13",
+        "Edoardo": "00:16",
+        "Marco": "00:20",
+        "Veronica": "00:27",
+        "Francesca": "00:28",
+        "Flaminia": "00:50"
+      },
+      "wrapTime": "00:23",
+      "result": {
+        "winner": "Marco",
+        "winners": [
+          "Marco"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Marco",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-24T19:46:08.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-27-main",
+      "gameDate": "2026-07-27",
+      "unit": "main",
+      "guesses": {
+        "Isabel": "17:30",
+        "Euridilla": "17:40",
+        "Lior": "17:50",
+        "Edoardo": "17:52",
+        "Lawrence": "17:54",
+        "Conor": "17:55",
+        "Sara": "17:56",
+        "Veronica": "17:57",
+        "Francesca": "17:58",
+        "Roberta": "17:59",
+        "Flaminia": "18:01",
+        "Maria Claudia": "18:02",
+        "Marco": "18:03",
+        "Giulia": "18:15"
+      },
+      "wrapTime": "17:59",
+      "result": {
+        "winner": "Roberta",
+        "winners": [
+          "Roberta"
+        ],
+        "exactWinner": true,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Roberta",
+          "points": 2,
+          "reason": "exact-win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-27T12:40:55.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-28-main",
+      "gameDate": "2026-07-28",
+      "unit": "main",
+      "guesses": {
+        "Giulia": "17:47",
+        "Edoardo": "17:50",
+        "Euridilla": "17:55",
+        "Maria Claudia": "17:56",
+        "Veronica": "17:57",
+        "Marco": "17:58",
+        "Conor": "17:59",
+        "Francesca": "18:00",
+        "Roberta": "18:01",
+        "Tiberio": "18:10",
+        "Isabel": "18:12",
+        "Lior": "18:15"
+      },
+      "wrapTime": "17:19",
+      "result": {
+        "winner": "Giulia",
+        "winners": [
+          "Giulia"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Giulia",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-28T12:34:46.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-29-main",
+      "gameDate": "2026-07-29",
+      "unit": "main",
+      "guesses": {
+        "Conor": "17:30",
+        "Tiberio": "17:40",
+        "Lawrence": "17:48",
+        "Maria Claudia": "17:52",
+        "Giulia": "17:55",
+        "Francesca": "17:57",
+        "Marco": "17:59",
+        "Edoardo": "18:00",
+        "Lior": "18:10",
+        "Flaminia": "18:24",
+        "Roberta": "18:25"
+      },
+      "wrapTime": "17:45",
+      "result": {
+        "winner": "Lawrence",
+        "winners": [
+          "Lawrence"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Lawrence",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-29T13:05:44.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-30-main",
+      "gameDate": "2026-07-30",
+      "unit": "main",
+      "guesses": {
+        "Tiberio": "04:00",
+        "Lior": "04:20",
+        "Roberta": "04:38",
+        "Maria Claudia": "04:46",
+        "Conor": "04:50",
+        "Marco": "04:55",
+        "Veronica": "04:57",
+        "Francesca": "04:58",
+        "Edoardo": "04:59",
+        "Flaminia": "05:00"
+      },
+      "wrapTime": "04:30",
+      "result": {
+        "winner": "Roberta",
+        "winners": [
+          "Roberta"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Roberta",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-30T23:15:57.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-07-31-main",
+      "gameDate": "2026-07-31",
+      "unit": "main",
+      "guesses": {
+        "Tiberio": "04:00",
+        "Lior": "04:20",
+        "Maria Claudia": "04:23",
+        "Conor": "04:25",
+        "Francesca": "04:29",
+        "Veronica": "04:37",
+        "Lawrence": "04:38",
+        "Isabel": "04:42",
+        "Marco": "04:45",
+        "Edoardo": "04:50",
+        "Roberta": "04:54",
+        "Flaminia": "04:55"
+      },
+      "wrapTime": "05:03",
+      "result": {
+        "winner": "Flaminia",
+        "winners": [
+          "Flaminia"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Flaminia",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-07-31T22:33:06.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-08-03-main",
+      "gameDate": "2026-08-03",
+      "unit": "main",
+      "guesses": {
+        "Maria Claudia": "04:26",
+        "Flaminia": "04:33",
+        "Veronica": "04:37",
+        "Isabel": "04:41",
+        "Tiberio": "04:45",
+        "Edoardo": "04:47",
+        "Conor": "04:50",
+        "Roberta": "04:53",
+        "Marco": "04:54",
+        "Lior": "04:55",
+        "Sara": "04:56",
+        "Lawrence": "04:57",
+        "Giulia": "04:58",
+        "Francesca": "04:59"
+      },
+      "wrapTime": "04:57",
+      "result": {
+        "winner": "Lawrence",
+        "winners": [
+          "Lawrence"
+        ],
+        "exactWinner": true,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Lawrence",
+          "points": 2,
+          "reason": "exact-win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-08-03T23:11:43.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-08-04-main",
+      "gameDate": "2026-08-04",
+      "unit": "main",
+      "guesses": {
+        "Conor": "04:40",
+        "Edoardo": "04:44",
+        "Roberta": "04:47",
+        "Maria Claudia": "04:49",
+        "Isabel": "04:51",
+        "Veronica": "04:53",
+        "Giulia": "04:56",
+        "Lawrence": "04:57",
+        "Francesca": "04:58",
+        "Marco": "04:59",
+        "Flaminia": "05:02",
+        "Lior": "05:07"
+      },
+      "wrapTime": "04:32",
+      "result": {
+        "winner": "Conor",
+        "winners": [
+          "Conor"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Conor",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-08-04T22:36:12.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-08-05-main",
+      "gameDate": "2026-08-05",
+      "unit": "main",
+      "guesses": {
+        "Flaminia": "04:20",
+        "Roberta": "04:27",
+        "Maria Claudia": "04:36",
+        "Giulia": "04:37",
+        "Marco": "04:40",
+        "Isabel": "04:41",
+        "Conor": "04:44",
+        "Lawrence": "04:46",
+        "Lior": "04:50",
+        "Edoardo": "04:54",
+        "Veronica": "04:57",
+        "Francesca": "04:58"
+      },
+      "wrapTime": "04:56",
+      "result": {
+        "winner": "Veronica",
+        "winners": [
+          "Veronica"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Veronica",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-08-05T21:51:40.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-08-06-main",
+      "gameDate": "2026-08-06",
+      "unit": "main",
+      "guesses": {
+        "Roberta": "04:39",
+        "Maria Claudia": "04:47",
+        "Isabel": "04:48",
+        "Giulia": "04:53",
+        "Marco": "04:55",
+        "Francesca": "04:56",
+        "Veronica": "04:57",
+        "Edoardo": "04:58",
+        "Lior": "05:00",
+        "Flaminia": "05:03",
+        "Conor": "05:06"
+      },
+      "wrapTime": "05:06",
+      "result": {
+        "winner": "Conor",
+        "winners": [
+          "Conor"
+        ],
+        "exactWinner": true,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Conor",
+          "points": 2,
+          "reason": "exact-win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-08-06T23:37:20.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-08-07-main",
+      "gameDate": "2026-08-07",
+      "unit": "main",
+      "guesses": {
+        "Isabel": "02:20",
+        "Edoardo": "02:22",
+        "Lawrence": "02:35",
+        "Giulia": "02:33",
+        "Tiberio": "03:00",
+        "Lior": "03:08",
+        "Maria Claudia": "03:13",
+        "Conor": "03:23",
+        "Flaminia": "04:20",
+        "Francesca": "04:36",
+        "Marco": "04:40",
+        "Roberta": "04:46",
+        "Veronica": "04:57"
+      },
+      "wrapTime": "01:57",
+      "result": {
+        "winner": "Isabel",
+        "winners": [
+          "Isabel"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Isabel",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-08-07T23:33:05.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-08-10-main",
+      "gameDate": "2026-08-10",
+      "unit": "main",
+      "guesses": {
+        "Roberta": "18:22",
+        "Isabel": "18:26",
+        "Conor": "18:30",
+        "Marco": "18:40",
+        "Lawrence": "18:42",
+        "Edoardo": "18:45",
+        "Veronica": "18:57",
+        "Francesca": "18:58",
+        "Flaminia": "19:00",
+        "Maria Claudia": "19:02"
+      },
+      "wrapTime": "18:40",
+      "result": {
+        "winner": "Marco",
+        "winners": [
+          "Marco"
+        ],
+        "exactWinner": true,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Marco",
+          "points": 2,
+          "reason": "exact-win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "MANUAL",
+        "originalMessageDate": null,
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-08-10-second",
+      "gameDate": "2026-08-10",
+      "unit": "second",
+      "guesses": {
+        "Roberta": "03:06",
+        "Veronica": "03:33",
+        "Marco": "03:50",
+        "Lior": "04:10",
+        "Conor": "04:15",
+        "Maria Claudia": "04:28",
+        "Lawrence": "04:35",
+        "Francesca": "04:36",
+        "Flaminia": "04:47",
+        "Edoardo": "04:57",
+        "Giulia": "04:58",
+        "Isabel": "05:00"
+      },
+      "wrapTime": "04:45",
+      "result": {
+        "winner": "Flaminia",
+        "winners": [
+          "Flaminia"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Flaminia",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-08-11T01:36:08.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-08-11-main",
+      "gameDate": "2026-08-11",
+      "unit": "main",
+      "guesses": {
+        "Isabel": "19:24",
+        "Marco": "19:40",
+        "Francesca": "19:41",
+        "Giulia": "19:45",
+        "Roberta": "19:47",
+        "Conor": "19:48",
+        "Veronica": "19:53",
+        "Edoardo": "19:55",
+        "Lior": "19:57",
+        "Maria Claudia": "19:58",
+        "Flaminia": "20:03"
+      },
+      "wrapTime": "18:22",
+      "result": {
+        "winner": null,
+        "winners": [],
+        "exactWinner": false,
+        "noWinner": true,
+        "crazyDay": false
+      },
+      "pointChanges": [],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "MANUAL",
+        "originalMessageDate": null,
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-08-11-second",
+      "gameDate": "2026-08-11",
+      "unit": "second",
+      "guesses": {
+        "Roberta": "04:18",
+        "Flaminia": "04:22",
+        "Maria Claudia": "04:32",
+        "Conor": "04:44",
+        "Veronica": "04:47",
+        "Marco": "04:50",
+        "Isabel": "04:51",
+        "Francesca": "04:52",
+        "Lior": "04:57",
+        "Giulia": "05:00",
+        "Edoardo": "05:01"
+      },
+      "wrapTime": "04:34",
+      "result": {
+        "winner": "Maria Claudia",
+        "winners": [
+          "Maria Claudia"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Maria Claudia",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-08-11T23:16:03.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-08-12-main",
+      "gameDate": "2026-08-12",
+      "unit": "main",
+      "guesses": {
+        "Roberta": "17:36",
+        "Conor": "17:49",
+        "Edoardo": "17:53",
+        "Veronica": "17:57",
+        "Francesca": "17:58",
+        "Flaminia": "17:59",
+        "Marco": "18:00",
+        "Maria Claudia": "18:06",
+        "Isabel": "18:07",
+        "Lior": "18:10"
+      },
+      "wrapTime": "18:09",
+      "result": {
+        "winner": "Lior",
+        "winners": [
+          "Lior"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Lior",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-08-12T11:44:07.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-08-13-main",
+      "gameDate": "2026-08-13",
+      "unit": "main",
+      "guesses": {
+        "Roberta": "17:44",
+        "Veronica": "17:47",
+        "Conor": "17:55",
+        "Lawrence": "17:57",
+        "Edoardo": "18:00",
+        "Maria Claudia": "18:03",
+        "Flaminia": "18:05",
+        "Lior": "18:07",
+        "Isabel": "18:09",
+        "Francesca": "18:11",
+        "Marco": "18:15"
+      },
+      "wrapTime": "18:01",
+      "result": {
+        "winner": "Edoardo",
+        "winners": [
+          "Edoardo"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Edoardo",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-08-13T10:33:59.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-08-14-main",
+      "gameDate": "2026-08-14",
+      "unit": "main",
+      "guesses": {
+        "Lior": "17:45",
+        "Edoardo": "17:47",
+        "Lawrence": "17:49",
+        "Roberta": "17:50",
+        "Veronica": "17:53",
+        "Isabel": "17:54",
+        "Conor": "17:55",
+        "Maria Claudia": "17:57",
+        "Francesca": "17:58",
+        "Sara": "17:59",
+        "Marco": "18:00",
+        "Flaminia": "18:01",
+        "Giulia": "18:02",
+        "Tiberio": "18:15"
+      },
+      "wrapTime": "17:56",
+      "result": {
+        "winner": "Maria Claudia",
+        "winners": [
+          "Maria Claudia"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": true
+      },
+      "pointChanges": [
+        {
+          "player": "Maria Claudia",
+          "points": 2,
+          "reason": "crazy-win"
+        },
+        {
+          "player": "Lior",
+          "points": -1,
+          "reason": "farthest-from-wrap"
+        }
+      ],
+      "crazyDay": {
+        "winnerPoints": 2,
+        "penalties": {
+          "didNotVote": [],
+          "farthestFromWrap": [
+            "Lior"
+          ]
+        },
+        "pointChanges": [
+          {
+            "player": "Maria Claudia",
+            "points": 2,
+            "reason": "crazy-win"
+          },
+          {
+            "player": "Lior",
+            "points": -1,
+            "reason": "farthest-from-wrap"
+          }
+        ]
+      },
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-08-14T10:25:13.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-08-17-main",
+      "gameDate": "2026-08-17",
+      "unit": "main",
+      "guesses": {
+        "Marco": "17:50",
+        "Edoardo": "17:52",
+        "Maria Claudia": "17:53",
+        "Ivana": "17:54",
+        "Francesca": "17:55",
+        "Conor": "17:56",
+        "Lior": "17:57",
+        "Flaminia": "17:58",
+        "Isabel": "17:59",
+        "Roberta": "18:00",
+        "Lawrence": "18:02",
+        "Giulia": "18:03"
+      },
+      "wrapTime": "17:26",
+      "result": {
+        "winner": "Marco",
+        "winners": [
+          "Marco"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Marco",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-08-17T13:50:10.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-08-18-main",
+      "gameDate": "2026-08-18",
+      "unit": "main",
+      "guesses": {
+        "Lawrence": "15:45",
+        "Roberta": "16:22",
+        "Giulia": "16:31",
+        "Flaminia": "16:33",
+        "Ivana": "16:35",
+        "Edoardo": "16:37",
+        "Conor": "16:40",
+        "Maria Claudia": "16:47",
+        "Chiara": "16:51",
+        "Lior": "16:58",
+        "Isabel": "17:11",
+        "Marco": "17:45",
+        "Francesca": "17:48",
+        "Veronica": "17:57"
+      },
+      "wrapTime": "17:46",
+      "result": {
+        "winner": "Marco",
+        "winners": [
+          "Marco"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Marco",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-08-18T12:00:53.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-08-19-main",
+      "gameDate": "2026-08-19",
+      "unit": "main",
+      "guesses": {
+        "Conor": "17:55",
+        "Veronica": "17:57",
+        "Francesca": "17:58",
+        "Edoardo": "18:00",
+        "Ivana": "18:04",
+        "Marco": "18:10",
+        "Giulia": "18:15",
+        "Isabel": "18:21",
+        "Lior": "18:30",
+        "Maria Claudia": "18:37",
+        "Roberta": "18:39",
+        "Flaminia": "18:49"
+      },
+      "wrapTime": "19:05",
+      "result": {
+        "winner": "Flaminia",
+        "winners": [
+          "Flaminia"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Flaminia",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-08-19T12:49:15.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-08-20-main",
+      "gameDate": "2026-08-20",
+      "unit": "main",
+      "guesses": {
+        "Conor": "15:15",
+        "Chiara": "15:20",
+        "Isabel": "15:30",
+        "Maria Claudia": "15:41",
+        "Lawrence": "15:45",
+        "Ivana": "15:50",
+        "Lior": "15:55",
+        "Veronica": "15:57",
+        "Marco": "16:00",
+        "Francesca": "16:02",
+        "Roberta": "16:10",
+        "Edoardo": "16:15",
+        "Giulia": "17:00",
+        "Flaminia": "17:10"
+      },
+      "wrapTime": "15:12",
+      "result": {
+        "winner": "Conor",
+        "winners": [
+          "Conor"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": true
+      },
+      "pointChanges": [
+        {
+          "player": "Conor",
+          "points": 2,
+          "reason": "crazy-win"
+        },
+        {
+          "player": "Sara",
+          "points": -1,
+          "reason": "did-not-vote"
+        },
+        {
+          "player": "Tiberio",
+          "points": -1,
+          "reason": "did-not-vote"
+        },
+        {
+          "player": "Flaminia",
+          "points": -1,
+          "reason": "farthest-from-wrap"
+        }
+      ],
+      "crazyDay": {
+        "winnerPoints": 2,
+        "penalties": {
+          "didNotVote": [
+            "Sara",
+            "Tiberio"
+          ],
+          "farthestFromWrap": [
+            "Flaminia"
+          ]
+        },
+        "pointChanges": [
+          {
+            "player": "Conor",
+            "points": 2,
+            "reason": "crazy-win"
+          },
+          {
+            "player": "Sara",
+            "points": -1,
+            "reason": "did-not-vote"
+          },
+          {
+            "player": "Tiberio",
+            "points": -1,
+            "reason": "did-not-vote"
+          },
+          {
+            "player": "Flaminia",
+            "points": -1,
+            "reason": "farthest-from-wrap"
+          }
+        ]
+      },
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-08-20T13:06:52.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-08-20-second",
+      "gameDate": "2026-08-20",
+      "unit": "second",
+      "guesses": {
+        "Lawrence": "22:50",
+        "Roberta": "23:22",
+        "Edoardo": "23:23",
+        "Sara": "23:34",
+        "Flaminia": "23:35",
+        "Veronica": "23:47",
+        "Isabel": "23:51",
+        "Maria Claudia": "23:55",
+        "Conor": "23:57",
+        "Francesca": "23:58",
+        "Marco": "00:00",
+        "Giulia": "00:01",
+        "Chiara": "00:03",
+        "Ivana": "00:08",
+        "Lior": "00:30"
+      },
+      "wrapTime": "22:51",
+      "result": {
+        "winner": "Lawrence",
+        "winners": [
+          "Lawrence"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": true
+      },
+      "pointChanges": [
+        {
+          "player": "Lawrence",
+          "points": 2,
+          "reason": "crazy-win"
+        },
+        {
+          "player": "Lior",
+          "points": -1,
+          "reason": "farthest-from-wrap"
+        }
+      ],
+      "crazyDay": {
+        "winnerPoints": 2,
+        "penalties": {
+          "didNotVote": [],
+          "farthestFromWrap": [
+            "Lior"
+          ]
+        },
+        "pointChanges": [
+          {
+            "player": "Lawrence",
+            "points": 2,
+            "reason": "crazy-win"
+          },
+          {
+            "player": "Lior",
+            "points": -1,
+            "reason": "farthest-from-wrap"
+          }
+        ]
+      },
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-08-20T20:03:16.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-08-21-main",
+      "gameDate": "2026-08-21",
+      "unit": "main",
+      "guesses": {
+        "Lawrence": "02:26",
+        "Flaminia": "02:28",
+        "Isabel": "02:29",
+        "Francesca": "02:32",
+        "Ivana": "02:34",
+        "Conor": "02:38",
+        "Edoardo": "02:40",
+        "Giulia": "02:45"
+      },
+      "wrapTime": "02:32",
+      "result": {
+        "winner": "Francesca",
+        "winners": [
+          "Francesca"
+        ],
+        "exactWinner": true,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Francesca",
+          "points": 2,
+          "reason": "exact-win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "HIGH",
+        "originalMessageDate": "2026-08-22T00:22:13.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    },
+    {
+      "id": "2026-08-21-second",
+      "gameDate": "2026-08-21",
+      "unit": "second",
+      "guesses": {
+        "Sara": "22:34",
+        "Francesca": "22:38",
+        "Roberta": "22:49",
+        "Edoardo": "23:00",
+        "Chiara": "23:03",
+        "Lior": "23:10",
+        "Conor": "23:11",
+        "Maria Claudia": "23:23",
+        "Lawrence": "23:25",
+        "Flaminia": "23:27",
+        "Ivana": "23:32",
+        "Veronica": "23:43"
+      },
+      "wrapTime": "23:59",
+      "result": {
+        "winner": "Veronica",
+        "winners": [
+          "Veronica"
+        ],
+        "exactWinner": false,
+        "noWinner": false,
+        "crazyDay": false
+      },
+      "pointChanges": [
+        {
+          "player": "Veronica",
+          "points": 1,
+          "reason": "win"
+        }
+      ],
+      "crazyDay": null,
+      "metadata": {
+        "calculationMode": "current",
+        "confidence": "VERY_HIGH",
+        "originalMessageDate": "2026-08-21T21:19:01.000Z",
+        "resultSource": "winners.json",
+        "source": "historical-import"
+      }
+    }
+  ],
+  "players": [
+    {
+      "name": "Edoardo",
+      "points": 13,
+      "gamesPlayed": 101,
+      "gamesVoted": 101,
+      "wins": 12,
+      "exactWins": 1,
+      "crazyWins": 0,
+      "noVotePenalties": 0,
+      "farthestPenalties": 0,
+      "currentWinStreak": 0,
+      "longestWinStreak": 2
+    },
+    {
+      "name": "Flaminia",
+      "points": 13,
+      "gamesPlayed": 90,
+      "gamesVoted": 90,
+      "wins": 11,
+      "exactWins": 3,
+      "crazyWins": 0,
+      "noVotePenalties": 0,
+      "farthestPenalties": 1,
+      "currentWinStreak": 0,
+      "longestWinStreak": 2
+    },
+    {
+      "name": "Marco",
+      "points": 11,
+      "gamesPlayed": 85,
+      "gamesVoted": 85,
+      "wins": 10,
+      "exactWins": 1,
+      "crazyWins": 0,
+      "noVotePenalties": 0,
+      "farthestPenalties": 0,
+      "currentWinStreak": 0,
+      "longestWinStreak": 2
+    },
+    {
+      "name": "Roberta",
+      "points": 11,
+      "gamesPlayed": 99,
+      "gamesVoted": 99,
+      "wins": 8,
+      "exactWins": 3,
+      "crazyWins": 0,
+      "noVotePenalties": 0,
+      "farthestPenalties": 0,
+      "currentWinStreak": 0,
+      "longestWinStreak": 2
+    },
+    {
+      "name": "Giulia",
+      "points": 10,
+      "gamesPlayed": 94,
+      "gamesVoted": 94,
+      "wins": 8,
+      "exactWins": 2,
+      "crazyWins": 0,
+      "noVotePenalties": 0,
+      "farthestPenalties": 0,
+      "currentWinStreak": 0,
+      "longestWinStreak": 2
+    },
+    {
+      "name": "Isabel",
+      "points": 9,
+      "gamesPlayed": 88,
+      "gamesVoted": 88,
+      "wins": 9,
+      "exactWins": 0,
+      "crazyWins": 0,
+      "noVotePenalties": 0,
+      "farthestPenalties": 0,
+      "currentWinStreak": 0,
+      "longestWinStreak": 2
+    },
+    {
+      "name": "Veronica",
+      "points": 8,
+      "gamesPlayed": 90,
+      "gamesVoted": 90,
+      "wins": 8,
+      "exactWins": 0,
+      "crazyWins": 0,
+      "noVotePenalties": 0,
+      "farthestPenalties": 0,
+      "currentWinStreak": 1,
+      "longestWinStreak": 2
+    },
+    {
+      "name": "Conor",
+      "points": 8,
+      "gamesPlayed": 89,
+      "gamesVoted": 89,
+      "wins": 5,
+      "exactWins": 2,
+      "crazyWins": 1,
+      "noVotePenalties": 0,
+      "farthestPenalties": 0,
+      "currentWinStreak": 0,
+      "longestWinStreak": 1
+    },
+    {
+      "name": "Nicolas",
+      "points": 7,
+      "gamesPlayed": 34,
+      "gamesVoted": 34,
+      "wins": 5,
+      "exactWins": 2,
+      "crazyWins": 0,
+      "noVotePenalties": 0,
+      "farthestPenalties": 0,
+      "currentWinStreak": 0,
+      "longestWinStreak": 2
+    },
+    {
+      "name": "Lawrence",
+      "points": 7,
+      "gamesPlayed": 71,
+      "gamesVoted": 71,
+      "wins": 5,
+      "exactWins": 1,
+      "crazyWins": 1,
+      "noVotePenalties": 0,
+      "farthestPenalties": 0,
+      "currentWinStreak": 0,
+      "longestWinStreak": 1
+    },
+    {
+      "name": "Maria Claudia",
+      "points": 6,
+      "gamesPlayed": 49,
+      "gamesVoted": 49,
+      "wins": 4,
+      "exactWins": 1,
+      "crazyWins": 1,
+      "noVotePenalties": 0,
+      "farthestPenalties": 0,
+      "currentWinStreak": 0,
+      "longestWinStreak": 1
+    },
+    {
+      "name": "Tiberio",
+      "points": 5,
+      "gamesPlayed": 71,
+      "gamesVoted": 70,
+      "wins": 5,
+      "exactWins": 1,
+      "crazyWins": 0,
+      "noVotePenalties": 1,
+      "farthestPenalties": 0,
+      "currentWinStreak": 0,
+      "longestWinStreak": 1
+    },
+    {
+      "name": "Francesca",
+      "points": 5,
+      "gamesPlayed": 88,
+      "gamesVoted": 88,
+      "wins": 3,
+      "exactWins": 2,
+      "crazyWins": 0,
+      "noVotePenalties": 0,
+      "farthestPenalties": 0,
+      "currentWinStreak": 0,
+      "longestWinStreak": 1
+    },
+    {
+      "name": "Sara",
+      "points": 4,
+      "gamesPlayed": 55,
+      "gamesVoted": 54,
+      "wins": 4,
+      "exactWins": 1,
+      "crazyWins": 0,
+      "noVotePenalties": 1,
+      "farthestPenalties": 0,
+      "currentWinStreak": 0,
+      "longestWinStreak": 2
+    },
+    {
+      "name": "Euridilla",
+      "points": 4,
+      "gamesPlayed": 46,
+      "gamesVoted": 46,
+      "wins": 3,
+      "exactWins": 1,
+      "crazyWins": 0,
+      "noVotePenalties": 0,
+      "farthestPenalties": 0,
+      "currentWinStreak": 0,
+      "longestWinStreak": 1
+    },
+    {
+      "name": "Lior",
+      "points": 3,
+      "gamesPlayed": 83,
+      "gamesVoted": 83,
+      "wins": 5,
+      "exactWins": 0,
+      "crazyWins": 0,
+      "noVotePenalties": 0,
+      "farthestPenalties": 2,
+      "currentWinStreak": 0,
+      "longestWinStreak": 1
+    },
+    {
+      "name": "Alessandro M",
+      "points": 1,
+      "gamesPlayed": 5,
+      "gamesVoted": 5,
+      "wins": 1,
+      "exactWins": 0,
+      "crazyWins": 0,
+      "noVotePenalties": 0,
+      "farthestPenalties": 0,
+      "currentWinStreak": 0,
+      "longestWinStreak": 1
+    },
+    {
+      "name": "Jai",
+      "points": 1,
+      "gamesPlayed": 12,
+      "gamesVoted": 12,
+      "wins": 1,
+      "exactWins": 0,
+      "crazyWins": 0,
+      "noVotePenalties": 0,
+      "farthestPenalties": 0,
+      "currentWinStreak": 0,
+      "longestWinStreak": 1
+    },
+    {
+      "name": "Alessandro L",
+      "points": 0,
+      "gamesPlayed": 38,
+      "gamesVoted": 38,
+      "wins": 0,
+      "exactWins": 0,
+      "crazyWins": 0,
+      "noVotePenalties": 0,
+      "farthestPenalties": 0,
+      "currentWinStreak": 0,
+      "longestWinStreak": 0
+    },
+    {
+      "name": "Chiara",
+      "points": 0,
+      "gamesPlayed": 4,
+      "gamesVoted": 4,
+      "wins": 0,
+      "exactWins": 0,
+      "crazyWins": 0,
+      "noVotePenalties": 0,
+      "farthestPenalties": 0,
+      "currentWinStreak": 0,
+      "longestWinStreak": 0
+    },
+    {
+      "name": "Ivana",
+      "points": 0,
+      "gamesPlayed": 7,
+      "gamesVoted": 7,
+      "wins": 0,
+      "exactWins": 0,
+      "crazyWins": 0,
+      "noVotePenalties": 0,
+      "farthestPenalties": 0,
+      "currentWinStreak": 0,
+      "longestWinStreak": 0
+    }
+  ]
+}

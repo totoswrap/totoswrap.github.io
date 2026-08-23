@@ -1,0 +1,191 @@
+{
+  "2026-03-12-main": {
+    "guesses": {
+      "Giulia": "21:00",
+      "Isabel": "21:46",
+      "Marco": "21:50",
+      "Alessandro L": "21:58",
+      "Lawrence": "21:59",
+      "Conor": "22:04",
+      "Veronica": "22:15",
+      "Jai": "22:23"
+    }
+  },
+
+  "2026-03-13-main": {
+    "guesses": {
+      "Isabel": "02:27",
+      "Alessandro L": "02:47",
+      "Lawrence": "02:52",
+      "Marco": "02:55",
+      "Conor": "03:01",
+      "Edoardo": "03:03",
+      "Veronica": "03:07",
+      "Giulia": "03:15"
+    }
+  },
+
+  "2026-03-16-main": {
+    "guesses": {
+      "Alessandro L": "15:27",
+      "Edoardo": "16:41",
+      "Isabel": "16:50",
+      "Lawrence": "16:54",
+      "Giulia": "16:56",
+      "Marco": "17:00",
+      "Veronica": "17:07",
+      "Conor": "17:10"
+    }
+  },
+
+  "2026-03-20-main": {
+    "guesses": {
+      "Marco": "10:07",  
+      "Alessandro L": "14:24",
+      "Lawrence": "15:28",
+      "Isabel": "16:22",
+      "Edoardo": "16:30",
+      "Veronica": "16:43",
+      "Jai": "16:46",
+      "Conor": "16:57",
+      "Giulia": "17:00"
+    }
+  },
+
+  "2026-03-24-main": {
+    "guesses": {
+      "Isabel": "18:41",
+      "Giulia": "18:43",
+      "Alessandro L": "18:49",
+      "Edoardo": "18:53",
+      "Marco": "18:57",
+      "Jai": "19:00",
+      "Lawrence": "19:10",
+      "Conor": "19:18"
+    }
+  },
+
+  "2026-03-25-main": {
+    "guesses": {
+      "Alessandro L": "00:17",
+      "Conor": "00:35",
+      "Flaminia": "00:48",
+      "Marco": "00:50",
+      "Jai": "01:00"
+    }
+  },
+
+  "2026-03-26-main": {
+    "guesses": {
+      "Veronica": "21:53",
+      "Conor": "22:50",
+      "Giulia": "22:51",
+      "Marco": "23:01",
+      "Flaminia": "23:03",
+      "Edoardo": "23:05"
+    }
+  },
+
+  "2026-03-30-main": {
+    "guesses": {
+      "Lawrence": "16:20",
+      "Isabel": "16:45",
+      "Roberta": "17:10",
+      "Conor": "17:30",
+      "Giulia": "17:31",
+      "Marco": "17:33",
+      "Flaminia": "17:44",
+      "Edoardo": "17:47"
+    }
+  },
+
+  "2026-03-31-main": {
+    "guesses": {
+      "Conor": "22:50",
+      "Alessandro L": "23:16",
+      "Veronica": "23:47",
+      "Roberta": "23:50",
+      "Edoardo": "23:53",
+      "Lawrence": "23:56",
+      "Giulia": "23:57",
+      "Flaminia": "23:58",
+      "Isabel": "00:01"
+    }
+  },
+
+  "2026-04-02-main": {
+    "guesses": {
+      "Marco": "04:00",  
+      "Conor": "04:50",
+      "Isabel": "04:57",  
+      "Edoardo": "04:59",
+      "Flaminia": "05:02",
+      "Roberta": "05:05",
+      "Alessandro L": "05:12"
+    }
+  },
+
+  "2026-04-15-main": {
+    "guesses": {
+      "Alessandro L": "23:12",
+      "Edoardo": "23:15",
+      "Sara": "23:37",
+      "Veronica": "23:47",
+      "Tiberio": "23:50",
+      "Roberta": "23:52",
+      "Isabel": "23:54",
+      "Euridilla": "23:58",
+      "Lior": "00:00",
+      "Flaminia": "00:07",
+      "Conor": "00:10",
+      "Lawrence": "00:25",
+      "Marco": "00:30",
+      "Francesca": "01:10"
+    }
+  },
+
+  "2026-06-26-second": {
+    "guesses": {
+      "Nicolas": "03:16",  
+      "Giulia": "03:17",  
+      "Edoardo": "03:18",
+      "Isabel": "03:28",
+      "Conor": "03:30",
+      "Euridilla": "03:31",
+      "Veronica": "03:37", 
+      "Lawrence": "03:43",
+      "Roberta": "03:50"
+    }
+  },
+
+  "2026-08-10-main": {
+    "guesses": {
+      "Roberta": "18:22",
+      "Isabel": "18:26",
+      "Conor": "18:30",
+      "Marco": "18:40",
+      "Lawrence": "18:42",
+      "Edoardo": "18:45",
+      "Veronica": "18:57",
+      "Francesca": "18:58",
+      "Flaminia": "19:00",
+      "Maria Claudia": "19:02"
+    }
+  },
+
+  "2026-08-11-main": {
+    "guesses": {
+      "Isabel": "19:24",  
+      "Marco": "19:40",
+      "Francesca": "19:41",
+      "Giulia": "19:45",
+      "Roberta": "19:47",
+      "Conor": "19:48",
+      "Veronica": "19:53",
+      "Edoardo": "19:55",
+      "Lior": "19:57",
+      "Maria Claudia": "19:58",
+      "Flaminia": "20:03"
+    }
+  }
+}

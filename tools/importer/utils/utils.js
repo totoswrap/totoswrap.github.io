@@ -12,16 +12,34 @@ export function normalizeTime(time) {
 
 }
 
-export function getGameDate(date, hour) {
+export function getGameDate(year, month, day, hour) {
 
-    const gameDate = new Date(date);
+    const yyyy = Number(year);
+    const mm = Number(month);
+    const dd = Number(day);
+    const hh = Number(hour);
 
-    if (hour < DAY_START_HOUR) {
-        gameDate.setDate(gameDate.getDate() - 1);
+    /*
+     * Usiamo UTC esclusivamente come strumento
+     * per fare aritmetica sul calendario.
+     *
+     * Non stiamo convertendo un timestamp reale:
+     * vogliamo semplicemente sapere quale data
+     * appartiene alla giornata TotoWrap.
+     */
+    const gameDate = new Date(
+        Date.UTC(yyyy, mm - 1, dd)
+    );
+
+    if (hh < DAY_START_HOUR) {
+        gameDate.setUTCDate(
+            gameDate.getUTCDate() - 1
+        );
     }
 
-    return gameDate.toISOString().slice(0, 10);
-
+    return gameDate
+        .toISOString()
+        .slice(0, 10);
 }
 
 export function confidence(count) {

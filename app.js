@@ -1683,7 +1683,7 @@ function getCrazyDayConfig(day=S.today) {
 }
 
 function getDayScoring(day=S.today) {
-  return getCrazyDayConfig(day) || { enabled: false, regularPoints: 1, perfectPoints: 3, penaltyPoints: 0 };
+  return getCrazyDayConfig(day) || { enabled: false, regularPoints: 1, perfectPoints: 2, penaltyPoints: 0 };
 }
 
 function guessWrapDistanceSec(guess, wrapHMSInput, day, noWinner=false) {

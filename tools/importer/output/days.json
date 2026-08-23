@@ -58,8 +58,8 @@
     }
   },
   {
-    "id": "2026-03-31-main",
-    "gameDate": "2026-03-31",
+    "id": "2026-04-01-main",
+    "gameDate": "2026-04-01",
     "unit": "main",
     "metadata": {
       "createdBy": "importer",
@@ -244,8 +244,8 @@
     }
   },
   {
-    "id": "2026-04-09-main",
-    "gameDate": "2026-04-09",
+    "id": "2026-04-10-main",
+    "gameDate": "2026-04-10",
     "unit": "main",
     "metadata": {
       "createdBy": "importer",
@@ -313,8 +313,8 @@
     }
   },
   {
-    "id": "2026-04-13-main",
-    "gameDate": "2026-04-13",
+    "id": "2026-04-14-main",
+    "gameDate": "2026-04-14",
     "unit": "main",
     "metadata": {
       "createdBy": "importer",
@@ -382,8 +382,8 @@
     }
   },
   {
-    "id": "2026-04-16-main",
-    "gameDate": "2026-04-16",
+    "id": "2026-04-17-main",
+    "gameDate": "2026-04-17",
     "unit": "main",
     "metadata": {
       "createdBy": "importer",
@@ -964,8 +964,8 @@
     }
   },
   {
-    "id": "2026-06-01-main",
-    "gameDate": "2026-06-01",
+    "id": "2026-06-02-main",
+    "gameDate": "2026-06-02",
     "unit": "main",
     "metadata": {
       "createdBy": "importer",
@@ -996,8 +996,8 @@
     }
   },
   {
-    "id": "2026-06-02-main",
-    "gameDate": "2026-06-02",
+    "id": "2026-06-03-main",
+    "gameDate": "2026-06-03",
     "unit": "main",
     "metadata": {
       "createdBy": "importer",
@@ -1030,8 +1030,8 @@
     }
   },
   {
-    "id": "2026-06-03-main",
-    "gameDate": "2026-06-03",
+    "id": "2026-06-04-main",
+    "gameDate": "2026-06-04",
     "unit": "main",
     "metadata": {
       "createdBy": "importer",
@@ -1065,8 +1065,8 @@
     }
   },
   {
-    "id": "2026-06-04-main",
-    "gameDate": "2026-06-04",
+    "id": "2026-06-05-main",
+    "gameDate": "2026-06-05",
     "unit": "main",
     "metadata": {
       "createdBy": "importer",
@@ -1428,8 +1428,8 @@
     }
   },
   {
-    "id": "2026-06-18-main",
-    "gameDate": "2026-06-18",
+    "id": "2026-06-19-main",
+    "gameDate": "2026-06-19",
     "unit": "main",
     "metadata": {
       "createdBy": "importer",
@@ -1526,8 +1526,8 @@
     }
   },
   {
-    "id": "2026-06-23-main",
-    "gameDate": "2026-06-23",
+    "id": "2026-06-24-main",
+    "gameDate": "2026-06-24",
     "unit": "main",
     "metadata": {
       "createdBy": "importer",
@@ -1557,15 +1557,15 @@
     }
   },
   {
-    "id": "2026-06-24-main",
-    "gameDate": "2026-06-24",
+    "id": "2026-06-25-main",
+    "gameDate": "2026-06-25",
     "unit": "main",
     "metadata": {
       "createdBy": "importer",
       "importVersion": 1
     },
     "import": {
-      "messageDate": "2026-06-25T23:39:48.000Z",
+      "messageDate": "2026-06-25T23:39:49.000Z",
       "confidence": "VERY_HIGH",
       "guesses": {
         "Sara": "04:27",
@@ -1864,15 +1864,15 @@
     }
   },
   {
-    "id": "2026-07-07-main",
-    "gameDate": "2026-07-07",
+    "id": "2026-07-08-main",
+    "gameDate": "2026-07-08",
     "unit": "main",
     "metadata": {
       "createdBy": "importer",
       "importVersion": 1
     },
     "import": {
-      "messageDate": "2026-07-08T23:52:46.000Z",
+      "messageDate": "2026-07-08T23:52:47.000Z",
       "confidence": "VERY_HIGH",
       "guesses": {
         "Francesca": "04:36",
@@ -1896,15 +1896,15 @@
     }
   },
   {
-    "id": "2026-07-08-main",
-    "gameDate": "2026-07-08",
+    "id": "2026-07-09-main",
+    "gameDate": "2026-07-09",
     "unit": "main",
     "metadata": {
       "createdBy": "importer",
       "importVersion": 1
     },
     "import": {
-      "messageDate": "2026-07-09T23:35:05.000Z",
+      "messageDate": "2026-07-09T23:35:06.000Z",
       "confidence": "VERY_HIGH",
       "guesses": {
         "Lior": "04:49",
@@ -1935,7 +1935,7 @@
       "importVersion": 1
     },
     "import": {
-      "messageDate": "2026-07-11T01:12:55.000Z",
+      "messageDate": "2026-07-11T01:12:56.000Z",
       "confidence": "HIGH",
       "guesses": {
         "Giulia": "04:56",
@@ -1997,7 +1997,7 @@
       "importVersion": 1
     },
     "import": {
-      "messageDate": "2026-07-13T19:58:12.000Z",
+      "messageDate": "2026-07-13T19:58:13.000Z",
       "confidence": "VERY_HIGH",
       "guesses": {
         "Nicolas": "03:40",
@@ -2128,7 +2128,7 @@
       "importVersion": 1
     },
     "import": {
-      "messageDate": "2026-07-16T18:01:47.000Z",
+      "messageDate": "2026-07-16T18:01:48.000Z",
       "confidence": "VERY_HIGH",
       "guesses": {
         "Tiberio": "20:00",
@@ -2159,7 +2159,7 @@
       "importVersion": 1
     },
     "import": {
-      "messageDate": "2026-07-17T19:12:14.000Z",
+      "messageDate": "2026-07-17T19:12:15.000Z",
       "confidence": "VERY_HIGH",
       "guesses": {
         "Giulia": "22:00",
@@ -2174,6 +2174,999 @@
         "Flaminia": "23:45",
         "Lior": "23:50",
         "Veronica": "00:17"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-07-20-main",
+    "gameDate": "2026-07-20",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-07-20T09:08:55.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Tiberio": "17:30",
+        "Euridilla": "17:47",
+        "Edoardo": "17:50",
+        "Isabel": "17:53",
+        "Conor": "17:55",
+        "Maria Claudia": "17:56",
+        "Veronica": "17:57",
+        "Lior": "17:58",
+        "Marco": "17:59",
+        "Lawrence": "18:00",
+        "Roberta": "18:05"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-07-20-main",
+    "gameDate": "2026-07-20",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-07-20T14:05:26.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Tiberio": "17:30",
+        "Euridilla": "17:47",
+        "Edoardo": "17:50",
+        "Giulia": "17:52",
+        "Isabel": "17:53",
+        "Flaminia": "17:54",
+        "Conor": "17:55",
+        "Maria Claudia": "17:56",
+        "Veronica": "17:57",
+        "Lior": "17:58",
+        "Marco": "17:59",
+        "Lawrence": "18:00",
+        "Francesca": "18:01",
+        "Roberta": "18:05"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-07-20-second",
+    "gameDate": "2026-07-20",
+    "unit": "second",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-07-20T14:05:36.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Tiberio": "16:30",
+        "Lior": "17:10",
+        "Veronica": "17:17",
+        "Lawrence": "17:20",
+        "Roberta": "17:26",
+        "Isabel": "17:35",
+        "Flaminia": "17:40",
+        "Giulia": "17:45",
+        "Marco": "17:50",
+        "Conor": "17:58",
+        "Edoardo": "18:01",
+        "Maria Claudia": "18:03",
+        "Francesca": "18:43"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-07-21-main",
+    "gameDate": "2026-07-21",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-07-21T13:00:33.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Conor": "17:40",
+        "Edoardo": "17:50",
+        "Euridilla": "17:52",
+        "Veronica": "17:53",
+        "Giulia": "17:55",
+        "Isabel": "17:56",
+        "Francesca": "17:57",
+        "Lawrence": "17:58",
+        "Tiberio": "17:59",
+        "Roberta": "18:00",
+        "Maria Claudia": "18:07",
+        "Lior": "18:20",
+        "Flaminia": "18:30"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-07-22-second",
+    "gameDate": "2026-07-22",
+    "unit": "second",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-07-22T15:30:11.000Z",
+      "confidence": "HIGH",
+      "guesses": {
+        "Edoardo": "17:00",
+        "Lior": "17:15",
+        "Francesca": "17:24",
+        "Giulia": "17:30",
+        "Sara": "17:35",
+        "Roberta": "17:48",
+        "Maria Claudia": "17:56"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-07-22-main",
+    "gameDate": "2026-07-22",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-07-22T15:58:28.000Z",
+      "confidence": "HIGH",
+      "guesses": {
+        "Roberta": "19:12",
+        "Edoardo": "19:19",
+        "Veronica": "19:26",
+        "Francesca": "19:27",
+        "Sara": "19:28",
+        "Conor": "19:29",
+        "Lior": "19:35",
+        "Giulia": "19:37",
+        "Maria Claudia": "19:48"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-07-23-main",
+    "gameDate": "2026-07-23",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-07-23T16:43:05.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Roberta": "20:42",
+        "Maria Claudia": "20:43",
+        "Edoardo": "20:45",
+        "Isabel": "20:51",
+        "Flaminia": "20:55",
+        "Lior": "20:58",
+        "Francesca": "20:57",
+        "Giulia": "21:00",
+        "Conor": "21:02",
+        "Marco": "21:03",
+        "Tiberio": "21:10"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-07-24-main",
+    "gameDate": "2026-07-24",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-07-24T19:46:08.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Tiberio": "23:20",
+        "Lior": "23:40",
+        "Isabel": "23:45",
+        "Maria Claudia": "23:49",
+        "Lawrence": "23:50",
+        "Roberta": "23:56",
+        "Giulia": "00:00",
+        "Conor": "00:05",
+        "Euridilla": "00:10",
+        "Sara": "00:13",
+        "Edoardo": "00:16",
+        "Marco": "00:20",
+        "Veronica": "00:27",
+        "Francesca": "00:28",
+        "Flaminia": "00:50"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-07-27-main",
+    "gameDate": "2026-07-27",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-07-27T12:40:55.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Isabel": "17:30",
+        "Euridilla": "17:40",
+        "Lior": "17:50",
+        "Edoardo": "17:52",
+        "Lawrence": "17:54",
+        "Conor": "17:55",
+        "Sara": "17:56",
+        "Veronica": "17:57",
+        "Francesca": "17:58",
+        "Roberta": "17:59",
+        "Flaminia": "18:01",
+        "Maria Claudia": "18:02",
+        "Marco": "18:03",
+        "Giulia": "18:15"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-07-28-main",
+    "gameDate": "2026-07-28",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-07-28T12:34:46.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Giulia": "17:47",
+        "Edoardo": "17:50",
+        "Euridilla": "17:55",
+        "Maria Claudia": "17:56",
+        "Veronica": "17:57",
+        "Marco": "17:58",
+        "Conor": "17:59",
+        "Francesca": "18:00",
+        "Roberta": "18:01",
+        "Tiberio": "18:10",
+        "Isabel": "18:12",
+        "Lior": "18:15"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-07-29-main",
+    "gameDate": "2026-07-29",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-07-29T13:05:44.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Conor": "17:30",
+        "Tiberio": "17:40",
+        "Lawrence": "17:48",
+        "Maria Claudia": "17:52",
+        "Giulia": "17:55",
+        "Francesca": "17:57",
+        "Marco": "17:59",
+        "Edoardo": "18:00",
+        "Lior": "18:10",
+        "Flaminia": "18:24",
+        "Roberta": "18:25"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-07-30-main",
+    "gameDate": "2026-07-30",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-07-30T23:15:57.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Tiberio": "04:00",
+        "Lior": "04:20",
+        "Roberta": "04:38",
+        "Maria Claudia": "04:46",
+        "Conor": "04:50",
+        "Marco": "04:55",
+        "Veronica": "04:57",
+        "Francesca": "04:58",
+        "Edoardo": "04:59",
+        "Flaminia": "05:00"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-07-31-main",
+    "gameDate": "2026-07-31",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-07-31T22:33:06.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Tiberio": "04:00",
+        "Lior": "04:20",
+        "Maria Claudia": "04:23",
+        "Conor": "04:25",
+        "Francesca": "04:29",
+        "Veronica": "04:37",
+        "Lawrence": "04:38",
+        "Isabel": "04:42",
+        "Marco": "04:45",
+        "Edoardo": "04:50",
+        "Roberta": "04:54",
+        "Flaminia": "04:55"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-08-03-main",
+    "gameDate": "2026-08-03",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-08-03T23:11:43.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Maria Claudia": "04:26",
+        "Flaminia": "04:33",
+        "Veronica": "04:37",
+        "Isabel": "04:41",
+        "Tiberio": "04:45",
+        "Edoardo": "04:47",
+        "Conor": "04:50",
+        "Roberta": "04:53",
+        "Marco": "04:54",
+        "Lior": "04:55",
+        "Sara": "04:56",
+        "Lawrence": "04:57",
+        "Giulia": "04:58",
+        "Francesca": "04:59"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-08-04-main",
+    "gameDate": "2026-08-04",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-08-04T22:36:12.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Conor": "04:40",
+        "Edoardo": "04:44",
+        "Roberta": "04:47",
+        "Maria Claudia": "04:49",
+        "Isabel": "04:51",
+        "Veronica": "04:53",
+        "Giulia": "04:56",
+        "Lawrence": "04:57",
+        "Francesca": "04:58",
+        "Marco": "04:59",
+        "Flaminia": "05:02",
+        "Lior": "05:07"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-08-05-main",
+    "gameDate": "2026-08-05",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-08-05T21:51:40.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Flaminia": "04:20",
+        "Roberta": "04:27",
+        "Maria Claudia": "04:36",
+        "Giulia": "04:37",
+        "Marco": "04:40",
+        "Isabel": "04:41",
+        "Conor": "04:44",
+        "Lawrence": "04:46",
+        "Lior": "04:50",
+        "Edoardo": "04:54",
+        "Veronica": "04:57",
+        "Francesca": "04:58"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-08-06-main",
+    "gameDate": "2026-08-06",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-08-06T23:37:20.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Roberta": "04:39",
+        "Maria Claudia": "04:47",
+        "Isabel": "04:48",
+        "Giulia": "04:53",
+        "Marco": "04:55",
+        "Francesca": "04:56",
+        "Veronica": "04:57",
+        "Edoardo": "04:58",
+        "Lior": "05:00",
+        "Flaminia": "05:03",
+        "Conor": "05:06"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-08-07-main",
+    "gameDate": "2026-08-07",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-08-07T23:33:05.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Isabel": "02:20",
+        "Edoardo": "02:22",
+        "Lawrence": "02:35",
+        "Giulia": "02:33",
+        "Tiberio": "03:00",
+        "Lior": "03:08",
+        "Maria Claudia": "03:13",
+        "Conor": "03:23",
+        "Flaminia": "04:20",
+        "Francesca": "04:36",
+        "Marco": "04:40",
+        "Roberta": "04:46",
+        "Veronica": "04:57"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-08-10-second",
+    "gameDate": "2026-08-10",
+    "unit": "second",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-08-11T01:36:08.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Roberta": "03:06",
+        "Veronica": "03:33",
+        "Marco": "03:50",
+        "Lior": "04:10",
+        "Conor": "04:15",
+        "Maria Claudia": "04:28",
+        "Lawrence": "04:35",
+        "Francesca": "04:36",
+        "Flaminia": "04:47",
+        "Edoardo": "04:57",
+        "Giulia": "04:58",
+        "Isabel": "05:00"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-08-11-second",
+    "gameDate": "2026-08-11",
+    "unit": "second",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-08-11T23:16:03.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Roberta": "04:18",
+        "Flaminia": "04:22",
+        "Maria Claudia": "04:32",
+        "Conor": "04:44",
+        "Veronica": "04:47",
+        "Marco": "04:50",
+        "Isabel": "04:51",
+        "Francesca": "04:52",
+        "Lior": "04:57",
+        "Giulia": "05:00",
+        "Edoardo": "05:01"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-08-12-main",
+    "gameDate": "2026-08-12",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-08-12T11:44:07.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Roberta": "17:36",
+        "Conor": "17:49",
+        "Edoardo": "17:53",
+        "Veronica": "17:57",
+        "Francesca": "17:58",
+        "Flaminia": "17:59",
+        "Marco": "18:00",
+        "Maria Claudia": "18:06",
+        "Isabel": "18:07",
+        "Lior": "18:10"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-08-13-main",
+    "gameDate": "2026-08-13",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-08-13T10:33:59.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Roberta": "17:44",
+        "Veronica": "17:47",
+        "Conor": "17:55",
+        "Lawrence": "17:57",
+        "Edoardo": "18:00",
+        "Maria Claudia": "18:03",
+        "Flaminia": "18:05",
+        "Lior": "18:07",
+        "Isabel": "18:09",
+        "Francesca": "18:11",
+        "Marco": "18:15"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-08-14-main",
+    "gameDate": "2026-08-14",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-08-14T10:25:13.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Lior": "17:45",
+        "Edoardo": "17:47",
+        "Lawrence": "17:49",
+        "Roberta": "17:50",
+        "Veronica": "17:53",
+        "Isabel": "17:54",
+        "Conor": "17:55",
+        "Maria Claudia": "17:57",
+        "Francesca": "17:58",
+        "Sara": "17:59",
+        "Marco": "18:00",
+        "Flaminia": "18:01",
+        "Giulia": "18:02",
+        "Tiberio": "18:15"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-08-17-main",
+    "gameDate": "2026-08-17",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-08-17T13:50:10.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Marco": "17:50",
+        "Edoardo": "17:52",
+        "Maria Claudia": "17:53",
+        "Ivana": "17:54",
+        "Francesca": "17:55",
+        "Conor": "17:56",
+        "Lior": "17:57",
+        "Flaminia": "17:58",
+        "Isabel": "17:59",
+        "Roberta": "18:00",
+        "Lawrence": "18:02",
+        "Giulia": "18:03"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-08-18-main",
+    "gameDate": "2026-08-18",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-08-18T12:00:53.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Lawrence": "15:45",
+        "Roberta": "16:22",
+        "Giulia": "16:31",
+        "Flaminia": "16:33",
+        "Ivana": "16:35",
+        "Edoardo": "16:37",
+        "Conor": "16:40",
+        "Maria Claudia": "16:47",
+        "Chiara": "16:51",
+        "Lior": "16:58",
+        "Isabel": "17:11",
+        "Marco": "17:45",
+        "Francesca": "17:48",
+        "Veronica": "17:57"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-08-19-main",
+    "gameDate": "2026-08-19",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-08-19T12:49:15.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Conor": "17:55",
+        "Veronica": "17:57",
+        "Francesca": "17:58",
+        "Edoardo": "18:00",
+        "Ivana": "18:04",
+        "Marco": "18:10",
+        "Giulia": "18:15",
+        "Isabel": "18:21",
+        "Lior": "18:30",
+        "Maria Claudia": "18:37",
+        "Roberta": "18:39",
+        "Flaminia": "18:49"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-08-20-main",
+    "gameDate": "2026-08-20",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-08-20T13:06:52.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Conor": "15:15",
+        "Chiara": "15:20",
+        "Isabel": "15:30",
+        "Maria Claudia": "15:41",
+        "Lawrence": "15:45",
+        "Ivana": "15:50",
+        "Lior": "15:55",
+        "Veronica": "15:57",
+        "Marco": "16:00",
+        "Francesca": "16:02",
+        "Roberta": "16:10",
+        "Edoardo": "16:15",
+        "Giulia": "17:00",
+        "Flaminia": "17:10"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-08-20-second",
+    "gameDate": "2026-08-20",
+    "unit": "second",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-08-20T20:03:16.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Lawrence": "22:50",
+        "Roberta": "23:22",
+        "Edoardo": "23:23",
+        "Sara": "23:34",
+        "Flaminia": "23:35",
+        "Veronica": "23:47",
+        "Isabel": "23:51",
+        "Maria Claudia": "23:55",
+        "Conor": "23:57",
+        "Francesca": "23:58",
+        "Marco": "00:00",
+        "Giulia": "00:01",
+        "Chiara": "00:03",
+        "Ivana": "00:08",
+        "Lior": "00:30"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-08-21-second",
+    "gameDate": "2026-08-21",
+    "unit": "second",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-08-21T21:19:01.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Sara": "22:34",
+        "Francesca": "22:38",
+        "Roberta": "22:49",
+        "Edoardo": "23:00",
+        "Chiara": "23:03",
+        "Lior": "23:10",
+        "Conor": "23:11",
+        "Maria Claudia": "23:23",
+        "Lawrence": "23:25",
+        "Flaminia": "23:27",
+        "Ivana": "23:32",
+        "Veronica": "23:43"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-08-21-main",
+    "gameDate": "2026-08-21",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-08-21T21:23:38.000Z",
+      "confidence": "VERY_HIGH",
+      "guesses": {
+        "Isabel": "00:30",
+        "Veronica": "01:17",
+        "Flaminia": "01:20",
+        "Ivana": "01:24",
+        "Lawrence": "01:25",
+        "Lior": "01:26",
+        "Conor": "01:27",
+        "Francesca": "01:28",
+        "Giulia": "01:30",
+        "Roberta": "01:31",
+        "Sara": "01:32",
+        "Edoardo": "01:33",
+        "Chiara": "01:34",
+        "Maria Claudia": "01:38"
+      }
+    },
+    "result": {
+      "winner": null,
+      "wrapTime": null,
+      "exactWinner": false
+    }
+  },
+  {
+    "id": "2026-08-21-main",
+    "gameDate": "2026-08-21",
+    "unit": "main",
+    "metadata": {
+      "createdBy": "importer",
+      "importVersion": 1
+    },
+    "import": {
+      "messageDate": "2026-08-22T00:22:13.000Z",
+      "confidence": "HIGH",
+      "guesses": {
+        "Lawrence": "02:26",
+        "Flaminia": "02:28",
+        "Isabel": "02:29",
+        "Francesca": "02:32",
+        "Ivana": "02:34",
+        "Conor": "02:38",
+        "Edoardo": "02:40",
+        "Giulia": "02:45"
       }
     },
     "result": {

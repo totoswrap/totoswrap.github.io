@@ -12,7 +12,9 @@
     "results": "node scripts/update-results.js",
     "state1": "node scripts/build-state.js",
     "state2": "node scripts/init-state.js",
-    "state:import": "node scripts/import-state.js"
+    "state:import": "node scripts/import-state.js",
+    "edoardo": "node scripts/extract-edoardo-messages.js",
+    "migration": "node scripts/build-migration.js"
   },
   "dependencies": {
     "firebase-admin": "^14.1.0"
