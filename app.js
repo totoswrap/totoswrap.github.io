@@ -4469,29 +4469,89 @@ function recalculateCompletedDay(day) {
 
 function recalculateCompletedResultsForCurrentBoundaryRule() {
   let changed = false;
+
   const completedDays = [...(S.days || [])];
-  if (S.today?.wrapTime) completedDays.push(S.today);
+
+  if (S.today?.wrapTime) {
+    completedDays.push(S.today);
+  }
 
   completedDays.forEach(day => {
+
     if (!day?.wrapTime) return;
-    const previous = completedDayOutcome(day);
-    const next = calcWinner(day.guesses || [], day.wrapTime, day);
+
+    /*
+     * Le giornate importate dallo storico sono già state
+     * ricostruite e validate manualmente.
+     *
+     * Non devono essere ricalcolate automaticamente:
+     * alcuni risultati storici dipendono dai secondi reali
+     * del wrap o da eccezioni che non possono essere
+     * ricostruite dai soli dati HH:MM.
+     */
+    if (
+      day?.historicalImport?.source === 'migration-data.json'
+    ) {
+      return;
+    }
+
+    const previous =
+      completedDayOutcome(day);
+
+    const next =
+      calcWinner(
+        day.guesses || [],
+        day.wrapTime,
+        day
+      );
+
     const nextOutcome = {
       winner: next.winner,
       winners: next.winners.map(w => w.name),
       points: next.points,
       noWinner: next.noWinner,
-      penalties: (next.penalties || []).map(p => `${p.name}:${Number(p.points) || 0}:${p.reason || ''}`).sort()
+      penalties: (next.penalties || [])
+        .map(
+          p =>
+            `${p.name}:${Number(p.points) || 0}:${p.reason || ''}`
+        )
+        .sort()
     };
-    if (outcomesMatch(previous, nextOutcome)) return;
 
-    adjustCompletedDayScores(day, -1);
-    day.winner = next.winner;
-    day.winners = next.winners;
-    day.points = next.points;
-    day.noWinner = next.noWinner;
-    day.penalties = next.penalties || [];
-    adjustCompletedDayScores(day, 1);
+    if (
+      outcomesMatch(
+        previous,
+        nextOutcome
+      )
+    ) {
+      return;
+    }
+
+    adjustCompletedDayScores(
+      day,
+      -1
+    );
+
+    day.winner =
+      next.winner;
+
+    day.winners =
+      next.winners;
+
+    day.points =
+      next.points;
+
+    day.noWinner =
+      next.noWinner;
+
+    day.penalties =
+      next.penalties || [];
+
+    adjustCompletedDayScores(
+      day,
+      1
+    );
+
     changed = true;
   });
 

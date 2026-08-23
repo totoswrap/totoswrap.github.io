@@ -1,0 +1,16 @@
+{
+  "generatedAt": "2026-08-23T21:40:07.898Z",
+  "summary": {
+    "days": 109,
+    "crazyDays": 3,
+    "rosterPlayers": 21,
+    "scoreEntries": 21,
+    "ledgerTotal": 126,
+    "errors": 0,
+    "warnings": 0,
+    "info": 0
+  },
+  "errors": [],
+  "warnings": [],
+  "info": []
+}
