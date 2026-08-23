@@ -800,6 +800,33 @@ function getDuplicateNameKeys(names) {
   return Object.keys(counts).filter(key => counts[key] > 1);
 }
 
+function getDuplicateBetTimes(guesses) {
+  const byTime = new Map();
+
+  (guesses || []).forEach(guess => {
+    if (!guess?.time) return;
+
+    const time = String(guess.time).trim();
+
+    if (!byTime.has(time)) {
+      byTime.set(time, []);
+    }
+
+    byTime.get(time).push(guess.name);
+  });
+
+  return [...byTime.entries()]
+    .filter(([, names]) => names.length > 1)
+    .map(([time, names]) => ({
+      time,
+      names
+    }));
+}
+
+function hasDuplicateBetTimes(guesses) {
+  return getDuplicateBetTimes(guesses).length > 0;
+}
+
 function stateHasDuplicateNames(state=S) {
   if (getDuplicateNameKeys(state?.playerRoster?.map(player => player.name)).length) return true;
   const days = [...(state?.days || []), state?.today].filter(Boolean);
@@ -1020,6 +1047,42 @@ function pad(n) { return String(n).padStart(2,'0'); }
 function nowSec() { const d=new Date(); return d.getHours()*3600+d.getMinutes()*60+d.getSeconds(); }
 function nowHMS() { const d=new Date(); return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`; }
 function localDateISO(d=new Date()) { return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
+function currentGameDateISO(d = new Date()) {
+  const gameDate = new Date(d);
+
+  // La giornata TotoWrap cambia alle 05:00.
+  // Tra 00:00 e 04:59 siamo ancora nel gameDate precedente.
+  if (gameDate.getHours() < 5) {
+    gameDate.setDate(gameDate.getDate() - 1);
+  }
+
+  return localDateISO(gameDate);
+}
+
+function unitNameFromIndex(index) {
+  const names = [
+    'main',
+    'second',
+    'third',
+    'fourth',
+    'fifth',
+    'sixth',
+    'seventh',
+    'eighth',
+    'ninth',
+    'tenth'
+  ];
+
+  return names[index] || `unit-${index + 1}`;
+}
+
+function nextUnitForDate(gameDate) {
+  const sameGameDateDays = (S.days || []).filter(
+    day => displayToISO(day.date) === gameDate
+  );
+
+  return unitNameFromIndex(sameGameDateDays.length);
+}
 function dateFromISO(iso) {
   if (!iso) return null;
   const value = String(iso);
@@ -1611,7 +1674,7 @@ function getWinProbability(playerName, allGuesses, day=S.today) {
   };
 }
 
-function boundaries(guesses, day=S.today) {
+function (guesses, day=S.today) {
   const start = approvalSec(day);
   const valid = guesses.filter(g => g.time).sort((a,b) => guessGameSec(a, day) - guessGameSec(b, day));
   if (valid.length === 0) return [];
@@ -2518,7 +2581,9 @@ function renderCompletedToday(t, canStartNextDay=false) {
   const penaltiesByPlayer = dayPenaltyDetailsMap(t);
   const winnerTag = canStartNextDay ? 'button type="button" data-share-result' : 'div';
   const winnerCloseTag = canStartNextDay ? 'button' : 'div';
-  const nextDayBtn = canStartNextDay ? '<button class="btn btn-p next-day-btn" id="new-day-btn">Start Next Day</button>' : '';
+  const nextDayBtn = canStartNextDay
+    ? '<button class="btn btn-p next-day-btn" id="new-day-btn">Start Next Game</button>'
+    : '';
   const completedViewClass = canStartNextDay ? 'today-fixed-view today-completed-view has-next-day-action' : 'today-fixed-view today-completed-view';
   const fridayBanner = renderFridayWrapBanner(t);
 
@@ -4162,6 +4227,21 @@ async function updateCurrentPlayerBet(name, betTime, betDate='') {
   }
 
   const prevS = cloneState();
+
+  const takenBy = (S.today.guesses || []).find(
+    g =>
+      g !== existingGuess &&
+      g?.time === normalizedBet
+  );
+
+  if (takenBy) {
+    toast(
+      `${normalizedBet} is already taken by ${takenBy.name}`,
+      'err'
+    );
+    return false;
+  }
+  
   existingGuess.time = normalizedBet;
   existingGuess.date = normalizedDate || inferBetDate(normalizedBet, S.today);
   const saved = await saveS();
@@ -4866,6 +4946,8 @@ async function showPreview() {
   
   const duplicates = getDuplicateNameKeys(parsed.map(g => g.name));
   
+  const duplicateTimes = getDuplicateBetTimes(parsed);
+
   const duplicateWarning = duplicates.length > 0 
     ? `<div class="card" style="border: 1px solid var(--red); background: rgba(var(--red-rgb), 0.1); margin-bottom: 12px;">
          <p class="red" style="font-weight:bold; font-size:0.8rem; text-align:center;">
@@ -4873,6 +4955,18 @@ async function showPreview() {
          </p>
        </div>`
     : '';
+
+  const duplicateTimeWarning = duplicateTimes.length > 0
+  ? `
+    <div class="preview-warning">
+      ⚠️ DUPLICATE BET TIMES DETECTED:<br>
+      ${duplicateTimes.map(esc).join(', ')}
+      <br><br>
+      Each minute can only belong to one player.
+      Fix the duplicated bets before confirming.
+    </div>
+  `
+  : '';
 
   const existingNames = new Set(S.playerRoster.map(p => nameKey(p.name)));
   const newPlayers = [];
@@ -4906,6 +5000,7 @@ async function showPreview() {
 <div class="standalone-scroll">
   ${errorWarning}
   ${duplicateWarning}
+  ${duplicateTimeWarning}
 
   <div class="card">
     <div class="card-lbl">Confirm Player Guesses</div>
@@ -4937,10 +5032,12 @@ async function showPreview() {
   startClock();
   
 	  document.getElementById('confirm-btn')?.addEventListener('click', async () => {
-	    if (duplicates.length > 0) {
-		      toast('Duplicate names', 'err');
-		      return;
-		    }
+	    if (
+        duplicates.length > 0 ||
+        duplicateTimes.length > 0
+      ) {
+        return;
+      }
 		    let finalWrap = normalizeHMInput(S.today?.estWrap && S.today.estWrap !== '--:--' ? S.today.estWrap : '');
 	    if (!finalWrap) { toast('Set wrap time first', 'err'); return; }
 	    if (!isValidHM(finalWrap)) { toast('Use a valid wrap time (HH:MM)', 'err'); return; }
@@ -5084,10 +5181,44 @@ function bindMain() {
   document.querySelectorAll('.nav-btn').forEach(btn=>btn.addEventListener('click',()=>setMainTab(btn.dataset.tab)));
   document.getElementById('new-day-btn')?.addEventListener('click', async () => {
     const prevS = cloneState();
-    if(S.today&&S.today.wrapTime) S.days.push({...S.today});
-    S.today={date:localDateISO(),guesses:[],wrapTime:null,winner:null,points:null,estWrap:null,approvedAt:null,approvedDate:null};
+
+    // Se la partita corrente è conclusa, la archiviamo.
+    if (S.today && S.today.wrapTime) {
+      S.days.push({ ...S.today });
+    }
+
+    // La giornata TotoWrap cambia alle 05:00, non a mezzanotte.
+    const gameDate = currentGameDateISO();
+
+    // Se nello stesso gameDate esistono già partite concluse,
+    // la nuova diventa second, third, ecc.
+    const unit = nextUnitForDate(gameDate);
+
+    S.today = {
+      date: gameDate,
+      unit,
+      guesses: [],
+      wrapTime: null,
+      winner: null,
+      winners: [],
+      points: null,
+      noWinner: false,
+      penalties: [],
+      crazyDay: null,
+      estWrap: null,
+      estWrapDate: null,
+      betCloseAt: null,
+      approvedAt: null,
+      approvedDate: null
+    };
+
     const saved = await saveS();
-    if (!saved) { restoreAfterFailedSave(prevS); return; }
+
+    if (!saved) {
+      restoreAfterFailedSave(prevS);
+      return;
+    }
+
     render();
   });
   document.getElementById('parse-btn')?.addEventListener('click', showPreview);
