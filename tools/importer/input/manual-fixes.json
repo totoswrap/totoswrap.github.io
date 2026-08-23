@@ -144,6 +144,21 @@
     }
   },
 
+  "2026-06-26-main": {
+  "guesses": {
+    "Marco": "03:30",
+    "Roberta": "04:12",
+    "Isabel": "04:27",
+    "Nicolas": "04:30",
+    "Giulia": "04:33",
+    "Edoardo": "04:34",
+    "Euridilla": "04:45",
+    "Lawrence": "04:47",
+    "Lior": "04:50",
+    "Francesca": "04:56"
+  }
+},
+
   "2026-06-26-second": {
     "guesses": {
       "Nicolas": "03:16",  

@@ -2842,23 +2842,21 @@
     "messageDate": "2026-06-27T00:51:11.000Z",
     "guesses": {
       "Marco": "03:30",
-      "Roberta": "03:50",
-      "Isabel": "03:28",
-      "Nicolas": "03:16",
-      "Giulia": "03:17",
-      "Edoardo": "03:18",
-      "Euridilla": "03:31",
-      "Lawrence": "03:43",
+      "Roberta": "04:12",
+      "Isabel": "04:27",
+      "Nicolas": "04:30",
+      "Giulia": "04:33",
+      "Edoardo": "04:34",
+      "Euridilla": "04:45",
+      "Lawrence": "04:47",
       "Lior": "04:50",
-      "Francesca": "04:56",
-      "Conor": "03:30",
-      "Veronica": "03:37"
+      "Francesca": "04:56"
     },
     "wrapTime": "04:28",
     "calculated": {
-      "winner": "Lior",
+      "winner": "Isabel",
       "winners": [
-        "Lior"
+        "Isabel"
       ],
       "exactWinner": false,
       "points": 1,

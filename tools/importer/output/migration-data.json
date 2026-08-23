@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generatedAt": "2026-08-23T21:12:48.320Z",
+    "generatedAt": "2026-08-23T23:20:48.723Z",
     "source": "calculated-results.json",
     "games": 109,
     "players": 21,
@@ -2619,17 +2619,15 @@
       "unit": "main",
       "guesses": {
         "Marco": "03:30",
-        "Roberta": "03:50",
-        "Isabel": "03:28",
-        "Nicolas": "03:16",
-        "Giulia": "03:17",
-        "Edoardo": "03:18",
-        "Euridilla": "03:31",
-        "Lawrence": "03:43",
+        "Roberta": "04:12",
+        "Isabel": "04:27",
+        "Nicolas": "04:30",
+        "Giulia": "04:33",
+        "Edoardo": "04:34",
+        "Euridilla": "04:45",
+        "Lawrence": "04:47",
         "Lior": "04:50",
-        "Francesca": "04:56",
-        "Conor": "03:30",
-        "Veronica": "03:37"
+        "Francesca": "04:56"
       },
       "wrapTime": "04:28",
       "result": {
@@ -4957,8 +4955,8 @@
     {
       "name": "Veronica",
       "points": 8,
-      "gamesPlayed": 90,
-      "gamesVoted": 90,
+      "gamesPlayed": 89,
+      "gamesVoted": 89,
       "wins": 8,
       "exactWins": 0,
       "crazyWins": 0,
@@ -4970,8 +4968,8 @@
     {
       "name": "Conor",
       "points": 8,
-      "gamesPlayed": 89,
-      "gamesVoted": 89,
+      "gamesPlayed": 88,
+      "gamesVoted": 88,
       "wins": 5,
       "exactWins": 2,
       "crazyWins": 1,
