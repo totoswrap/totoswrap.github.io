@@ -6494,7 +6494,7 @@ window.__TOTOSWRAP_DEBUG__ = {
     } finally {
       S = original;
     }
-  }
+  },
 
   runBonusReconcileSimulation: async () => {
   const original = cloneState();
