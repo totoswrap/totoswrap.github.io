@@ -2452,6 +2452,8 @@ function restoreUIState(uiState) {
 }
 
 function render() {
+  document.body.classList.add('desktop-preview-active');
+  
   const uiState = _skipNextUIRestore ? null : captureUIState();
   _skipNextUIRestore = false;
   const app=document.getElementById('app');
@@ -6055,7 +6057,9 @@ async function showPreview() {
   const sorted = sortedGuesses(fullList, previewDay);
   const totalDays = getInternalProjectDayNumber();
   const app = document.getElementById('app');
-  
+
+  document.body.classList.remove('desktop-preview-active');
+
   app.innerHTML = `
 <div class="hdr">
   <div class="hdr-day">${displayDayProgressHeader(totalDays)} Preview</div>
