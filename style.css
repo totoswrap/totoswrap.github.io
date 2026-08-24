@@ -485,6 +485,84 @@ input::placeholder, textarea::placeholder { color: var(--dim); }
 .settings-row:last-of-type { border-bottom: none; }
 .settings-name-input { flex: 1 1 auto; min-width: 0; height: 32px; padding: 6px 9px; font-size: .84rem; background: var(--bg4); }
 .settings-points-input { flex: 0 0 52px; width: 52px; height: 32px; padding: 6px 6px; font-size: .84rem; text-align: right; background: var(--bg4); font-variant-numeric: tabular-nums; }
+.settings-active-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex: 0 0 auto;
+  cursor: pointer;
+  user-select: none;
+}
+
+.settings-active-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.settings-active-toggle {
+  position: relative;
+  width: 34px;
+  height: 20px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(var(--yellow-rgb), .32);
+  border-radius: 999px;
+  background: rgba(38,55,89,.72);
+  transition:
+    background .18s ease,
+    border-color .18s ease;
+}
+
+.settings-active-toggle::after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--dim);
+  transition:
+    transform .18s ease,
+    background .18s ease;
+}
+
+.settings-active-input:checked + .settings-active-toggle {
+  border-color: rgba(var(--green-rgb), .48);
+  background: rgba(var(--green-rgb), .12);
+}
+
+.settings-active-input:checked + .settings-active-toggle::after {
+  transform: translateX(14px);
+  background: var(--green);
+}
+
+.settings-active-label {
+  width: 43px;
+  color: var(--dim);
+  font-family: 'Alte Haas Grotesk', sans-serif;
+  font-size: .5rem;
+  line-height: 1;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.settings-active-input:checked
+  ~ .settings-active-label {
+  color: var(--green);
+}
+
+.settings-active-input:not(:checked)
+  ~ .settings-active-label {
+  font-size: 0;
+}
+
+.settings-active-input:not(:checked)
+  ~ .settings-active-label::after {
+  content: "Inactive";
+  font-size: .5rem;
+  color: var(--dim);
+}
 .settings-actions { display: inline-flex; align-items: center; gap: 5px; flex: 0 0 auto; }
 .settings-save, .settings-delete { width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; font-family: 'Alte Haas Grotesk', sans-serif; line-height: 1; cursor: pointer; flex: 0 0 auto; transition: background .15s, transform .08s, border-color .15s; }
 .settings-save { border: 1px solid rgba(var(--green-rgb), .38); background: rgba(var(--green-rgb), .12); color: var(--green); font-size: .82rem; font-weight: 700; text-indent: -1px; }

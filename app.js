@@ -3806,7 +3806,7 @@ function renderBoard(view=_boardView) {
 }).join('');
   const activePlayerCount =
     pl.filter(player => player.active !== false).length;
-    
+
   return `<div class="card board-fixed-card board-standings-card">${toolbar}
     <div class="standings-player-count">${activePlayerCount} ${countWord(activePlayerCount, 'TUNA PLAYING', 'TUNAS PLAYING')}</div>
     <div class="standings-scroll-list">${standingsRows}</div>
@@ -5913,13 +5913,15 @@ ${pl.map((p, idx)=> {
       aria-label="Player points"
     >
 
-    <label class="settings-active-control">
+    <label class="settings-active-control" for="active-${realIdx}">
       <input
+        class="settings-active-input"
         type="checkbox"
         id="active-${realIdx}"
         ${p.active !== false ? 'checked' : ''}
       >
-      <span>Active</span>
+      <span class="settings-active-toggle" aria-hidden="true"></span>
+      <span class="settings-active-label">Active</span>
     </label>
 
     <div class="settings-actions">
