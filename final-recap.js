@@ -191,6 +191,53 @@
     let previousLeader = null;
     const runningScores = new Map(players.map(name => [name, 0]));
     const runningWins = new Map(players.map(name => [name, 0]));
+    const streakWinsByDate = new Map();
+
+    days.forEach(day => {
+      const gameDate = isoDate(day?.date);
+      if (!gameDate) return;
+
+      if (!streakWinsByDate.has(gameDate)) {
+        streakWinsByDate.set(gameDate, new Map());
+      }
+
+      const winsThisDate = streakWinsByDate.get(gameDate);
+
+      winnerNames(day).forEach(name => {
+        winsThisDate.set(
+          name,
+          (winsThisDate.get(name) || 0) + 1
+        );
+      });
+    });
+    
+    const orderedStreakDates =
+      [...streakWinsByDate.keys()].sort();
+    
+    stats.forEach(player => {
+      let currentStreak = 0;
+      let longestStreak = 0;
+
+      orderedStreakDates.forEach(gameDate => {
+        const winsThisDate =
+          streakWinsByDate.get(gameDate);
+        const wins =
+          winsThisDate.get(player.name) || 0;
+
+        if (wins > 0) {
+          currentStreak += wins;
+          longestStreak = Math.max(
+            longestStreak,
+            currentStreak
+          );
+        } else {
+          currentStreak = 0;
+        }
+      });
+
+      player.winStreak = currentStreak;
+      player.longestWinStreak = longestStreak;
+    });
 
     days.forEach((day, dayIndex) => {
       const winners = new Set(winnerNames(day));
@@ -206,12 +253,8 @@
         if (winners.has(player.name)) {
           player.wins += 1;
           if (isExactWinner(player.name, day)) player.exact += 1;
-          player.winStreak += 1;
-          player.longestWinStreak = Math.max(player.longestWinStreak, player.winStreak);
           runningScores.set(player.name, (runningScores.get(player.name) || 0) + Number(day.points || 0));
           runningWins.set(player.name, (runningWins.get(player.name) || 0) + 1);
-        } else {
-          player.winStreak = 0;
         }
       });
 
