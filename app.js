@@ -647,14 +647,20 @@ document.addEventListener('click', e => {
 
   const closestWrongBtn = e.target.closest?.('[data-closest-wrong-date]');
   if (closestWrongBtn) {
-    openHistoryDay(closestWrongBtn.dataset.closestWrongDate);
+    openHistoryDay(
+      closestWrongBtn.dataset.closestWrongDate,
+      closestWrongBtn.dataset.closestWrongUnit || 'main'
+    );
     return;
   }
 
   const closenessDotBtn = e.target.closest?.('[data-closeness-date]');
   if (closenessDotBtn) {
     e.preventDefault();
-    openHistoryDay(closenessDotBtn.dataset.closenessDate);
+    openHistoryDay(
+      closenessDotBtn.dataset.closenessDate,
+      closenessDotBtn.dataset.closenessUnit || 'main'
+    );
     return;
   }
 
@@ -869,13 +875,35 @@ function playerDomId(idx) {
 
 function normalizeState(state) {
   const base = state && typeof state === 'object' ? { ...state } : {};
+
   return {
     ...base,
-    playerRoster: Array.isArray(state?.playerRoster) ? state.playerRoster : (Array.isArray(state?.players) ? state.players : []),
-    scores: state?.scores && typeof state.scores === 'object' ? state.scores : {},
-    days: Array.isArray(state?.days) ? state.days : [],
-    today: state?.today || null,
-    _version: Number(state?._version) || 0
+    playerRoster: Array.isArray(state?.playerRoster)
+      ? state.playerRoster
+      : (Array.isArray(state?.players) ? state.players : []),
+
+    scores:
+      state?.scores && typeof state.scores === 'object'
+        ? state.scores
+        : {},
+
+    days:
+      Array.isArray(state?.days)
+        ? state.days
+        : [],
+
+    today:
+      state?.today || null,
+
+    multiUnitBonuses:
+      state?.multiUnitBonuses &&
+      typeof state.multiUnitBonuses === 'object' &&
+      !Array.isArray(state.multiUnitBonuses)
+        ? state.multiUnitBonuses
+        : {},
+
+    _version:
+      Number(state?._version) || 0
   };
 }
 
@@ -1114,11 +1142,19 @@ function formatUnitLabel(unit) {
 }
 
 function nextUnitForDate(gameDate) {
-  const sameGameDateDays = (S.days || []).filter(
-    day => displayToISO(day.date) === gameDate
+  const usedUnits = new Set(
+    (S.days || [])
+      .filter(day => displayToISO(day.date) === gameDate)
+      .map(day => day.unit || 'main')
   );
 
-  return unitNameFromIndex(sameGameDateDays.length);
+  let index = 0;
+
+  while (usedUnits.has(unitNameFromIndex(index))) {
+    index += 1;
+  }
+
+  return unitNameFromIndex(index);
 }
 function dateFromISO(iso) {
   if (!iso) return null;
@@ -1922,30 +1958,72 @@ function boundaryRangeWithDuration(s) {
 }
     
 function getPreviousStreak(playerName) {
-  const allDays = [...(S.days || [])];
+  const completedGames = getHistoryEntries()
+    .filter(day => day?.wrapTime);
 
-  // Include today if it's completed but not yet pushed to S.days
-  if (S.today && S.today.wrapTime && !S.today.noWinner) {
-    allDays.push(S.today);
+  if (!completedGames.length) {
+    return { count: 0, pill: "" };
   }
 
-  if (allDays.length === 0) return { count: 0, pill: "" };
+  /*
+   * La continuità della streak dipende dal gameDate,
+   * non dall'ordine delle singole unità.
+   *
+   * Ogni gameDate può però contribuire con più vittorie:
+   * Main + Second vinte = +2 alla lunghezza della streak.
+   */
+  const gamesByDate = new Map();
 
+  completedGames.forEach(day => {
+    const gameDate = displayToISO(day.date);
+    if (!gameDate) return;
+
+    if (!gamesByDate.has(gameDate)) {
+      gamesByDate.set(gameDate, []);
+    }
+
+    gamesByDate.get(gameDate).push(day);
+  });
+
+  const dateGroups = [...gamesByDate.values()];
   let count = 0;
-  for (let i = allDays.length - 1; i >= 0; i--) {
-    const dayWinners = allDays[i].winners ? allDays[i].winners.map(w => w.name) : [allDays[i].winner];
-    if (dayWinners.includes(playerName)) {
-      count++;
-    } else {
+
+  for (let i = dateGroups.length - 1; i >= 0; i--) {
+    const games = dateGroups[i];
+
+    const winsThisDate = games.reduce((total, day) => {
+      if (day?.noWinner) return total;
+
+      const winnerNames = Array.isArray(day?.winners)
+        ? day.winners.map(w => w.name)
+        : (day?.winner ? [day.winner] : []);
+
+      const won = winnerNames.some(
+        winnerName =>
+          nameKey(winnerName) === nameKey(playerName)
+      );
+
+      return total + (won ? 1 : 0);
+    }, 0);
+
+    /*
+     * Il gameDate interrompe la streak soltanto se
+     * il giocatore non ha vinto NESSUNA unità quel giorno.
+     */
+    if (winsThisDate === 0) {
       break;
     }
+
+    count += winsThisDate;
   }
+
   if (count >= 2) {
     return {
-      count: count,
-      pill: `<div class="badge b-streak">${count} ${countWord(count, 'Day', 'Days')}</div>`
+      count,
+      pill: `<div class="badge b-streak">${count} ${countWord(count, 'Win', 'Wins')}</div>`
     };
   }
+
   return { count: 0, pill: "" };
 }
 
@@ -2225,7 +2303,7 @@ function getWinnerConfettiKey() {
     winnerNameList.includes(guess.name) && isExactBetForDay(guess, S.today)
   );
   if (!exactWinner) return null;
-  return S.today.date + '_' + winnerNameList.join(',');
+  return `${S.today.date}_${S.today.unit || 'main'}_${winnerNameList.join(',')}`;
 }
 
 function scheduleWinnerConfetti() {
@@ -3220,6 +3298,7 @@ function renderToday() {
 }
 
 function renderCrazyDaySetupCard(day) {
+  if ((day?.unit || 'main') !== 'main') return '';
   const cfg = getCrazyDayConfig(day);
   const regular = cfg ? String(cfg.regularPoints) : '';
   const perfect = cfg ? String(cfg.perfectPoints) : '';
@@ -3478,6 +3557,7 @@ function renderBoardCloseness(pl) {
         name: player.name,
         day: dayIdx,
         date: displayToISO(day.date),
+        unit: day.unit || 'main',
         gap: boardClosenessGap(guess, day),
         won: didPlayerWinDay(player.name, day)
       });
@@ -3527,7 +3607,7 @@ function renderBoardCloseness(pl) {
     const marker = point.won
       ? '<img class="closeness-win-marker" src="imgs/tuna.png" alt="" aria-hidden="true">'
       : `<span class="closeness-dot" style="background:${colorOf(point.name)};"></span>`;
-    return `<a class="closeness-marker" href="#history-${encodeURIComponent(point.date)}" data-closeness-date="${esc(point.date)}" style="left:${pos.left.toFixed(2)}%; top:${pos.top.toFixed(2)}%;" title="${esc(point.name)} - ${esc(formatBoardExactCompactGap(point.gap))} off on ${esc(displayDayLabel(point.day + 1))}" aria-label="Open ${esc(displayDayLabel(point.day + 1))} in history">
+    return `<a class="closeness-marker" href="#history-${encodeURIComponent(point.date)}" data-closeness-date="${esc(point.date)}" data-closeness-unit="${esc(point.unit)}" style="left:${pos.left.toFixed(2)}%; top:${pos.top.toFixed(2)}%;" title="${esc(point.name)} - ${esc(formatBoardExactCompactGap(point.gap))} off on ${esc(displayDayLabel(point.day + 1))}" aria-label="Open ${esc(displayDayLabel(point.day + 1))} in history">
       ${marker}
     </a>`;
   }).join('');
@@ -3741,9 +3821,14 @@ function wrongTerritoryGap(name, day) {
   return wrapSec < slice.start ? slice.start - wrapSec : wrapSec - slice.end;
 }
 
-function openHistoryDay(date) {
+function openHistoryDay(date, unit = 'main') {
   const isoDate = displayToISO(date);
-  const row = [...document.querySelectorAll('[data-history-row]')].find(el => displayToISO(el.dataset.historyDate) === isoDate);
+  const unitKey = unit || 'main';
+
+  const row = [...document.querySelectorAll('[data-history-row]')].find(el =>
+    displayToISO(el.dataset.historyDate) === isoDate &&
+    (el.dataset.historyUnit || 'main') === unitKey
+  );
   if (!row) return false;
   setTimeout(() => {
     row.classList.add('open');
@@ -3778,6 +3863,7 @@ function getBoardPlayerStats(name) {
   let lastDay = null;
   let closestWrongGap = null;
   let closestWrongDate = null;
+  let closestWrongUnit = null;
 
   [...completed].reverse().forEach(day => {
     const winnerNames = day.winners ? day.winners.map(w => w.name) : (day.winner ? [day.winner] : []);
@@ -3802,6 +3888,7 @@ function getBoardPlayerStats(name) {
       if (wrongGap !== null && (closestWrongGap === null || wrongGap < closestWrongGap)) {
         closestWrongGap = wrongGap;
         closestWrongDate = day.date || null;
+        closestWrongUnit = day.unit || 'main';
       }
     }
   });
@@ -3816,7 +3903,8 @@ function getBoardPlayerStats(name) {
     lastGuess,
     lastDay,
     closestWrongGap,
-    closestWrongDate
+    closestWrongDate,
+    closestWrongUnit
   };
 }
 
@@ -3832,7 +3920,7 @@ function renderBoardPlayerStats(name) {
         : `Last bet was <span class="accent">${formatBoardGap(stats.lastGap)}</span> from official wrap`;
   const closestWrongValue = stats.closestWrongGap === null ? '--' : formatBoardCompactGap(stats.closestWrongGap);
   const closestWrongStat = stats.closestWrongDate
-    ? `<button class="board-stat board-stat-link" type="button" data-closest-wrong-date="${esc(stats.closestWrongDate)}" title="Open history day" aria-label="Open closest wrong bet history">
+    ? `<button class="board-stat board-stat-link" type="button" data-closest-wrong-date="${esc(stats.closestWrongDate)}" data-closest-wrong-unit="${esc(stats.closestWrongUnit || 'main')}" title="Open history day" aria-label="Open closest wrong bet history">
         <strong>${closestWrongValue}</strong><span>Closest Wrong Bet</span>
       </button>`
     : `<div class="board-stat"><strong>${closestWrongValue}</strong><span>Closest Wrong Bet</span></div>`;
@@ -4253,6 +4341,13 @@ async function updateHistoryWrapTime(
   }
 
   const prevS = cloneState();
+
+  const gameDate =
+    displayToISO(target.day.date);
+
+  const previousBonusRecord =
+    getMultiUnitBonusRecord(gameDate);
+
   adjustCompletedDayScores(target.day, -1);
   const { winner, winners, points, noWinner, penalties } = calcWinner(target.day.guesses || [], normalizedWrap, target.day);
   target.day.wrapTime = normalizedWrap;
@@ -4262,6 +4357,12 @@ async function updateHistoryWrapTime(
   target.day.noWinner = noWinner;
   target.day.penalties = penalties || [];
   adjustCompletedDayScores(target.day, 1);
+
+  await reconcileMultiUnitBonusesAfterEdit(
+    gameDate,
+    previousBonusRecord
+  );
+
   const saved = await saveS();
   if (!saved) { restoreAfterFailedSave(prevS); return false; }
   toast('Official wrap time updated', 'ok');
@@ -4308,6 +4409,13 @@ async function addHistoryPlayerBet(
   }
 
   const prevS = cloneState();
+
+  const gameDate =
+    displayToISO(target.day.date);
+
+  const previousBonusRecord =
+    getMultiUnitBonusRecord(gameDate);
+
   adjustCompletedDayScores(target.day, -1);
   target.day.guesses = target.day.guesses || [];
   const nextGuess = existingGuess || { name };
@@ -4321,6 +4429,11 @@ async function addHistoryPlayerBet(
   target.day.noWinner = noWinner;
   target.day.penalties = penalties || [];
   adjustCompletedDayScores(target.day, 1);
+
+  await reconcileMultiUnitBonusesAfterEdit(
+    gameDate,
+    previousBonusRecord
+  );
 
   const saved = await saveS();
   if (!saved) { restoreAfterFailedSave(prevS); return false; }
@@ -4629,7 +4742,13 @@ function readCrazyDayPenaltyInput(id) {
 }
 
 async function saveCrazyDaySettings() {
-  if (!IS_ADMIN || !S.today || S.today.wrapTime || S.today.guesses?.some(g => g.time)) return false;
+  if (
+    !IS_ADMIN ||
+    !S.today ||
+    (S.today.unit || 'main') !== 'main' ||
+    S.today.wrapTime ||
+    S.today.guesses?.some(g => g.time)
+  ) return false;
   const regularPoints = readCrazyDayInput('crazy-regular-points');
   const perfectPoints = readCrazyDayInput('crazy-perfect-points');
   const penaltyPoints = readCrazyDayPenaltyInput('crazy-penalty-points');
@@ -4648,7 +4767,13 @@ async function saveCrazyDaySettings() {
 }
 
 async function clearCrazyDaySettings() {
-  if (!IS_ADMIN || !S.today || S.today.wrapTime || S.today.guesses?.some(g => g.time)) return false;
+  if (
+    !IS_ADMIN ||
+    !S.today ||
+    (S.today.unit || 'main') !== 'main' ||
+    S.today.wrapTime ||
+    S.today.guesses?.some(g => g.time)
+  ) return false;
   if (!S.today.crazyDay) {
     _crazyDayPanelOpen = false;
     render();
@@ -4767,6 +4892,424 @@ async function handleAdminDialogAction(btn) {
     );
     if (saved) closeAdminDialog();
     return;
+  }
+}
+
+function getMultiUnitBonusCandidates(gameDate) {
+  const isoDate = displayToISO(gameDate);
+
+  const completedGames = [
+    ...(S.days || []),
+    ...(S.today?.wrapTime ? [S.today] : [])
+  ].filter(day =>
+    day?.wrapTime &&
+    displayToISO(day.date) === isoDate
+  );
+
+  const winsByPlayer = new Map();
+
+  completedGames.forEach(day => {
+    if (day.noWinner) return;
+
+    const winnerNames = Array.isArray(day.winners)
+      ? day.winners.map(w => w.name).filter(Boolean)
+      : (day.winner ? [day.winner] : []);
+
+    winnerNames.forEach(name => {
+      const key = nameKey(name);
+
+      if (!winsByPlayer.has(key)) {
+        winsByPlayer.set(key, {
+          player: name,
+          wins: 0
+        });
+      }
+
+      winsByPlayer.get(key).wins += 1;
+    });
+  });
+
+  return [...winsByPlayer.values()]
+    .filter(entry => entry.wins >= 2)
+    .sort((a, b) =>
+      b.wins - a.wins ||
+      a.player.localeCompare(b.player)
+    );
+}
+
+function hasMultiUnitBonusDecision(gameDate) {
+  const isoDate = displayToISO(gameDate);
+
+  return Boolean(
+    S.multiUnitBonuses &&
+    typeof S.multiUnitBonuses === 'object' &&
+    S.multiUnitBonuses[isoDate]
+  );
+}
+
+function applyMultiUnitBonusDecisions(gameDate, decisions) {
+  const isoDate = displayToISO(gameDate);
+
+  if (
+    !S.multiUnitBonuses ||
+    typeof S.multiUnitBonuses !== 'object'
+  ) {
+    S.multiUnitBonuses = {};
+  }
+
+  const dateRecord = {};
+
+  decisions.forEach(decision => {
+    const points = Number(decision.points) || 0;
+
+    dateRecord[nameKey(decision.player)] = {
+      player: decision.player,
+      wins: decision.wins,
+      points,
+      status: points > 0 ? 'awarded' : 'skipped'
+    };
+
+    if (points > 0) {
+      applyScoreDelta(
+        decision.player,
+        points
+      );
+    }
+  });
+
+  S.multiUnitBonuses[isoDate] = dateRecord;
+}
+
+function requestMultiUnitBonusDecision(gameDate, candidates) {
+  return new Promise(resolve => {
+    const label =
+      displayDate(gameDate) || gameDate;
+
+    const rows = candidates.map((candidate, idx) => `
+      <div class="admin-dialog-input-wrap">
+        <label
+          class="inp-lbl"
+          for="multi-unit-bonus-${idx}"
+        >
+          ${esc(candidate.player)}
+          · ${candidate.wins} Unit Wins
+        </label>
+
+        <input
+          class="admin-dialog-wrap-input"
+          type="number"
+          id="multi-unit-bonus-${idx}"
+          value="1"
+          min="0"
+          step="1"
+          inputmode="numeric"
+          aria-label="${esc(candidate.player)} bonus points"
+        >
+      </div>
+    `).join('');
+
+    openAdminDialog({
+      title: 'Multi-Unit Bonus',
+      copy:
+        `${label} has player${candidates.length === 1 ? '' : 's'} ` +
+        `with multiple unit wins. Choose bonus points. Use 0 for no bonus.`,
+      showClose: false,
+      body: `
+        ${rows}
+
+        <div class="admin-dialog-split">
+          <button
+            class="admin-dialog-action undo"
+            type="button"
+            data-multi-unit-bonus-skip
+          >
+            Skip All
+          </button>
+
+          <button
+            class="admin-dialog-action approve"
+            type="button"
+            data-multi-unit-bonus-apply
+          >
+            Apply
+          </button>
+        </div>
+      `
+    });
+
+    const modal =
+      document.getElementById('admin-dialog-modal');
+
+    modal
+      ?.querySelector('[data-multi-unit-bonus-skip]')
+      ?.addEventListener('click', () => {
+        const decisions = candidates.map(candidate => ({
+          player: candidate.player,
+          wins: candidate.wins,
+          points: 0
+        }));
+
+        closeAdminDialog();
+        resolve(decisions);
+      });
+
+    modal
+      ?.querySelector('[data-multi-unit-bonus-apply]')
+      ?.addEventListener('click', () => {
+        const decisions = [];
+
+        for (let idx = 0; idx < candidates.length; idx++) {
+          const candidate = candidates[idx];
+
+          const raw =
+            document.getElementById(
+              `multi-unit-bonus-${idx}`
+            )?.value;
+
+          const points = Number(raw);
+
+          if (
+            !Number.isInteger(points) ||
+            points < 0
+          ) {
+            toast(
+              `Check ${candidate.player}'s bonus points`,
+              'err'
+            );
+            return;
+          }
+
+          decisions.push({
+            player: candidate.player,
+            wins: candidate.wins,
+            points
+          });
+        }
+
+        closeAdminDialog();
+        resolve(decisions);
+      });
+  });
+}
+
+function getMultiUnitBonusRecord(gameDate) {
+  const isoDate = displayToISO(gameDate);
+
+  const record =
+    S.multiUnitBonuses &&
+    typeof S.multiUnitBonuses === 'object'
+      ? S.multiUnitBonuses[isoDate]
+      : null;
+
+  if (!record || typeof record !== 'object') {
+    return {};
+  }
+
+  return JSON.parse(JSON.stringify(record));
+}
+
+function getAwardedMultiUnitBonuses(record) {
+  if (!record || typeof record !== 'object') {
+    return [];
+  }
+
+  return Object.values(record).filter(entry =>
+    entry &&
+    Number(entry.points) > 0
+  );
+}
+
+function requestExistingMultiUnitBonusDecision(
+  gameDate,
+  bonus
+) {
+  return new Promise(resolve => {
+    const label =
+      displayDate(gameDate) || gameDate;
+
+    const points =
+      Number(bonus.points) || 0;
+
+    openAdminDialog({
+      title: 'Existing Multi-Unit Bonus',
+      copy:
+        `${bonus.player} currently has a +${points} bonus for ${label}. ` +
+        `The results for this date have changed. Keep or remove this bonus?`,
+      showClose: false,
+      body: `
+        <div class="admin-dialog-split">
+          <button
+            class="admin-dialog-action undo"
+            type="button"
+            data-existing-bonus-remove
+          >
+            Remove Bonus
+          </button>
+
+          <button
+            class="admin-dialog-action approve"
+            type="button"
+            data-existing-bonus-keep
+          >
+            Keep +${points}
+          </button>
+        </div>
+      `
+    });
+
+    const modal =
+      document.getElementById('admin-dialog-modal');
+
+    modal
+      ?.querySelector('[data-existing-bonus-remove]')
+      ?.addEventListener('click', () => {
+        closeAdminDialog();
+        resolve(false);
+      });
+
+    modal
+      ?.querySelector('[data-existing-bonus-keep]')
+      ?.addEventListener('click', () => {
+        closeAdminDialog();
+        resolve(true);
+      });
+  });
+}
+
+async function reconcileMultiUnitBonusesAfterEdit(
+  gameDate,
+  previousBonusRecord
+) {
+  const isoDate =
+    displayToISO(gameDate);
+
+  if (!isoDate) return;
+
+  if (
+    !S.multiUnitBonuses ||
+    typeof S.multiUnitBonuses !== 'object'
+  ) {
+    S.multiUnitBonuses = {};
+  }
+
+  const oldRecord =
+    previousBonusRecord &&
+    typeof previousBonusRecord === 'object'
+      ? previousBonusRecord
+      : {};
+
+  /*
+   * First remove the old awarded bonus points from
+   * the score. We will add back only the bonuses that
+   * the admin decides to keep.
+   */
+  getAwardedMultiUnitBonuses(oldRecord)
+    .forEach(entry => {
+      applyScoreDelta(
+        entry.player,
+        -(Number(entry.points) || 0)
+      );
+    });
+
+  const nextRecord = {};
+
+  /*
+   * Existing awarded bonuses are manual decisions.
+   * Even if the player no longer qualifies after the
+   * edit, the admin can explicitly keep the bonus.
+   */
+  for (
+    const bonus of getAwardedMultiUnitBonuses(oldRecord)
+  ) {
+    const keep =
+      await requestExistingMultiUnitBonusDecision(
+        isoDate,
+        bonus
+      );
+
+    if (!keep) continue;
+
+    const points =
+      Number(bonus.points) || 0;
+
+    applyScoreDelta(
+      bonus.player,
+      points
+    );
+
+    nextRecord[nameKey(bonus.player)] = {
+      player: bonus.player,
+      wins: Number(bonus.wins) || 0,
+      points,
+      status: 'awarded'
+    };
+  }
+
+  /*
+   * Recalculate the multi-unit winners using the
+   * edited results.
+   */
+  const candidates =
+    getMultiUnitBonusCandidates(isoDate);
+
+  /*
+   * Anyone who now qualifies and does not already
+   * have a kept bonus gets the normal bonus prompt.
+   */
+  const newCandidates =
+    candidates.filter(candidate =>
+      !nextRecord[nameKey(candidate.player)]
+    );
+
+  if (newCandidates.length > 0) {
+    const decisions =
+      await requestMultiUnitBonusDecision(
+        isoDate,
+        newCandidates
+      );
+
+    decisions.forEach(decision => {
+      const points =
+        Number(decision.points) || 0;
+
+      if (points > 0) {
+        applyScoreDelta(
+          decision.player,
+          points
+        );
+      }
+
+      nextRecord[nameKey(decision.player)] = {
+        player: decision.player,
+        wins: decision.wins,
+        points,
+        status:
+          points > 0
+            ? 'awarded'
+            : 'skipped'
+      };
+    });
+  }
+
+  /*
+   * Refresh the number of wins stored for bonuses
+   * that were kept.
+   */
+  candidates.forEach(candidate => {
+    const key =
+      nameKey(candidate.player);
+
+    if (nextRecord[key]) {
+      nextRecord[key].wins =
+        candidate.wins;
+    }
+  });
+
+  if (Object.keys(nextRecord).length > 0) {
+    S.multiUnitBonuses[isoDate] =
+      nextRecord;
+  } else {
+    delete S.multiUnitBonuses[isoDate];
   }
 }
 
@@ -4996,6 +5539,12 @@ async function deleteHistoryDay(
 
   const prevS = cloneState();
 
+  const gameDate =
+    displayToISO(date);
+
+  const previousBonusRecord =
+    getMultiUnitBonusRecord(gameDate);
+
   const day =
     target.kind === 'history'
       ? S.days[target.idx]
@@ -5018,6 +5567,11 @@ async function deleteHistoryDay(
 
   removeAutoAddedPlayersFromDeletedDays(
     [day]
+  );
+
+  await reconcileMultiUnitBonusesAfterEdit(
+    gameDate,
+    previousBonusRecord
   );
 
   const saved =
@@ -5080,6 +5634,9 @@ async function deleteCurrentDayAndMatchingHistory() {
   const prevS =
     cloneState();
 
+  const previousBonusRecord =
+    getMultiUnitBonusRecord(isoDate);  
+
   const deletedDays = [
     S.today,
     ...matchingHistoryIndexes.map(
@@ -5115,6 +5672,11 @@ async function deleteCurrentDayAndMatchingHistory() {
 
   removeAutoAddedPlayersFromDeletedDays(
     deletedDays
+  );
+
+  await reconcileMultiUnitBonusesAfterEdit(
+    isoDate,
+    previousBonusRecord
   );
 
   const saved =
@@ -5311,7 +5873,13 @@ ${hasCurrentDay ? `
 }
 
 async function cancelCrazyDayForSafety() {
-  if (!IS_ADMIN || !S.today?.crazyDay || S.today.wrapTime || S.today.guesses?.some(g => g.time)) return true;
+  if (
+    !IS_ADMIN ||
+    !S.today?.crazyDay ||
+    (S.today.unit || 'main') !== 'main' ||
+    S.today.wrapTime ||
+    S.today.guesses?.some(g => g.time)
+  ) return true;
   const prevS = cloneState();
   delete S.today.crazyDay;
   _crazyDayPanelOpen = false;
@@ -5628,6 +6196,34 @@ function removePlayerFromDay(day, name) {
   recalculateCompletedDay(day);
 }
 
+function removePlayerFromMultiUnitBonuses(name) {
+  const key = nameKey(name);
+
+  if (
+    !S.multiUnitBonuses ||
+    typeof S.multiUnitBonuses !== 'object'
+  ) {
+    return;
+  }
+
+  Object.keys(S.multiUnitBonuses).forEach(date => {
+    const dateRecord = S.multiUnitBonuses[date];
+
+    if (
+      !dateRecord ||
+      typeof dateRecord !== 'object'
+    ) {
+      return;
+    }
+
+    delete dateRecord[key];
+
+    if (Object.keys(dateRecord).length === 0) {
+      delete S.multiUnitBonuses[date];
+    }
+  });
+}
+
 async function deletePlayer(idx) {
   if (!IS_ADMIN || !currentUser) return;
   const player = S.playerRoster[idx];
@@ -5639,6 +6235,7 @@ async function deletePlayer(idx) {
   daysToUpdate.forEach(day => adjustCompletedDayScores(day, -1));
   S.playerRoster.splice(idx, 1);
   delete S.scores[name];
+  removePlayerFromMultiUnitBonuses(name);
   daysToUpdate.forEach(day => {
     removePlayerFromDay(day, name);
     adjustCompletedDayScores(day, 1);
@@ -5670,17 +6267,71 @@ function bindMain() {
   document.getElementById('new-day-btn')?.addEventListener('click', async () => {
     const prevS = cloneState();
 
-    // Se la partita corrente è conclusa, la archiviamo.
-    if (S.today && S.today.wrapTime) {
+    const completedToday =
+      S.today?.wrapTime
+        ? S.today
+        : null;
+
+    const previousGameDate =
+      completedToday
+        ? displayToISO(completedToday.date)
+        : null;
+
+    // La giornata TotoWrap cambia alle 05:00, non a mezzanotte.
+    const gameDate =
+      currentGameDateISO();
+
+    /*
+    * Il bonus multi-unit viene chiesto soltanto
+    * quando stiamo ABBANDONANDO il gameDate appena concluso.
+    *
+    * Non viene mai ricalcolato automaticamente
+    * sullo storico importato.
+    */
+    if (
+      completedToday &&
+      previousGameDate &&
+     previousGameDate !== gameDate &&
+      !hasMultiUnitBonusDecision(previousGameDate)
+    ) {
+      const candidates =
+        getMultiUnitBonusCandidates(previousGameDate);
+
+      if (candidates.length > 0) {
+        const decisions =
+          await requestMultiUnitBonusDecision(
+            previousGameDate,
+            candidates
+          );
+
+        applyMultiUnitBonusDecisions(
+          previousGameDate,
+          decisions
+        );
+      }
+    }
+
+    // Ora archiviamo la partita appena conclusa.
+    if (completedToday) {
       S.days.push({ ...S.today });
     }
 
-    // La giornata TotoWrap cambia alle 05:00, non a mezzanotte.
-    const gameDate = currentGameDateISO();
-
     // Se nello stesso gameDate esistono già partite concluse,
     // la nuova diventa second, third, ecc.
-    const unit = nextUnitForDate(gameDate);
+    const unit =
+      nextUnitForDate(gameDate);
+    const previousGameDateUnits = (S.days || []).filter(
+      day => displayToISO(day.date) === gameDate
+    );
+
+    const inheritedCrazyDay =
+      previousGameDateUnits.length > 0
+        ? (
+            previousGameDateUnits[0].crazyDay
+              ? JSON.parse(JSON.stringify(previousGameDateUnits[0].crazyDay))
+              : null
+          )
+        : null;
 
     S.today = {
       date: gameDate,
@@ -5692,7 +6343,7 @@ function bindMain() {
       points: null,
       noWinner: false,
       penalties: [],
-      crazyDay: null,
+      crazyDay: inheritedCrazyDay,
       estWrap: null,
       estWrapDate: null,
       betCloseAt: null,
