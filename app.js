@@ -2484,6 +2484,7 @@ function restoreUIState(uiState) {
 }
 
 function render() {
+  document.body.classList.remove('preview-mode');
   document.body.classList.add('desktop-preview-active');
 
   const uiState = _skipNextUIRestore ? null : captureUIState();
@@ -6150,6 +6151,7 @@ async function showPreview() {
   const app = document.getElementById('app');
 
   document.body.classList.remove('desktop-preview-active');
+  document.body.classList.add('preview-mode');
 
   app.innerHTML = `
 <div class="hdr">
