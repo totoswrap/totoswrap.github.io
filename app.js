@@ -1724,8 +1724,14 @@ function buildFullGuessList(parsed) {
     result.push({ ...g, name: rosterName || g.name });
   });
   S.playerRoster.forEach(p => {
-    if (!submitted.has(nameKey(p.name))) {
-      result.push({ name: p.name, time: null });
+    if (
+      p.active !== false &&
+      !submitted.has(nameKey(p.name))
+    ) {
+      result.push({
+        name: p.name,
+        time: null
+      });
     }
   });
   return result;
@@ -4569,7 +4575,10 @@ async function addRosterPlayer(name) {
   }
 
   const prevS = cloneState();
-  S.playerRoster.push({ name: newName });
+  S.playerRoster.push({
+    name: newName,
+    active: true
+  });
   S.scores[newName] = Number(S.scores[newName]) || 0;
   const saved = await saveS();
   if (!saved) { restoreAfterFailedSave(prevS); return false; }
@@ -5885,8 +5894,31 @@ ${pl.map((p, idx)=> {
   const realIdx = S.playerRoster.findIndex(orig => orig.name === p.name);
   return `
   <div class="settings-row">
-    <input class="settings-name-input" type="text" value="${esc(p.name)}" id="name-${realIdx}" aria-label="Player name">
-    <input class="settings-points-input" type="number" value="${S.scores[p.name]||0}" id="pts-${realIdx}" aria-label="Player points">
+    <input
+      class="settings-name-input"
+      type="text"
+      value="${esc(p.name)}"
+      id="name-${realIdx}"
+      aria-label="Player name"
+    >
+
+    <input
+      class="settings-points-input"
+      type="number"
+      value="${S.scores[p.name] || 0}"
+      id="pts-${realIdx}"
+      aria-label="Player points"
+    >
+
+    <label class="settings-active-control">
+      <input
+        type="checkbox"
+        id="active-${realIdx}"
+        ${p.active !== false ? 'checked' : ''}
+      >
+      <span>Active</span>
+    </label>
+
     <div class="settings-actions">
       <button class="settings-delete" type="button" title="Delete player" aria-label="Delete player" data-delete-player="${realIdx}">×</button>
       <button class="settings-save" type="button" title="Save player" aria-label="Save player" data-save-player="${realIdx}">✓</button>
@@ -6190,7 +6222,9 @@ async function savePlayer(idx) {
   if (!IS_ADMIN || !currentUser) return;
   const nameInput = document.getElementById(`name-${idx}`);
   const ptsInput = document.getElementById(`pts-${idx}`);
-  if (!nameInput || !ptsInput) return;
+  const activeInput =
+    document.getElementById(`active-${idx}`);
+  if (!nameInput || !ptsInput || !activeInput) return;
   const prevS = cloneState();
   const oldName = S.playerRoster[idx].name;
   const newName = nameInput.value.trim();
@@ -6223,6 +6257,8 @@ async function savePlayer(idx) {
     }
   }
   S.scores[newName] = newPoints;
+  S.playerRoster[idx].active =
+    activeInput.checked;
   const saved = await saveS();
   if (!saved) { restoreAfterFailedSave(prevS); return; }
   toast('Player updated!', 'ok');
