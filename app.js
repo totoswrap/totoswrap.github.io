@@ -943,7 +943,7 @@ async function exportProjectBackup() {
   }
 }
 
-const DISPLAY_TOTAL_DAYS = 133;
+const DISPLAY_TOTAL_DAYS = 119;
 
 function displayDayNumber(internalDayNumber) {
   const n = Number(internalDayNumber);
