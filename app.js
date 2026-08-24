@@ -6131,8 +6131,15 @@ async function showPreview() {
   });
   
   const previewApprovedAt = nowHMS();
-  const previewApprovedDate = S.today?.date || localDateISO();
-  const previewDay = { approvedAt: previewApprovedAt, approvedDate: previewApprovedDate };
+  const previewApprovedDate =
+    S.today?.date || currentGameDateISO();
+
+  const previewDay = {
+    approvedAt: previewApprovedAt,
+    approvedDate: previewApprovedDate,
+    estWrap: savedWrap,
+    estWrapDate: savedWrapDate
+  };
   const fullList = buildFullGuessList(parsed).map((g, idx) => ({
     ...g,
     date: g.time ? inferBetDate(g.time, previewDay) : null,
