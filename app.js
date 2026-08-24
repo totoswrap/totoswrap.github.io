@@ -2075,10 +2075,42 @@ function startClock() {
 }
 
 function betCloseDiffSec(day=S.today) {
-  if (!day?.betCloseAt || !isValidHM(day.betCloseAt)) return null;
-  let closeSec = toSec(day.betCloseAt);
+  if (!day?.betCloseAt || !isValidHM(day.betCloseAt)) {
+    return null;
+  }
+
   const currentSec = nowSec();
-  if (closeSec < currentSec && (currentSec - closeSec) > 12 * 3600) closeSec += DAY_SEC;
+
+  if (
+    day.betCloseDate &&
+    dateFromISO(day.betCloseDate)
+  ) {
+    const dayOffset =
+      dateDiffDays(
+        localDateISO(),
+        day.betCloseDate
+      );
+
+    return (
+      dayOffset * DAY_SEC +
+      toSec(day.betCloseAt) -
+      currentSec
+    );
+  }
+
+  /*
+   * Compatibilità con eventuali vecchi stati
+   * che possiedono betCloseAt ma non betCloseDate.
+   */
+  let closeSec = toSec(day.betCloseAt);
+
+  if (
+    closeSec < currentSec &&
+    (currentSec - closeSec) > 12 * 3600
+  ) {
+    closeSec += DAY_SEC;
+  }
+
   return closeSec - currentSec;
 }
 
@@ -2453,7 +2485,7 @@ function restoreUIState(uiState) {
 
 function render() {
   document.body.classList.add('desktop-preview-active');
-  
+
   const uiState = _skipNextUIRestore ? null : captureUIState();
   _skipNextUIRestore = false;
   const app=document.getElementById('app');
@@ -3321,7 +3353,28 @@ function renderToday() {
       <div class="card-lbl">Closing Bet Time</div>
       <p class="mono dim" style="margin-bottom:10px">Set when players must stop submitting bets. Players will see a countdown until guesses are pasted.</p>
       <div class="admin-time-save-row admin-close-save-row">
-        <input type="text" class="admin-time-input" id="bet-close-input" value="${esc(t.betCloseAt || '')}" placeholder="hh:mm" inputmode="text" maxlength="5" aria-label="Closing bet time">
+        <input
+          type="text"
+          class="admin-time-input"
+          id="bet-close-input"
+          value="${esc(t.betCloseAt || '')}"
+          placeholder="hh:mm"
+          inputmode="text"
+          maxlength="5"
+          aria-label="Closing bet time"
+        >
+
+        <input
+          type="text"
+          class="admin-date-input"
+          id="bet-close-date-input"
+          value="${esc(displayDate(t.betCloseDate || t.date || currentGameDateISO()))}"
+          placeholder="dd/mm/yyyy"
+          inputmode="numeric"
+          maxlength="10"
+          aria-label="Closing bet date"
+        >
+
         <button class="settings-delete admin-time-delete-btn" id="clear-bet-close-btn" type="button" title="Clear closing bet time" aria-label="Clear closing bet time">×</button>
         <button class="settings-save admin-time-save-btn" id="save-bet-close-btn" type="button" title="Save closing bet time" aria-label="Save closing bet time">✓</button>
       </div>
@@ -4704,20 +4757,50 @@ async function confirmTodayWrap(wrapTime) {
 }
 
 async function saveBetCloseTime() {
-  if (!IS_ADMIN || !S.today || S.today.wrapTime || S.today.guesses?.some(g => g.time)) return false;
-  const closeTime = normalizeHMInput(document.getElementById('bet-close-input')?.value || '');
+  if (
+    !IS_ADMIN ||
+    !S.today ||
+    S.today.wrapTime ||
+    S.today.guesses?.some(g => g.time)
+  ) return false;
+
+  const closeTime =
+    normalizeHMInput(
+      document.getElementById('bet-close-input')?.value || ''
+    );
+
+  const closeDate =
+    parseDateInput(
+      document.getElementById('bet-close-date-input')?.value || ''
+    );
+
   if (!closeTime) {
     toast('Choose a closing time', 'err');
     return false;
   }
+
   if (!isValidHM(closeTime)) {
     toast('Use a valid closing time', 'err');
     return false;
   }
+
+  if (!closeDate) {
+    toast('Use a valid closing date', 'err');
+    return false;
+  }
+
   const prevS = cloneState();
+
   S.today.betCloseAt = closeTime;
+  S.today.betCloseDate = closeDate;
+
   const saved = await saveS();
-  if (!saved) { restoreAfterFailedSave(prevS); return false; }
+
+  if (!saved) {
+    restoreAfterFailedSave(prevS);
+    return false;
+  }
+
   toast('Closing bet time saved', 'ok');
   render();
   return true;
@@ -4731,6 +4814,7 @@ async function clearBetCloseTime() {
   }
   const prevS = cloneState();
   S.today.betCloseAt = null;
+  S.today.betCloseDate = null;
   const saved = await saveS();
   if (!saved) { restoreAfterFailedSave(prevS); return false; }
   toast('Closing bet time cleared', 'ok');
@@ -6433,6 +6517,7 @@ function bindMain() {
       estWrap: null,
       estWrapDate: null,
       betCloseAt: null,
+      betCloseDate: null,
       approvedAt: null,
       approvedDate: null
     };
