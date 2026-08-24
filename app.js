@@ -6436,6 +6436,54 @@ onSnapshot(STATE_REF, (snap) => {
   if (!_stateReady) showConnectionError();
 });
 
-window.__TOTOSWRAP_DEBUG__ = {
-  getState: () => JSON.parse(JSON.stringify(S))
+window.__TOTOSWRAP_DEBUG__.runBonusSimulation = async () => {
+  const original = cloneState();
+
+  try {
+    S = normalizeState({
+      playerRoster: [
+        { name: 'Marco' },
+        { name: 'Giulia' },
+        { name: 'Edoardo' }
+      ],
+      scores: {
+        Marco: 10,
+        Giulia: 7,
+        Edoardo: 5
+      },
+      days: [
+        {
+          date: '2099-01-01',
+          unit: 'main',
+          wrapTime: '20:00:00',
+          winner: 'Marco',
+          winners: [{ name: 'Marco' }],
+          points: 1,
+          noWinner: false,
+          guesses: []
+        },
+        {
+          date: '2099-01-01',
+          unit: 'second',
+          wrapTime: '21:00:00',
+          winner: 'Marco',
+          winners: [{ name: 'Marco' }],
+          points: 1,
+          noWinner: false,
+          guesses: []
+        }
+      ],
+      today: null,
+      multiUnitBonuses: {},
+      _version: original._version
+    });
+
+    return {
+      candidates: getMultiUnitBonusCandidates('2099-01-01'),
+      scoresBefore: JSON.parse(JSON.stringify(S.scores)),
+      bonusesBefore: JSON.parse(JSON.stringify(S.multiUnitBonuses))
+    };
+  } finally {
+    S = original;
+  }
 };
