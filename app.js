@@ -3751,15 +3751,15 @@ function getStandingsEntries() {
   });
   let previousRank = null;
   let previousScore = null;
-  let previousWins = null;
+
   return standingsPlayers.map((entry, i) => {
-    let rank = '—';
-    if (entry.score > 0) {
-      if (entry.score !== previousScore || entry.wins !== previousWins) previousRank = i + 1;
-      rank = previousRank;
-      previousScore = entry.score;
-      previousWins = entry.wins;
+    if (entry.score !== previousScore) {
+      previousRank = i + 1;
     }
+
+    const rank = previousRank;
+    previousScore = entry.score;
+
     return { ...entry, rank };
   });
 }
