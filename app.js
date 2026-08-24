@@ -2484,7 +2484,6 @@ function restoreUIState(uiState) {
 }
 
 function render() {
-  document.body.classList.remove('preview-mode');
   document.body.classList.add('desktop-preview-active');
 
   const uiState = _skipNextUIRestore ? null : captureUIState();
@@ -6150,8 +6149,10 @@ async function showPreview() {
   const totalDays = getInternalProjectDayNumber();
   const app = document.getElementById('app');
 
-  document.body.classList.remove('desktop-preview-active');
-  document.body.classList.add('preview-mode');
+  document.body.classList.add('desktop-preview-active');
+
+  const desktopPreview =
+    window.matchMedia('(min-width: 900px)').matches;
 
   app.innerHTML = `
 <div class="hdr">
@@ -6192,6 +6193,91 @@ async function showPreview() {
   <button class="btn btn-p" id="confirm-btn">✓ Looks Good — Start Game</button>
   <button class="btn btn-s" id="cancel-btn">Go Back</button>
 </div>`;
+
+  if (desktopPreview) {
+    const header =
+      app.querySelector(':scope > .hdr');
+
+    const previewScroll =
+      app.querySelector(':scope > .standalone-scroll');
+
+    if (header && previewScroll) {
+      /*
+      * Sul desktop usiamo l'header come blocco-logo
+      * della sidebar, esattamente come nell'app normale.
+      */
+      header.innerHTML = `
+        <div class="hdr-day"></div>
+        ${get3DLogoHTML()}
+        <div class="hdr-right"></div>
+      `;
+
+      /*
+      * Sidebar desktop.
+      * I pulsanti qui sono volutamente solo visivi:
+      * durante Preview Guesses si esce usando Go Back.
+      */
+      const nav =
+        document.createElement('nav');
+
+      nav.className = 'nav';
+
+      nav.innerHTML = `
+        <button class="nav-btn on" type="button">Today</button>
+        <button class="nav-btn" type="button">Boards</button>
+        <button class="nav-btn" type="button">History</button>
+        <button class="nav-btn" type="button">Settings</button>
+        ${renderDesktopProjectProgress()}
+      `;
+
+      /*
+      * Barra superiore con Day, clock ed Estimated Wrap.
+      */
+      const liveBarHolder =
+        document.createElement('div');
+
+      liveBarHolder.innerHTML =
+        renderDesktopLiveBar();
+
+      const liveBar =
+        liveBarHolder.firstElementChild;
+
+      /*
+      * La Preview viene spostata nella stessa area
+      * centrale usata normalmente dai tab.
+      */
+      const viewport =
+        document.createElement('div');
+
+      viewport.className =
+        'tab-viewport';
+
+      previewScroll.classList.add(
+        'desktop-preview-guesses'
+      );
+
+      viewport.appendChild(
+        previewScroll
+      );
+
+      /*
+      * Ricostruiamo i quattro figli diretti che
+      * desktop-preview.css si aspetta:
+      *
+      * .hdr
+      * .nav
+      * .desktop-live-bar
+      * .tab-viewport
+      */
+      app.appendChild(nav);
+
+      if (liveBar) {
+        app.appendChild(liveBar);
+      }
+
+      app.appendChild(viewport);
+    }
+  }    
   
   startClock();
   

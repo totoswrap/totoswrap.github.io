@@ -339,28 +339,30 @@ body::before {
   }
 }
 @media (min-width: 900px) {
-  body.preview-mode #app {
+  body.desktop-preview-active
+  #app
+  > .tab-viewport
+  > .desktop-preview-guesses {
     width: 100%;
-    max-width: none;
-    margin: 0;
+    height: 100%;
+    padding: 18px 28px 22px;
   }
 
-  body.preview-mode #app > .hdr {
+  body.desktop-preview-active
+  .desktop-preview-guesses
+  > .card,
+  body.desktop-preview-active
+  .desktop-preview-guesses
+  > .btn {
     width: min(100%, 1040px);
     margin-left: auto;
     margin-right: auto;
   }
 
-  body.preview-mode #app > .standalone-scroll {
-    width: 100%;
-    max-width: none;
-  }
-
-  body.preview-mode #app > .standalone-scroll > .card,
-  body.preview-mode #app > .standalone-scroll > .btn {
-    width: min(100%, 1040px);
-    margin-left: auto;
-    margin-right: auto;
+  body.desktop-preview-active
+  .desktop-preview-guesses
+  > .card {
+    margin-bottom: 18px;
   }
 }
 .preview-card { background: transparent; border: 0; border-radius: 0; padding: 0; margin-bottom: 12px; max-height: 360px; overflow-y: auto; -webkit-overflow-scrolling: touch; -webkit-mask-image: linear-gradient(to bottom, transparent 0, rgba(0,0,0,.36) 3px, #000 8px, #000 calc(100% - 10px), rgba(0,0,0,.36) calc(100% - 4px), transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, rgba(0,0,0,.36) 3px, #000 8px, #000 calc(100% - 10px), rgba(0,0,0,.36) calc(100% - 4px), transparent 100%); }
