@@ -709,7 +709,12 @@ document.addEventListener('click', e => {
   const historyEditBtn = e.target.closest?.('[data-history-edit]');
   if (historyEditBtn) {
     e.stopPropagation();
-    openHistoryDayActions(historyEditBtn.dataset.historyEdit);
+
+    openHistoryDayActions(
+      historyEditBtn.dataset.historyEdit,
+      historyEditBtn.dataset.historyUnit || 'main'
+    );
+
     return;
   }
 
@@ -806,7 +811,10 @@ function getDuplicateBetTimes(guesses) {
   (guesses || []).forEach(guess => {
     if (!guess?.time) return;
 
-    const time = String(guess.time).trim();
+    const time =
+      normalizeHMInput(String(guess.time).trim());
+
+    if (!time || !isValidHM(time)) return;
 
     if (!byTime.has(time)) {
       byTime.set(time, []);
@@ -1074,6 +1082,35 @@ function unitNameFromIndex(index) {
   ];
 
   return names[index] || `unit-${index + 1}`;
+}
+
+function formatUnitLabel(unit) {
+  const labels = {
+    main: 'Main Unit',
+    second: 'Second Unit',
+    third: 'Third Unit',
+    fourth: 'Fourth Unit',
+    fifth: 'Fifth Unit',
+    sixth: 'Sixth Unit',
+    seventh: 'Seventh Unit',
+    eighth: 'Eighth Unit',
+    ninth: 'Ninth Unit',
+    tenth: 'Tenth Unit'
+  };
+
+  if (!unit) return 'Main Unit';
+
+  if (labels[unit]) {
+    return labels[unit];
+  }
+
+  const match = String(unit).match(/^unit-(\d+)$/);
+
+  if (match) {
+    return `Unit ${match[1]}`;
+  }
+
+  return String(unit);
 }
 
 function nextUnitForDate(gameDate) {
@@ -1674,7 +1711,7 @@ function getWinProbability(playerName, allGuesses, day=S.today) {
   };
 }
 
-function (guesses, day=S.today) {
+function boundaries(guesses, day=S.today) {
   const start = approvalSec(day);
   const valid = guesses.filter(g => g.time).sort((a,b) => guessGameSec(a, day) - guessGameSec(b, day));
   if (valid.length === 0) return [];
@@ -2586,12 +2623,13 @@ function renderCompletedToday(t, canStartNextDay=false) {
     : '';
   const completedViewClass = canStartNextDay ? 'today-fixed-view today-completed-view has-next-day-action' : 'today-fixed-view today-completed-view';
   const fridayBanner = renderFridayWrapBanner(t);
+  const unitLabel = formatUnitLabel(t.unit);
 
   if (t.noWinner) {
     return `
     <div class="${completedViewClass}">
       <${winnerTag} class="winner-banner no-winner-banner">
-        <span class="winner-sub">Day Complete</span>
+        <span class="winner-sub">${esc(unitLabel)} Complete</span>
         <span class="winner-name" style="font-size: 1.35rem; color: var(--red); white-space: nowrap;">That was a real mattanza!</span>
 	        <span class="winner-pts">Wrap at ${esc(t.wrapTime)} was outside all bets</span>
       </${winnerCloseTag}>
@@ -2626,7 +2664,7 @@ function renderCompletedToday(t, canStartNextDay=false) {
   return `
   <div class="${completedViewClass}">
   <${winnerTag} class="winner-banner">
-    <span class="winner-sub">Today's winner${todayWinnerNames.length > 1 ? 's' : ''}</span>
+    <span class="winner-sub">${esc(unitLabel)} Winner</span>
     <span class="winner-name" style="font-size: 2.2rem;">${todayWinnerStr}</span>
 	    <span class="winner-pts">+${t.points} ${countWord(t.points, 'pt', 'pts')} · Wrap at ${esc(t.wrapTime)}</span>
   </${winnerCloseTag}>
@@ -3102,7 +3140,8 @@ function renderToday() {
   const t = S.today;
   const lastDay = S.days && S.days.length > 0 ? S.days[S.days.length - 1] : null;
   const statusHeader = renderPlayerStatusHeader(lastDay);
-  
+  const unitLabel = t ? formatUnitLabel(t.unit) : '';
+
   if (!t) {
     return `<div class="tab-page-frame"><div class="card">
       <div class="card-lbl">Start New Day</div>
@@ -3112,10 +3151,16 @@ function renderToday() {
 
   const clockCard = `
     <div class="card">
+      <div class="card-lbl">${esc(unitLabel)}</div>
+
       <div style="display: flex; align-items: center; justify-content: center;">
         <button class="big-clock js-clock admin-clock-trigger" id="admin-clock" type="button" title="Tap to set wrap time">--:--:--</button>
       </div>
-      <div class="big-clock-lbl">Live Time · Tap to Wrap</div>
+
+      <div class="big-clock-lbl">
+        ${esc(displayDate(t.date))} · Live Time · Tap to Wrap
+      </div>
+
       <div id="next-out-countdown" class="countdown-txt"></div>
     </div>`;
 
@@ -3138,7 +3183,7 @@ function renderToday() {
   }
   return `<div class="tab-page-frame">
     <div class="card">
-      <div class="card-lbl">Set Wrap Time</div>
+      <div class="card-lbl">${esc(unitLabel)} · Set Wrap Time</div>
       <p class="mono dim" style="margin-bottom:10px">Set the estimated wrap time players see before the game starts.</p>
       <div class="admin-time-save-row admin-wrap-save-row">
         <input type="text" class="admin-time-input" id="est-wrap-input" value="${esc(t.estWrap && t.estWrap !== '--:--' ? t.estWrap : '')}" placeholder="hh:mm" inputmode="text" maxlength="5" aria-label="Estimated wrap time">
@@ -3161,7 +3206,7 @@ function renderToday() {
     ${renderCrazyDayIndicator(t)}
     ${renderCrazyDaySetupCard(t)}
     <div class="card">
-      <div class="card-lbl">Paste Today's Guesses</div>
+      <div class="card-lbl">Paste ${esc(unitLabel)} Guesses</div>
       <p class="mono dim" style="margin-bottom:10px">Format: Name - hh:mm (one per line).</p>
       <textarea id="paste-inp" placeholder="Name - hh:mm"></textarea>
       <div class="chat-upload-wrap">
@@ -3809,27 +3854,60 @@ function getHistoryEntries() {
   return all;
 }
 
-function deleteHistoryDayByDate(date) {
+function deleteHistoryDayByDate(date, unit = 'main') {
   const isoDate = displayToISO(date);
-  const idx = S.days.findIndex(day => displayToISO(day.date) === isoDate);
+  const unitKey = unit || 'main';
+
+  const idx = S.days.findIndex(day =>
+    displayToISO(day.date) === isoDate &&
+    (day.unit || 'main') === unitKey
+  );
+
   if (idx !== -1) {
     return { kind: 'history', idx };
   }
-  if (S.today && displayToISO(S.today.date) === isoDate) {
+
+  if (
+    S.today &&
+    displayToISO(S.today.date) === isoDate &&
+    (S.today.unit || 'main') === unitKey
+  ) {
     return { kind: 'today' };
   }
+
   return null;
 }
 
-function findHistoryEntryByDate(date) {
+function findHistoryEntryByDate(date, unit = 'main') {
   const isoDate = displayToISO(date);
-  const historyIdx = S.days.findIndex(day => displayToISO(day.date) === isoDate);
+  const unitKey = unit || 'main';
+
+  const historyIdx = S.days.findIndex(day =>
+    displayToISO(day.date) === isoDate &&
+    (day.unit || 'main') === unitKey
+  );
+
   if (historyIdx !== -1) {
-    return { kind: 'history', idx: historyIdx, day: S.days[historyIdx] };
+    return {
+      kind: 'history',
+      idx: historyIdx,
+      day: S.days[historyIdx]
+    };
   }
-  if (S.today && S.today.wrapTime && displayToISO(S.today.date) === isoDate) {
-    return { kind: 'today', idx: -1, day: S.today };
+
+  if (
+    S.today &&
+    S.today.wrapTime &&
+    displayToISO(S.today.date) === isoDate &&
+    (S.today.unit || 'main') === unitKey
+  ) {
+    return {
+      kind: 'today',
+      idx: -1,
+      day: S.today
+    };
   }
+
   return null;
 }
 
@@ -3856,26 +3934,58 @@ function openAdminDialog({ title, copy='', body='', focusSelector='', showClose=
   if (focusSelector) requestAnimationFrame(() => modal.querySelector(focusSelector)?.focus());
 }
 
-function getHistoryDayLabel(date) {
+function getHistoryDayLabel(date, unit = 'main') {
   const isoDate = displayToISO(date);
-  const idx = getHistoryEntries().findIndex(day => displayToISO(day.date) === isoDate);
+  const unitKey = unit || 'main';
+
+  const idx = getHistoryEntries().findIndex(day =>
+    displayToISO(day.date) === isoDate &&
+    (day.unit || 'main') === unitKey
+  );
+
   return idx === -1 ? 'History Day' : displayDayLabel(idx + 1);
 }
 
-function openHistoryDayActions(date) {
+function openHistoryDayActions(date, unit = 'main') {
   if (!IS_ADMIN) return;
-  const target = findHistoryEntryByDate(date);
+
+  const target = findHistoryEntryByDate(date, unit);
+
   if (!target) {
-    toast('History day not found', 'err');
+    toast('History game not found', 'err');
     return;
   }
+
   const safeDate = esc(date);
+  const safeUnit = esc(unit || 'main');
+  const unitLabel = formatUnitLabel(unit || 'main');
+
   openAdminDialog({
-    title: getHistoryDayLabel(date),
+    title: `${getHistoryDayLabel(date, unit)} · ${unitLabel}`,
     body: `<div class="admin-dialog-actions">
-      <button class="admin-dialog-action edit" type="button" data-admin-dialog-action="history-wrap-open" data-history-date="${safeDate}">Edit Official Wrap</button>
-      <button class="admin-dialog-action edit" type="button" data-admin-dialog-action="history-bet-players-open" data-history-date="${safeDate}">Add Player Bet</button>
-      <button class="admin-dialog-action delete" type="button" data-admin-dialog-action="history-delete-open" data-history-date="${safeDate}">Delete Day</button>
+      <button
+        class="admin-dialog-action edit"
+        type="button"
+        data-admin-dialog-action="history-wrap-open"
+        data-history-date="${safeDate}"
+        data-history-unit="${safeUnit}"
+      >Edit Official Wrap</button>
+
+      <button
+        class="admin-dialog-action edit"
+        type="button"
+        data-admin-dialog-action="history-bet-players-open"
+        data-history-date="${safeDate}"
+        data-history-unit="${safeUnit}"
+      >Add Player Bet</button>
+
+      <button
+        class="admin-dialog-action delete"
+        type="button"
+        data-admin-dialog-action="history-delete-open"
+        data-history-date="${safeDate}"
+        data-history-unit="${safeUnit}"
+      >Delete Game</button>
     </div>`
   });
 }
@@ -3888,102 +3998,248 @@ function getHistoryPlayersMissingBet(day) {
     .sort((a, b) => a.localeCompare(b));
 }
 
-function openHistoryBetPlayersDialog(date) {
+function openHistoryBetPlayersDialog(date, unit = 'main') {
   if (!IS_ADMIN) return;
-  const target = findHistoryEntryByDate(date);
+
+  const target = findHistoryEntryByDate(date, unit);
+
   if (!target) {
-    toast('History day not found', 'err');
+    toast('History game not found', 'err');
     return;
   }
-  const missingPlayers = getHistoryPlayersMissingBet(target.day);
+
+  const missingPlayers =
+    getHistoryPlayersMissingBet(target.day);
+
+  const safeDate = esc(date);
+  const safeUnit = esc(unit || 'main');
+
   openAdminDialog({
     title: 'Add Player Bet',
-    copy: `${getHistoryDayLabel(date)} - choose a roster player missing a bet.`,
-    body: missingPlayers.length ? `<div class="admin-dialog-actions">
-      ${missingPlayers.map(name => `<button class="admin-dialog-action edit" type="button" data-admin-dialog-action="history-bet-player-open" data-history-date="${esc(date)}" data-history-player="${esc(name)}">${esc(name)}</button>`).join('')}
-    </div>` : `<p class="admin-dialog-copy">Every roster player already has a bet on this day.</p>`
+
+    copy:
+      `${getHistoryDayLabel(date, unit)} · ` +
+      `${formatUnitLabel(unit)} - choose a roster player missing a bet.`,
+
+    body: missingPlayers.length
+      ? `<div class="admin-dialog-actions">
+          ${missingPlayers.map(name => `
+            <button
+              class="admin-dialog-action edit"
+              type="button"
+              data-admin-dialog-action="history-bet-player-open"
+              data-history-date="${safeDate}"
+              data-history-unit="${safeUnit}"
+              data-history-player="${esc(name)}"
+            >${esc(name)}</button>
+          `).join('')}
+        </div>`
+      : `<p class="admin-dialog-copy">
+          Every roster player already has a bet on this game.
+        </p>`
   });
 }
 
-function openHistoryBetTimeDialog(date, name) {
+function openHistoryBetTimeDialog(date, unit = 'main', name) {
   if (!IS_ADMIN) return;
-  const target = findHistoryEntryByDate(date);
+
+  const target = findHistoryEntryByDate(date, unit);
+
   if (!target) {
-    toast('History day not found', 'err');
+    toast('History game not found', 'err');
     return;
   }
+
   if (!getHistoryPlayersMissingBet(target.day).includes(name)) {
     toast('Duplicate names', 'err');
     return;
   }
+
+  const safeDate = esc(date);
+  const safeUnit = esc(unit || 'main');
+
   openAdminDialog({
     title: `Add ${name} Bet`,
-    copy: `${getHistoryDayLabel(date)} official wrap: ${target.day.wrapTime || '--:--'}`,
+
+    copy:
+      `${getHistoryDayLabel(date, unit)} · ` +
+      `${formatUnitLabel(unit)} official wrap: ` +
+      `${target.day.wrapTime || '--:--'}`,
+
     focusSelector: '#admin-history-bet-input',
-    body: `<div class="admin-dialog-input-wrap">
-      <label class="inp-lbl" for="admin-history-bet-input">Bet Time (HH:MM)</label>
-      <input class="admin-dialog-wrap-input" type="text" id="admin-history-bet-input" placeholder="hh:mm" maxlength="5" pattern="[0-9]{2}:[0-9]{2}">
-    </div>
-    <div class="admin-dialog-input-wrap">
-      <label class="inp-lbl" for="admin-history-bet-date-input">Bet Date (Optional)</label>
-      <input class="admin-dialog-wrap-input" type="date" id="admin-history-bet-date-input">
-    </div>
-    <div class="admin-dialog-split">
-      <button class="admin-dialog-action undo" type="button" data-admin-dialog-action="history-bet-players-open" data-history-date="${esc(date)}">Back</button>
-      <button class="admin-dialog-action approve" type="button" data-admin-dialog-action="history-bet-save" data-history-date="${esc(date)}" data-history-player="${esc(name)}">Confirm</button>
-    </div>`
+
+    body: `
+      <div class="admin-dialog-input-wrap">
+        <label class="inp-lbl" for="admin-history-bet-input">
+          Bet Time (HH:MM)
+        </label>
+
+        <input
+          class="admin-dialog-wrap-input"
+          type="text"
+          id="admin-history-bet-input"
+          placeholder="hh:mm"
+          maxlength="5"
+          pattern="[0-9]{2}:[0-9]{2}"
+        >
+      </div>
+
+      <div class="admin-dialog-input-wrap">
+        <label class="inp-lbl" for="admin-history-bet-date-input">
+          Bet Date (Optional)
+        </label>
+
+        <input
+          class="admin-dialog-wrap-input"
+          type="date"
+          id="admin-history-bet-date-input"
+        >
+      </div>
+
+      <div class="admin-dialog-split">
+
+        <button
+          class="admin-dialog-action undo"
+          type="button"
+          data-admin-dialog-action="history-bet-players-open"
+          data-history-date="${safeDate}"
+          data-history-unit="${safeUnit}"
+        >Back</button>
+
+        <button
+          class="admin-dialog-action approve"
+          type="button"
+          data-admin-dialog-action="history-bet-save"
+          data-history-date="${safeDate}"
+          data-history-unit="${safeUnit}"
+          data-history-player="${esc(name)}"
+        >Confirm</button>
+
+      </div>
+    `
   });
 }
 
-function openHistoryWrapDialog(date) {
+function openHistoryWrapDialog(date, unit = 'main') {
   if (!IS_ADMIN) return;
-  const target = findHistoryEntryByDate(date);
+
+  const target = findHistoryEntryByDate(date, unit);
+
   if (!target) {
-    toast('History day not found', 'err');
+    toast('History game not found', 'err');
     return;
   }
-  const currentWrap = target.day.wrapTime || '';
+
+  const currentWrap =
+    target.day.wrapTime || '';
+
+  const safeDate = esc(date);
+  const safeUnit = esc(unit || 'main');
+
   openAdminDialog({
-    title: 'Edit Official Wrap',
-    copy: `${getHistoryDayLabel(date)} current wrap: ${currentWrap || '--:--'}`,
+    title:
+      `Edit Official Wrap · ${formatUnitLabel(unit)}`,
+
+    copy:
+      `${getHistoryDayLabel(date, unit)} current wrap: ` +
+      `${currentWrap || '--:--'}`,
+
     showClose: false,
     focusSelector: '#admin-history-wrap-input',
-    body: `<div class="admin-dialog-input-wrap">
-      <label class="inp-lbl" for="admin-history-wrap-input">Wrap Time (HH:MM:SS)</label>
-      <input class="admin-dialog-wrap-input" type="text" id="admin-history-wrap-input" value="${esc(currentWrap)}" placeholder="hh:mm:ss" maxlength="8" pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}">
-    </div>
-    <div class="admin-dialog-split">
-      <button class="admin-dialog-action undo" type="button" data-admin-dialog-close>Cancel</button>
-      <button class="admin-dialog-action approve" type="button" data-admin-dialog-action="history-wrap-save" data-history-date="${esc(date)}">Confirm</button>
-    </div>`
+
+    body: `
+      <div class="admin-dialog-input-wrap">
+
+        <label
+          class="inp-lbl"
+          for="admin-history-wrap-input"
+        >
+          Wrap Time (HH:MM:SS)
+        </label>
+
+        <input
+          class="admin-dialog-wrap-input"
+          type="text"
+          id="admin-history-wrap-input"
+          value="${esc(currentWrap)}"
+          placeholder="hh:mm:ss"
+          maxlength="8"
+          pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
+        >
+
+      </div>
+
+      <div class="admin-dialog-split">
+
+        <button
+          class="admin-dialog-action undo"
+          type="button"
+          data-admin-dialog-close
+        >Cancel</button>
+
+        <button
+          class="admin-dialog-action approve"
+          type="button"
+          data-admin-dialog-action="history-wrap-save"
+          data-history-date="${safeDate}"
+          data-history-unit="${safeUnit}"
+        >Confirm</button>
+
+      </div>
+    `
   });
 }
 
-function openHistoryDeleteDialog(date) {
+function openHistoryDeleteDialog(date, unit = 'main') {
   if (!IS_ADMIN) return;
-  const target = findHistoryEntryByDate(date);
+
+  const target = findHistoryEntryByDate(date, unit);
+
   if (!target) {
-    toast('History day not found', 'err');
+    toast('History game not found', 'err');
     return;
   }
-  const matchCount = target.kind === 'history' ? getHistoryDateMatchCount(date) : 0;
-  const copy = matchCount > 1
-    ? `${matchCount} history entries have this date. This will delete the first matching entry only.`
-    : 'This cannot be undone.';
+
+  const safeDate = esc(date);
+  const safeUnit = esc(unit || 'main');
+
   openAdminDialog({
-    title: `Delete ${getHistoryDayLabel(date)}?`,
-    copy,
+    title:
+      `Delete ${getHistoryDayLabel(date, unit)} · ` +
+      `${formatUnitLabel(unit)}?`,
+
+    copy: 'This cannot be undone.',
     showClose: false,
-    body: `<div class="admin-dialog-split">
-      <button class="admin-dialog-action undo" type="button" data-admin-dialog-close>Cancel</button>
-      <button class="admin-dialog-action delete" type="button" data-admin-dialog-action="history-delete-confirm" data-history-date="${esc(date)}">Delete</button>
-    </div>`
+
+    body: `
+      <div class="admin-dialog-split">
+
+        <button
+          class="admin-dialog-action undo"
+          type="button"
+          data-admin-dialog-close
+        >Cancel</button>
+
+        <button
+          class="admin-dialog-action delete"
+          type="button"
+          data-admin-dialog-action="history-delete-confirm"
+          data-history-date="${safeDate}"
+          data-history-unit="${safeUnit}"
+        >Delete</button>
+
+      </div>
+    `
   });
 }
 
-async function updateHistoryWrapTime(date, nextWrap) {
+async function updateHistoryWrapTime(
+  date,
+  unit = 'main',
+  nextWrap
+) {
   if (!IS_ADMIN) return false;
-  const target = findHistoryEntryByDate(date);
+  const target = findHistoryEntryByDate(date, unit);
   if (!target) {
     toast('History day not found', 'err');
     return false;
@@ -4013,9 +4269,15 @@ async function updateHistoryWrapTime(date, nextWrap) {
   return true;
 }
 
-async function addHistoryPlayerBet(date, name, betTime, betDate='') {
+async function addHistoryPlayerBet(
+  date,
+  unit = 'main',
+  name,
+  betTime,
+  betDate = ''
+) {
   if (!IS_ADMIN) return false;
-  const target = findHistoryEntryByDate(date);
+  const target = findHistoryEntryByDate(date, unit);
   if (!target) {
     toast('History day not found', 'err');
     return false;
@@ -4406,45 +4668,63 @@ async function handleAdminDialogAction(btn) {
   if (!IS_ADMIN || !currentUser) return;
   const action = btn.dataset.adminDialogAction;
   const date = btn.dataset.historyDate;
+  const unit = btn.dataset.historyUnit || 'main';
   if (action === 'standings-export-save') {
     closeAdminDialog();
     await downloadStandingsExport();
     return;
   }
   if (action === 'history-wrap-open') {
-    openHistoryWrapDialog(date);
+    openHistoryWrapDialog(date, unit);
     return;
   }
+
   if (action === 'history-bet-players-open') {
-    openHistoryBetPlayersDialog(date);
+    openHistoryBetPlayersDialog(date, unit);
     return;
   }
+
   if (action === 'history-bet-player-open') {
-    openHistoryBetTimeDialog(date, btn.dataset.historyPlayer);
+    openHistoryBetTimeDialog(
+      date,
+      unit,
+      btn.dataset.historyPlayer
+    );
     return;
   }
+
   if (action === 'history-delete-open') {
-    openHistoryDeleteDialog(date);
+    openHistoryDeleteDialog(date, unit);
     return;
   }
+
   if (action === 'history-wrap-save') {
-    const updated = await updateHistoryWrapTime(date, document.getElementById('admin-history-wrap-input')?.value);
+    const updated = await updateHistoryWrapTime(
+      date,
+      unit,
+      document.getElementById('admin-history-wrap-input')?.value
+    );
+
     if (updated) closeAdminDialog();
     return;
   }
+
   if (action === 'history-bet-save') {
     const saved = await addHistoryPlayerBet(
       date,
+      unit,
       btn.dataset.historyPlayer,
       document.getElementById('admin-history-bet-input')?.value,
       document.getElementById('admin-history-bet-date-input')?.value
     );
+
     if (saved) closeAdminDialog();
     return;
   }
+
   if (action === 'history-delete-confirm') {
     closeAdminDialog();
-    deleteHistoryDay(date, true);
+    deleteHistoryDay(date, unit, true);
     return;
   }
   if (action === 'today-wrap-manual') {
@@ -4674,67 +4954,182 @@ function removeAutoAddedPlayersFromDeletedDays(deletedDays) {
   });
 }
 
-function getHistoryDateMatchCount(date) {
+function getHistoryGameMatchCount(date, unit = 'main') {
   const isoDate = displayToISO(date);
-  return S.days.filter(day => displayToISO(day.date) === isoDate).length;
+  const unitKey = unit || 'main';
+
+  return S.days.filter(day =>
+    displayToISO(day.date) === isoDate &&
+    (day.unit || 'main') === unitKey
+  ).length;
 }
 
-async function deleteHistoryDay(date, confirmed=false) {
-  const target = deleteHistoryDayByDate(date);
+async function deleteHistoryDay(
+  date,
+  unit = 'main',
+  confirmed = false
+) {
+  const target = deleteHistoryDayByDate(
+    date,
+    unit
+  );
+
   if (!target) {
-    toast('History day not found', 'err');
+    toast('History game not found', 'err');
     return;
   }
-  const label = displayDate(date) || date;
-  const matchCount = target.kind === 'history' ? getHistoryDateMatchCount(date) : 0;
-  const duplicateWarning = matchCount > 1
-    ? `\n\nWarning: ${matchCount} history entries have this date. This action deletes the first matching entry only.`
-    : '';
-  if (!confirmed && !confirm(`Delete Day ${label}? This cannot be undone.${duplicateWarning}`)) return;
+
+  const label =
+    displayDate(date) || date;
+
+  const unitLabel =
+    formatUnitLabel(unit);
+
+  if (
+    !confirmed &&
+    !confirm(
+      `Delete ${label} · ${unitLabel}? This cannot be undone.`
+    )
+  ) {
+    return;
+  }
 
   const prevS = cloneState();
-  const day = target.kind === 'history' ? S.days[target.idx] : S.today;
 
-  // Roll back score changes from the deleted completed day.
-  adjustCompletedDayScores(day, -1);
+  const day =
+    target.kind === 'history'
+      ? S.days[target.idx]
+      : S.today;
+
+  // Roll back only this game's score changes.
+  adjustCompletedDayScores(
+    day,
+    -1
+  );
 
   if (target.kind === 'history') {
-    S.days.splice(target.idx, 1);
+    S.days.splice(
+      target.idx,
+      1
+    );
   } else {
     S.today = null;
   }
-  removeAutoAddedPlayersFromDeletedDays([day]);
 
-  const saved = await saveS();
-  if (!saved) { restoreAfterFailedSave(prevS); return; }
-  toast('History day deleted', 'ok');
+  removeAutoAddedPlayersFromDeletedDays(
+    [day]
+  );
+
+  const saved =
+    await saveS();
+
+  if (!saved) {
+    restoreAfterFailedSave(prevS);
+    return;
+  }
+
+  toast(
+    'History game deleted',
+    'ok'
+  );
+
   render();
 }
 
 async function deleteCurrentDayAndMatchingHistory() {
   if (!IS_ADMIN || !S.today) return;
-  const isoDate = displayToISO(S.today.date);
-  const label = displayDate(isoDate) || isoDate;
-  const matchingHistoryIndexes = S.days
-    .map((day, idx) => displayToISO(day.date) === isoDate ? idx : -1)
-    .filter(idx => idx !== -1);
 
-  const confirmCopy = matchingHistoryIndexes.length
-    ? `Delete today's game and ${matchingHistoryIndexes.length} matching history ${matchingHistoryIndexes.length === 1 ? 'entry' : 'entries'} for ${label}? This cannot be undone.${matchingHistoryIndexes.length > 1 ? '\n\nWarning: duplicate history dates were found and all matching entries will be deleted.' : ''}`
-    : `Delete today's game for ${label}? This cannot be undone.`;
-  if (!confirm(confirmCopy)) return;
+  const isoDate =
+    displayToISO(S.today.date);
 
-  const prevS = cloneState();
-  const deletedDays = [S.today, ...matchingHistoryIndexes.map(idx => S.days[idx])];
-  adjustCompletedDayScores(S.today, -1);
-  matchingHistoryIndexes.forEach(idx => adjustCompletedDayScores(S.days[idx], -1));
-  S.days = S.days.filter(day => displayToISO(day.date) !== isoDate);
+  const unit =
+    S.today.unit || 'main';
+
+  const label =
+    displayDate(isoDate) || isoDate;
+
+  const unitLabel =
+    formatUnitLabel(unit);
+
+  /*
+   * Normalmente S.today non dovrebbe avere una copia
+   * equivalente dentro S.days.
+   *
+   * Se però esiste per qualche motivo, rimuoviamo solo
+   * quella con stessa data E stessa unità.
+   */
+  const matchingHistoryIndexes =
+    S.days
+      .map((day, idx) =>
+        displayToISO(day.date) === isoDate &&
+        (day.unit || 'main') === unit
+          ? idx
+          : -1
+      )
+      .filter(idx => idx !== -1);
+
+  const confirmCopy =
+    matchingHistoryIndexes.length
+      ? `Delete ${label} · ${unitLabel} and its matching history entry? This cannot be undone.`
+      : `Delete ${label} · ${unitLabel}? This cannot be undone.`;
+
+  if (!confirm(confirmCopy)) {
+    return;
+  }
+
+  const prevS =
+    cloneState();
+
+  const deletedDays = [
+    S.today,
+    ...matchingHistoryIndexes.map(
+      idx => S.days[idx]
+    )
+  ];
+
+  adjustCompletedDayScores(
+    S.today,
+    -1
+  );
+
+  matchingHistoryIndexes.forEach(
+    idx =>
+      adjustCompletedDayScores(
+        S.days[idx],
+        -1
+      )
+  );
+
+  /*
+   * Manteniamo tutte le altre unità
+   * della stessa data.
+   */
+  S.days = S.days.filter(day =>
+    !(
+      displayToISO(day.date) === isoDate &&
+      (day.unit || 'main') === unit
+    )
+  );
+
   S.today = null;
-  removeAutoAddedPlayersFromDeletedDays(deletedDays);
 
-  const saved = await saveS();
-  if (!saved) { restoreAfterFailedSave(prevS); return; }
-  toast('Current day deleted', 'ok');
+  removeAutoAddedPlayersFromDeletedDays(
+    deletedDays
+  );
+
+  const saved =
+    await saveS();
+
+  if (!saved) {
+    restoreAfterFailedSave(prevS);
+    return;
+  }
+
+  toast(
+    'Current game deleted',
+    'ok'
+  );
+
   render();
 }
 
@@ -4749,11 +5144,23 @@ function renderHistory() {
     const canManage = IS_ADMIN;
     const estWrapInfo = `<div class="hist-est-wrap">Estimated Wrap - <span>${esc(d.estWrap || '--:--')}</span></div>`;
     const historyDate = esc(d.date);
-    const historyDetailsLabel = `${esc(displayDate(d.date) || d.date)} Leaderboard`;
+    const unitLabel = formatUnitLabel(d.unit);
+    const historyUnit = esc(d.unit || 'main');
+    const historyDetailsLabel =
+      `${esc(displayDate(d.date) || d.date)} · ${esc(unitLabel)} Leaderboard`;
     const dayLabel = displayDayLabel(num);
+    const historyUnitTag =
+      `<span class="hist-unit-tag">${esc(unitLabel)}</span>`;
     const penaltiesByPlayer = dayPenaltyMap(d);
     const historyDayTag = canManage
-      ? `<button class="hist-day-tag hist-day-edit" type="button" title="Edit ${dayLabel}" aria-label="Edit ${dayLabel}" data-history-edit="${historyDate}">${dayLabel}</button>`
+      ? `<button
+          class="hist-day-tag hist-day-edit"
+          type="button"
+          title="Edit ${dayLabel} · ${esc(unitLabel)}"
+          aria-label="Edit ${dayLabel} · ${esc(unitLabel)}"
+          data-history-edit="${historyDate}"
+          data-history-unit="${historyUnit}"
+        >${dayLabel}</button>`
       : `<span class="hist-day-tag">${dayLabel}</span>`;
     const historyShareTag = (className, content) => canManage
       ? `<button class="${className} hist-share-trigger" style="font-weight:bold" type="button" data-history-share-result="${historyIndex}">${content}</button>`
@@ -4762,10 +5169,13 @@ function renderHistory() {
     if (d.noWinner) {
         const slices = boundaries(d.guesses, d);
         return `
-        <div class="card hist-row" data-history-row data-history-date="${historyDate}">
-          <div class="hist-summary">
+        <div class="card hist-row"
+             data-history-row
+             data-history-date="${historyDate}"
+             data-history-unit="${historyUnit}">
             <div class="hist-main-info">
               ${historyDayTag}
+              ${historyUnitTag}
               ${historyShareTag('hist-title red', 'No Winner')}
             </div>
             <div class="hist-meta">
@@ -4812,10 +5222,14 @@ function renderHistory() {
     const slices = boundaries(d.guesses, d);
     
     return `
-    <div class="card hist-row" data-history-row data-history-date="${historyDate}">
+    <div class="card hist-row"
+         data-history-row
+         data-history-date="${historyDate}"
+         data-history-unit="${historyUnit}">
       <div class="hist-summary">
         <div class="hist-main-info">
           ${historyDayTag}
+          ${historyUnitTag}
           ${historyShareTag(histWinnerClass, histWinnerMarkup)}
           <span class="hist-bet mono dim" style="font-size:0.75rem">(${esc(winnerBet)})</span>
         </div>
@@ -4957,16 +5371,22 @@ async function showPreview() {
     : '';
 
   const duplicateTimeWarning = duplicateTimes.length > 0
-  ? `
-    <div class="preview-warning">
-      ⚠️ DUPLICATE BET TIMES DETECTED:<br>
-      ${duplicateTimes.map(esc).join(', ')}
-      <br><br>
-      Each minute can only belong to one player.
-      Fix the duplicated bets before confirming.
-    </div>
-  `
-  : '';
+    ? `
+      <div class="card" style="border: 1px solid var(--red); background: rgba(var(--red-rgb), 0.1); margin-bottom: 12px;">
+        <p class="red" style="font-weight:bold; font-size:0.8rem; text-align:center;">
+          ⚠️ DUPLICATE BET TIMES DETECTED:<br>
+          ${duplicateTimes.map(item =>
+            `${esc(item.time)} — ${item.names.map(esc).join(', ')}`
+          ).join('<br>')}
+        </p>
+
+        <p class="dim" style="font-size:0.6rem; text-align:center; margin-top:4px;">
+          Each minute can only belong to one player.
+          Edit the duplicated bets below before confirming.
+        </p>
+      </div>
+    `
+    : '';
 
   const existingNames = new Set(S.playerRoster.map(p => nameKey(p.name)));
   const newPlayers = [];
@@ -5025,61 +5445,128 @@ async function showPreview() {
       ${newPlayers.length > 0 ? `<br><span style="color:var(--green)">+ ${newPlayers.length} new player(s) will be added to the roster</span>` : ''}
     </p>
   </div>
-  <button class="btn btn-p" id="confirm-btn">✓ Looks Good — Start Day</button>
+  <button class="btn btn-p" id="confirm-btn">✓ Looks Good — Start Game</button>
   <button class="btn btn-s" id="cancel-btn">Go Back</button>
 </div>`;
   
   startClock();
   
 	  document.getElementById('confirm-btn')?.addEventListener('click', async () => {
-	    if (
-        duplicates.length > 0 ||
-        duplicateTimes.length > 0
-      ) {
+
+      // I nomi duplicati non possono essere corretti nella preview.
+      if (duplicates.length > 0) {
+        toast(
+          'Fix duplicate player names before confirming.',
+          'err'
+        );
         return;
       }
-		    let finalWrap = normalizeHMInput(S.today?.estWrap && S.today.estWrap !== '--:--' ? S.today.estWrap : '');
-	    if (!finalWrap) { toast('Set wrap time first', 'err'); return; }
-	    if (!isValidHM(finalWrap)) { toast('Use a valid wrap time (HH:MM)', 'err'); return; }
-	    const editedFullList = fullList.map(g => {
-	      const nextGuess = { ...g };
-	      if (nextGuess.time) {
-	        const editedTime = normalizeHMInput(document.getElementById(`bet-time-${nextGuess._previewIdx}`)?.value || nextGuess.time);
-	        if (!isValidHM(editedTime)) {
-	          toast(`Check ${nextGuess.name}'s bet time`, 'err');
-	          return null;
-	        }
-	        nextGuess.time = editedTime;
-	        const editedDateValue = document.getElementById(`bet-date-${nextGuess._previewIdx}`)?.value || nextGuess.date;
-	        const editedDate = parseDateInput(editedDateValue);
-	        if (!editedDate) {
-	          toast(`Check ${nextGuess.name}'s bet date`, 'err');
-	          return null;
-	        }
-	        nextGuess.date = editedDate;
-	      }
-	      delete nextGuess._previewIdx;
-	      return nextGuess;
-	    });
-	    if (editedFullList.some(g => !g)) return;
-	    const prevS = cloneState();
+
+      let finalWrap = normalizeHMInput(
+        S.today?.estWrap &&
+        S.today.estWrap !== '--:--'
+          ? S.today.estWrap
+          : ''
+      );
+
+      if (!finalWrap) {
+        toast('Set wrap time first', 'err');
+        return;
+      }
+
+      if (!isValidHM(finalWrap)) {
+        toast('Use a valid wrap time (HH:MM)', 'err');
+        return;
+      }
+
+      const editedFullList = fullList.map(g => {
+        const nextGuess = { ...g };
+
+        if (nextGuess.time) {
+          const editedTime = normalizeHMInput(
+            document.getElementById(
+              `bet-time-${nextGuess._previewIdx}`
+            )?.value || nextGuess.time
+          );
+
+          if (!isValidHM(editedTime)) {
+            toast(
+              `Check ${nextGuess.name}'s bet time`,
+              'err'
+            );
+            return null;
+          }
+
+          nextGuess.time = editedTime;
+
+          const editedDateValue =
+            document.getElementById(
+              `bet-date-${nextGuess._previewIdx}`
+            )?.value || nextGuess.date;
+
+          const editedDate =
+            parseDateInput(editedDateValue);
+
+          if (!editedDate) {
+            toast(
+              `Check ${nextGuess.name}'s bet date`,
+              'err'
+            );
+            return null;
+          }
+
+          nextGuess.date = editedDate;
+        }
+
+        delete nextGuess._previewIdx;
+
+        return nextGuess;
+      });
+
+      if (editedFullList.some(g => !g)) {
+        return;
+      }
+
+      // IMPORTANT:
+      // controlliamo i minuti DOPO le modifiche fatte nella preview.
+      const editedDuplicateTimes =
+        getDuplicateBetTimes(editedFullList);
+
+      if (editedDuplicateTimes.length > 0) {
+
+        const details = editedDuplicateTimes
+          .map(item =>
+            `${item.time}: ${item.names.join(', ')}`
+          )
+          .join(' · ');
+
+        toast(
+          `Duplicate bet time${editedDuplicateTimes.length > 1 ? 's' : ''}: ${details}`,
+          'err'
+        );
+
+        return;
+      }
+
+      const prevS = cloneState();
+
 	    newPlayers.forEach(name => {
 	      S.playerRoster.push({ name: name });
 	      S.scores[name] = 0;
-    });
+      });
     
-    S.today.approvedAt = previewApprovedAt;
-	    S.today.approvedDate = previewApprovedDate;
-	    S.today.date = previewApprovedDate;
-	    S.today.guesses = editedFullList;
-	    S.today.estWrap = finalWrap;
-	    S.today.estWrapDate = savedWrapDate;
-	    S.today.addedPlayers = newPlayers;
-	    const saved = await saveS();
-		    if (!saved) { restoreAfterFailedSave(prevS); return; }
-	    toast('Day started!', 'ok');
-	    render();
-	  });
+      S.today.approvedAt = previewApprovedAt;
+	      S.today.approvedDate = previewApprovedDate;
+	      S.today.date = previewApprovedDate;
+	      S.today.guesses = editedFullList;
+	      S.today.estWrap = finalWrap;
+	      S.today.estWrapDate = savedWrapDate;
+	      S.today.addedPlayers = newPlayers;
+	      const saved = await saveS();
+		      if (!saved) { restoreAfterFailedSave(prevS); return; }
+	      toast('Game started!', 'ok');
+	      render();
+	    });
 
   // --- 3. PERSISTENT PASTE ON CANCEL ---
   document.getElementById('cancel-btn')?.addEventListener('click', () => { 
