@@ -615,7 +615,12 @@ document.addEventListener('click', e => {
     e.stopPropagation();
     const historyIndex = Number(historyShareResultBtn.dataset.historyShareResult);
     const day = getHistoryEntries()[historyIndex];
-    if (day) openShareResult(day, historyIndex + 1);
+    if (day) {
+      openShareResult(
+        day,
+        getInternalProjectDayNumberForDate(day.date)
+      );
+    }
     return;
   }
 
@@ -938,7 +943,7 @@ async function exportProjectBackup() {
   }
 }
 
-const DISPLAY_TOTAL_DAYS = 50;
+const DISPLAY_TOTAL_DAYS = 133;
 
 function displayDayNumber(internalDayNumber) {
   const n = Number(internalDayNumber);
@@ -955,6 +960,36 @@ function displayDayProgress(internalDayNumber) {
 
 function displayDayProgressHeader(internalDayNumber) {
   return `Day ${esc(displayDayNumber(internalDayNumber))}/${DISPLAY_TOTAL_DAYS}`;
+}
+
+function getProjectGameDates() {
+  const dates = new Set();
+
+  (S.days || []).forEach(day => {
+    const isoDate = displayToISO(day?.date);
+    if (isoDate) dates.add(isoDate);
+  });
+
+  if (S.today) {
+    const isoDate = displayToISO(S.today.date);
+    if (isoDate) dates.add(isoDate);
+  }
+
+  return [...dates].sort();
+}
+
+function getInternalProjectDayNumber() {
+  return getProjectGameDates().length;
+}
+
+function getInternalProjectDayNumberForDate(date) {
+  const isoDate = displayToISO(date);
+  if (!isoDate) return null;
+
+  const dates = getProjectGameDates();
+  const idx = dates.indexOf(isoDate);
+
+  return idx === -1 ? null : idx + 1;
 }
 
 function restoreAfterFailedSave(prevS) {
@@ -2529,7 +2564,7 @@ function renderPlayer(app) {
 }
 
 function renderDesktopLiveBar() {
-  const dayNum = S.days.length + (S.today ? 1 : 0);
+  const dayNum = getInternalProjectDayNumber();
   const dayLabel = dayNum ? displayDayProgressHeader(dayNum) : `Day —/${DISPLAY_TOTAL_DAYS}`;
   const estWrap = S.today?.estWrap || '--:--';
   const wrapStatusClass = S.today?.wrapTime ? 'off' : 'live';
@@ -2553,7 +2588,7 @@ function renderDesktopLiveBar() {
 }
 
 function renderDesktopProjectProgress() {
-  const internalDay = S.days.length + (S.today ? 1 : 0);
+  const internalDay = getInternalProjectDayNumber();
   const displayDay = Number(displayDayNumber(internalDay));
   const current = Number.isFinite(displayDay) ? Math.max(0, Math.min(DISPLAY_TOTAL_DAYS, displayDay)) : 0;
   const pct = DISPLAY_TOTAL_DAYS ? (current / DISPLAY_TOTAL_DAYS) * 100 : 0;
@@ -2590,7 +2625,7 @@ function renderDesktopProjectProgress() {
 }
 
 function renderPlayerMain() {
-  const dayNum = S.days.length + (S.today ? 1 : 0);
+  const dayNum = getInternalProjectDayNumber();
   const wrapStatusClass = (S.today && S.today.wrapTime) ? 'off' : 'live';
   const estWrap = S.today?.estWrap || '--:--';
   return `
@@ -2794,7 +2829,10 @@ function getShareResultInfo(day, dayNumber=null) {
   const detail = noWinner
     ? 'Outside all bets'
     : formatOfficialWrapOffset(wrapOffset);
-  const dayNum = dayNumber || (S.days.length + (S.today ? 1 : 0));
+  const dayNum =
+    dayNumber ||
+    getInternalProjectDayNumberForDate(day?.date) ||
+    getInternalProjectDayNumber();
 
   return {
     noWinner,
@@ -3183,7 +3221,7 @@ function bindPlayerNav() {
 }
 
 function renderMain() {
-  const totalDays=S.days.length+(S.today?1:0);
+  const totalDays = getInternalProjectDayNumber();
   const estWrap = S.today?.estWrap || '--:--';
   const wrapStatusClass = S.today&&S.today.wrapTime ? 'off' : 'live';
   const dayHeader = totalDays ? displayDayProgressHeader(totalDays) : `Day —/${DISPLAY_TOTAL_DAYS}`;
@@ -4023,15 +4061,12 @@ function openAdminDialog({ title, copy='', body='', focusSelector='', showClose=
 }
 
 function getHistoryDayLabel(date, unit = 'main') {
-  const isoDate = displayToISO(date);
-  const unitKey = unit || 'main';
+  const internalDayNumber =
+    getInternalProjectDayNumberForDate(date);
 
-  const idx = getHistoryEntries().findIndex(day =>
-    displayToISO(day.date) === isoDate &&
-    (day.unit || 'main') === unitKey
-  );
-
-  return idx === -1 ? 'History Day' : displayDayLabel(idx + 1);
+  return internalDayNumber === null
+    ? 'History Day'
+    : displayDayLabel(internalDayNumber);
 }
 
 function openHistoryDayActions(date, unit = 'main') {
@@ -5710,7 +5745,13 @@ function renderHistory() {
     const historyUnit = esc(d.unit || 'main');
     const historyDetailsLabel =
       `${esc(displayDate(d.date) || d.date)} · ${esc(unitLabel)} Leaderboard`;
-    const dayLabel = displayDayLabel(num);
+    const internalDayNumber =
+      getInternalProjectDayNumberForDate(d.date);
+
+    const dayLabel =
+      internalDayNumber === null
+        ? 'History Day'
+        : displayDayLabel(internalDayNumber);
     const historyUnitTag =
       `<span class="hist-unit-tag">${esc(unitLabel)}</span>`;
     const penaltiesByPlayer = dayPenaltyMap(d);
@@ -5975,7 +6016,7 @@ async function showPreview() {
     _previewIdx: idx
   }));
   const sorted = sortedGuesses(fullList, previewDay);
-  const totalDays = S.days.length + (S.today ? 1 : 0);
+  const totalDays = getInternalProjectDayNumber();
   const app = document.getElementById('app');
   
   app.innerHTML = `
