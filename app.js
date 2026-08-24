@@ -5173,6 +5173,7 @@ function renderHistory() {
              data-history-row
              data-history-date="${historyDate}"
              data-history-unit="${historyUnit}">
+          <div class="hist-summary">
             <div class="hist-main-info">
               ${historyDayTag}
               ${historyUnitTag}
