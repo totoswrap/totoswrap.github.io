@@ -6435,3 +6435,7 @@ onSnapshot(STATE_REF, (snap) => {
   console.error("Firestore error:", err);
   if (!_stateReady) showConnectionError();
 });
+
+window.__TOTOSWRAP_DEBUG__ = {
+  getState: () => JSON.parse(JSON.stringify(S))
+};
