@@ -3804,8 +3804,11 @@ function renderBoard(view=_boardView) {
     ${isOpen ? renderBoardPlayerStats(p.name) : ''}
   </div>`;
 }).join('');
+  const activePlayerCount =
+    pl.filter(player => player.active !== false).length;
+    
   return `<div class="card board-fixed-card board-standings-card">${toolbar}
-    <div class="standings-player-count">${pl.length} ${countWord(pl.length, 'TUNA PLAYING', 'TUNAS PLAYING')}</div>
+    <div class="standings-player-count">${activePlayerCount} ${countWord(activePlayerCount, 'TUNA PLAYING', 'TUNAS PLAYING')}</div>
     <div class="standings-scroll-list">${standingsRows}</div>
   </div>`;
 }
