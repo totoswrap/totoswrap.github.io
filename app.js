@@ -6223,10 +6223,38 @@ async function showPreview() {
       nav.className = 'nav';
 
       nav.innerHTML = `
-        <button class="nav-btn on" type="button">Today</button>
-        <button class="nav-btn" type="button">Boards</button>
-        <button class="nav-btn" type="button">History</button>
-        <button class="nav-btn" type="button">Settings</button>
+        <button
+          class="nav-btn on"
+          type="button"
+          data-preview-tab="today"
+        >
+          Today
+        </button>
+
+        <button
+          class="nav-btn"
+          type="button"
+          data-preview-tab="board"
+        >
+          Boards
+        </button>
+
+        <button
+          class="nav-btn"
+          type="button"
+          data-preview-tab="history"
+        >
+          History
+        </button>
+
+        <button
+          class="nav-btn"
+          type="button"
+          data-preview-tab="settings"
+        >
+          Settings
+        </button>
+
         ${renderDesktopProjectProgress()}
       `;
 
@@ -6399,11 +6427,36 @@ async function showPreview() {
 	    });
 
   // --- 3. PERSISTENT PASTE ON CANCEL ---
-  document.getElementById('cancel-btn')?.addEventListener('click', () => { 
-    render(); 
-    const textarea = document.getElementById('paste-inp');
-    if (textarea) textarea.value = text; // Restore the saved text
-  });
+  const exitPreview = targetTab => {
+    render();
+
+    const textarea =
+      document.getElementById('paste-inp');
+
+    if (textarea) {
+      textarea.value = text;
+    }
+
+    if (targetTab) {
+      setMainTab(targetTab);
+    }
+  };
+
+  document
+    .getElementById('cancel-btn')
+    ?.addEventListener('click', () => {
+      exitPreview('today');
+    });
+
+  document
+    .querySelectorAll('[data-preview-tab]')
+    .forEach(btn => {
+      btn.addEventListener('click', () => {
+        exitPreview(
+          btn.dataset.previewTab || 'today'
+        );
+      });
+    });
 }
 
 async function savePlayer(idx) {
