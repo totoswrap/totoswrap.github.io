@@ -6131,8 +6131,7 @@ async function showPreview() {
   });
   
   const previewApprovedAt = nowHMS();
-  const previewApprovedDate =
-    S.today?.date || currentGameDateISO();
+  const previewApprovedDate = localDateISO();
 
   const previewDay = {
     approvedAt: previewApprovedAt,
