@@ -20,7 +20,15 @@ let S = {
   playerRoster: [],
   scores: {},
   days: [],
-  today: null
+
+  // Legacy/current active-game alias.
+  today: null,
+
+  // Canonical container for simultaneous live units.
+  liveGames: {},
+
+  // Unit currently displayed by Today.
+  activeUnit: 'main'
 };
 
 const APP_MODE = document.documentElement.dataset.appMode || 'player';
@@ -848,9 +856,19 @@ function hasDuplicateBetTimes(guesses) {
 
 function stateHasDuplicateNames(state=S) {
   if (getDuplicateNameKeys(state?.playerRoster?.map(player => player.name)).length) return true;
-  const days = [...(state?.days || []), state?.today].filter(Boolean);
-  return days.some(day => getDuplicateNameKeys(day.guesses?.map(guess => guess.name)).length);
-}
+  const liveDays =
+    Object.values(
+      isLiveGamesObject(state?.liveGames)
+        ? state.liveGames
+        : {}
+    );
+
+  const days = [
+    ...(state?.days || []),
+    ...liveDays
+  ].filter(Boolean);
+    return days.some(day => getDuplicateNameKeys(day.guesses?.map(guess => guess.name)).length);
+  }
 
 function formatSafeNames(names) {
   return formatNames((names || []).map(esc));
@@ -878,37 +896,182 @@ function playerDomId(idx) {
   return `player-${idx}`;
 }
 
+function isLiveGamesObject(value) {
+  return Boolean(
+    value &&
+    typeof value === 'object' &&
+    !Array.isArray(value)
+  );
+}
+
+function getLiveGames(state = S) {
+  return isLiveGamesObject(state?.liveGames)
+    ? state.liveGames
+    : {};
+}
+
+function getActiveUnit(state = S) {
+  const liveGames = getLiveGames(state);
+
+  if (
+    state?.activeUnit &&
+    liveGames[state.activeUnit]
+  ) {
+    return state.activeUnit;
+  }
+
+  if (state?.today) {
+    return state.today.unit || 'main';
+  }
+
+  return Object.keys(liveGames)[0] || 'main';
+}
+
+function getActiveGame(state = S) {
+  const liveGames = getLiveGames(state);
+  const unit = getActiveUnit(state);
+
+  return liveGames[unit] || state?.today || null;
+}
+
 function normalizeState(state) {
-  const base = state && typeof state === 'object' ? { ...state } : {};
+  const source =
+    state && typeof state === 'object'
+      ? state
+      : {};
+
+  const base = { ...source };
+
+  /*
+   * liveGames diventa il contenitore canonico delle
+   * partite live.
+   *
+   * Facciamo una shallow copy perché normalizeState()
+   * non deve modificare direttamente l'oggetto ricevuto.
+   */
+  const liveGames =
+    isLiveGamesObject(source.liveGames)
+      ? { ...source.liveGames }
+      : {};
+
+  const hasTodayProperty =
+    Object.prototype.hasOwnProperty.call(
+      source,
+      'today'
+    );
+
+  const legacyToday =
+    source.today || null;
+
+  let activeUnit =
+    String(source.activeUnit || '').trim() ||
+    legacyToday?.unit ||
+    Object.keys(liveGames)[0] ||
+    'main';
+
+  /*
+   * Compatibilità con il vecchio modello.
+   *
+   * Se arriva un vecchio stato con solo `today`,
+   * quella partita viene automaticamente inserita
+   * dentro liveGames.
+   *
+   * Inoltre, durante la fase di migrazione,
+   * `today` resta autorevole per la unità attiva:
+   * così tutto il codice esistente che modifica
+   * S.today continua a funzionare.
+   */
+  if (hasTodayProperty) {
+    if (legacyToday) {
+      const todayUnit =
+        legacyToday.unit ||
+        activeUnit ||
+        'main';
+
+      activeUnit = todayUnit;
+      liveGames[todayUnit] = legacyToday;
+    } else if (
+      activeUnit &&
+      liveGames[activeUnit]
+    ) {
+      /*
+       * Il vecchio codice può ancora fare:
+       *
+       * S.today = null
+       *
+       * In questa fase lo interpretiamo come:
+       * rimuovi la partita attualmente selezionata.
+       */
+      delete liveGames[activeUnit];
+    }
+  }
+
+  /*
+   * Se la unità selezionata non esiste più,
+   * scegliamo una delle eventuali altre partite live.
+   */
+  if (!liveGames[activeUnit]) {
+    activeUnit =
+      Object.keys(liveGames)[0] ||
+      'main';
+  }
+
+  /*
+   * IMPORTANTISSIMO:
+   *
+   * today non è una copia.
+   * Deve puntare allo stesso oggetto presente
+   * dentro liveGames.
+   *
+   * Così:
+   *
+   * S.today.estWrap = ...
+   *
+   * modifica automaticamente anche:
+   *
+   * S.liveGames[S.activeUnit].estWrap
+   */
+  const today =
+    liveGames[activeUnit] || null;
 
   return {
     ...base,
-    playerRoster: Array.isArray(state?.playerRoster)
-      ? state.playerRoster
-      : (Array.isArray(state?.players) ? state.players : []),
+
+    playerRoster:
+      Array.isArray(source.playerRoster)
+        ? source.playerRoster
+        : (
+            Array.isArray(source.players)
+              ? source.players
+              : []
+          ),
 
     scores:
-      state?.scores && typeof state.scores === 'object'
-        ? state.scores
+      source.scores &&
+      typeof source.scores === 'object'
+        ? source.scores
         : {},
 
     days:
-      Array.isArray(state?.days)
-        ? state.days
+      Array.isArray(source.days)
+        ? source.days
         : [],
 
-    today:
-      state?.today || null,
+    liveGames,
+
+    activeUnit,
+
+    today,
 
     multiUnitBonuses:
-      state?.multiUnitBonuses &&
-      typeof state.multiUnitBonuses === 'object' &&
-      !Array.isArray(state.multiUnitBonuses)
-        ? state.multiUnitBonuses
+      source.multiUnitBonuses &&
+      typeof source.multiUnitBonuses === 'object' &&
+      !Array.isArray(source.multiUnitBonuses)
+        ? source.multiUnitBonuses
         : {},
 
     _version:
-      Number(state?._version) || 0
+      Number(source._version) || 0
   };
 }
 
@@ -970,10 +1133,16 @@ function getProjectGameDates() {
     if (isoDate) dates.add(isoDate);
   });
 
-  if (S.today) {
-    const isoDate = displayToISO(S.today.date);
-    if (isoDate) dates.add(isoDate);
-  }
+  Object.values(
+    getLiveGames()
+  ).forEach(day => {
+    const isoDate =
+      displayToISO(day?.date);
+
+    if (isoDate) {
+      dates.add(isoDate);
+    }
+  });
 
   return [...dates].sort();
 }
@@ -6653,7 +6822,6 @@ async function showPreview() {
     
       S.today.approvedAt = previewApprovedAt;
 	      S.today.approvedDate = previewApprovedDate;
-	      S.today.date = previewApprovedDate;
 	      S.today.guesses = editedFullList;
 	      S.today.estWrap = finalWrap;
 	      S.today.estWrapDate = savedWrapDate;
@@ -6947,7 +7115,14 @@ function bindMain() {
   document.getElementById('reset-btn')?.addEventListener('click',async ()=>{
     if(confirm('Reset all data?')){
       const prevS = cloneState();
-      S={playerRoster:[],scores:{},days:[],today:null};
+      S = {
+        playerRoster: [],
+        scores: {},
+        days: [],
+        today: null,
+        liveGames: {},
+        activeUnit: 'main'
+      };
       const saved = await saveS();
       if (!saved) { restoreAfterFailedSave(prevS); return; }
       render();
