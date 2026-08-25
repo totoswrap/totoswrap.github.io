@@ -1269,7 +1269,11 @@ function normalizeGameSec(time, day=S.today, explicitDate=null) {
 function guessGameSec(g, day=S.today) { return normalizeGameSec(g.time, day, g.date || null); }
 function betMinuteDistanceFromWrapSec(guess, day=S.today) {
   if (!guess?.time || !day?.wrapTime) return null;
-  const wrapSec = normalizeGameSec(day.wrapTime, day);
+  const wrapSec = normalizeGameSec(
+    day.wrapTime,
+    day,
+    day.wrapDate || null
+  );
   const betStart = guessGameSec(guess, day);
   const betEnd = betStart + 59;
   if (wrapSec >= betStart && wrapSec <= betEnd) return 0;
@@ -1277,7 +1281,11 @@ function betMinuteDistanceFromWrapSec(guess, day=S.today) {
 }
 function betMinuteOffsetFromWrap(guess, day=S.today) {
   if (!guess?.time || !day?.wrapTime) return null;
-  const wrapSec = normalizeGameSec(day.wrapTime, day);
+  const wrapSec = normalizeGameSec(
+    day.wrapTime,
+    day,
+    day.wrapDate || null
+  );
   const betStart = guessGameSec(guess, day);
   const betEnd = betStart + 59;
   if (wrapSec >= betStart && wrapSec <= betEnd) return { distance: 0, direction: 'exact' };
@@ -1286,7 +1294,11 @@ function betMinuteOffsetFromWrap(guess, day=S.today) {
 }
 function betMinuteDistanceFromWrapInputSec(guess, wrapHMSInput, day=S.today) {
   if (!guess?.time || !wrapHMSInput) return null;
-  const wrapSec = normalizeGameSec(wrapHMSInput, day);
+  const wrapSec = normalizeGameSec(
+    wrapHMSInput,
+    day,
+    day?.wrapDate || null
+  );
   const betStart = guessGameSec(guess, day);
   const betEnd = betStart + 59;
   if (wrapSec >= betStart && wrapSec <= betEnd) return 0;
@@ -1867,7 +1879,11 @@ function guessWrapDistanceSec(guess, wrapHMSInput, day, noWinner=false) {
   if (!guess?.time || !wrapHMSInput) return null;
   if (noWinner) return clockDistanceSec(guess.time, wrapHMSInput);
   const guessSec = guessGameSec(guess, day);
-  const wrapSec = normalizeGameSec(wrapHMSInput, day);
+  const wrapSec = normalizeGameSec(
+    wrapHMSInput,
+    day,
+    day?.wrapDate || null
+  );
   return Math.abs(guessSec - wrapSec);
 }
 
@@ -1903,7 +1919,11 @@ function calcCrazyDayPenalties(guesses, wrapHMSInput, day, noWinner=false, exclu
 }
 
 function calcWinner(guesses, wrapHMSInput, day=S.today) {
-  const wrapSec = normalizeGameSec(wrapHMSInput, day);
+  const wrapSec = normalizeGameSec(
+    wrapHMSInput,
+    day,
+    day?.wrapDate || null
+  );
   const slices = boundaries(guesses, day);
   const scoring = getDayScoring(day);
   
@@ -2706,10 +2726,25 @@ function renderPlayerStatusHeader(lastDay) {
 }
 
 function getWrapDateISO(day) {
-  if (!day?.wrapTime) return displayToISO(day?.date);
+  if (dateFromISO(day?.wrapDate)) {
+    return day.wrapDate;
+  }
+
+  if (!day?.wrapTime) {
+    return displayToISO(day?.date);
+  }
+
   const baseDate = approvalDateISO(day);
-  const wrapGameSec = normalizeGameSec(day.wrapTime, day);
-  return addDaysISO(baseDate, Math.floor(wrapGameSec / DAY_SEC));
+
+  const wrapGameSec = normalizeGameSec(
+    day.wrapTime,
+    day
+  );
+
+  return addDaysISO(
+    baseDate,
+    Math.floor(wrapGameSec / DAY_SEC)
+  );
 }
 
 function renderFridayWrapBanner(day) {
@@ -3616,7 +3651,14 @@ function clockDistanceSec(a, b) {
 
 function boardClosenessGap(guess, day) {
   if (day?.noWinner) return clockDistanceSec(guess.time, day.wrapTime);
-  return Math.abs(guessGameSec(guess, day) - normalizeGameSec(day.wrapTime, day));
+  return Math.abs(
+    guessGameSec(guess, day) -
+    normalizeGameSec(
+      day.wrapTime,
+      day,
+      day?.wrapDate || null
+    )
+  );
 }
 
 function didPlayerWinDay(name, day) {
@@ -3917,7 +3959,11 @@ function formatBoardExactCompactGap(totalSec) {
 
 function wrongTerritoryGap(name, day) {
   if (!day?.wrapTime || !day.guesses?.length) return null;
-  const wrapSec = normalizeGameSec(day.wrapTime, day);
+  const wrapSec = normalizeGameSec(
+    day.wrapTime,
+    day,
+    day?.wrapDate || null
+  );
   const slice = boundaries(day.guesses, day).find(s => s.names.includes(name));
   if (!slice || (wrapSec >= slice.start && wrapSec <= slice.end)) return null;
   return wrapSec < slice.start ? slice.start - wrapSec : wrapSec - slice.end;
@@ -4319,6 +4365,9 @@ function openHistoryWrapDialog(date, unit = 'main') {
 
   const currentWrap =
     target.day.wrapTime || '';
+  const currentWrapDate =
+    target.day.wrapDate ||
+    inferBetDate(currentWrap, target.day);
 
   const safeDate = esc(date);
   const safeUnit = esc(unit || 'main');
@@ -4352,6 +4401,27 @@ function openHistoryWrapDialog(date, unit = 'main') {
           placeholder="hh:mm:ss"
           maxlength="8"
           pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
+        >
+
+      </div>
+
+      <div class="admin-dialog-input-wrap">
+
+        <label
+          class="inp-lbl"
+          for="admin-history-wrap-date-input"
+        >
+          Wrap Date
+        </label>
+
+        <input
+          class="admin-dialog-wrap-input"
+          type="text"
+          id="admin-history-wrap-date-input"
+          value="${esc(displayDate(currentWrapDate))}"
+          placeholder="dd/mm/yyyy"
+          inputmode="numeric"
+          maxlength="10"
         >
 
       </div>
@@ -4423,20 +4493,52 @@ function openHistoryDeleteDialog(date, unit = 'main') {
 async function updateHistoryWrapTime(
   date,
   unit = 'main',
-  nextWrap
+  nextWrap,
+  nextWrapDate = ''
 ) {
   if (!IS_ADMIN) return false;
+
   const target = findHistoryEntryByDate(date, unit);
+
   if (!target) {
     toast('History day not found', 'err');
     return false;
   }
+
   const currentWrap = target.day.wrapTime || '';
+  const currentWrapDate =
+    target.day.wrapDate ||
+    inferBetDate(currentWrap, target.day);
+
   const normalizedWrap = normalizeHMSInput(nextWrap);
-  if (!normalizedWrap || normalizedWrap === currentWrap) return true;
-  if (!isValidHMS(normalizedWrap)) {
-    toast('Use a valid wrap time (HH:MM or HH:MM:SS)', 'err');
+  const normalizedWrapDate = String(nextWrapDate || '').trim();
+
+  if (!normalizedWrap) {
+    toast('Enter wrap time', 'err');
     return false;
+  }
+
+  if (!isValidHMS(normalizedWrap)) {
+    toast(
+      'Use a valid wrap time (HH:MM or HH:MM:SS)',
+      'err'
+    );
+    return false;
+  }
+
+  if (
+    !normalizedWrapDate ||
+    !dateFromISO(normalizedWrapDate)
+  ) {
+    toast('Use a valid wrap date', 'err');
+    return false;
+  }
+
+  if (
+    normalizedWrap === currentWrap &&
+    normalizedWrapDate === currentWrapDate
+  ) {
+    return true;
   }
 
   const prevS = cloneState();
@@ -4448,13 +4550,33 @@ async function updateHistoryWrapTime(
     getMultiUnitBonusRecord(gameDate);
 
   adjustCompletedDayScores(target.day, -1);
-  const { winner, winners, points, noWinner, penalties } = calcWinner(target.day.guesses || [], normalizedWrap, target.day);
+
+  /*
+   * Save both parts of the official wrap before recalculating.
+   * calcWinner() uses day.wrapDate to place the wrap on the
+   * correct side of midnight.
+   */
   target.day.wrapTime = normalizedWrap;
+  target.day.wrapDate = normalizedWrapDate;
+
+  const {
+    winner,
+    winners,
+    points,
+    noWinner,
+    penalties
+  } = calcWinner(
+    target.day.guesses || [],
+    normalizedWrap,
+    target.day
+  );
+
   target.day.winner = winner;
   target.day.winners = winners;
   target.day.points = points;
   target.day.noWinner = noWinner;
   target.day.penalties = penalties || [];
+
   adjustCompletedDayScores(target.day, 1);
 
   await reconcileMultiUnitBonusesAfterEdit(
@@ -4463,9 +4585,15 @@ async function updateHistoryWrapTime(
   );
 
   const saved = await saveS();
-  if (!saved) { restoreAfterFailedSave(prevS); return false; }
-  toast('Official wrap time updated', 'ok');
+
+  if (!saved) {
+    restoreAfterFailedSave(prevS);
+    return false;
+  }
+
+  toast('Official wrap updated', 'ok');
   render();
+
   return true;
 }
 
@@ -4557,19 +4685,65 @@ function openLiveWrapActions(wrapTime) {
 
 function openManualTodayWrapDialog() {
   if (!IS_ADMIN || !S.today || S.today.wrapTime) return;
+
   openAdminDialog({
     title: 'Insert Wrap Manually',
-    copy: 'Type the official wrap time and confirm.',
+    copy: 'Type the official wrap time and date, then confirm.',
     showClose: false,
     focusSelector: '#admin-today-wrap-input',
-    body: `<div class="admin-dialog-input-wrap">
-      <label class="inp-lbl" for="admin-today-wrap-input">Wrap Time (HH:MM:SS)</label>
-      <input class="admin-dialog-wrap-input" type="text" id="admin-today-wrap-input" placeholder="hh:mm:ss" maxlength="8" pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}">
-    </div>
-    <div class="admin-dialog-split">
-      <button class="admin-dialog-action undo" type="button" data-admin-dialog-close>Cancel</button>
-      <button class="admin-dialog-action approve" type="button" data-admin-dialog-action="today-wrap-save">Confirm</button>
-    </div>`
+
+    body: `
+      <div class="admin-dialog-input-wrap">
+        <label
+          class="inp-lbl"
+          for="admin-today-wrap-input"
+        >
+          Wrap Time (HH:MM:SS)
+        </label>
+
+        <input
+          class="admin-dialog-wrap-input"
+          type="text"
+          id="admin-today-wrap-input"
+          placeholder="hh:mm:ss"
+          maxlength="8"
+          pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
+        >
+      </div>
+
+      <div class="admin-dialog-input-wrap">
+        <label
+          class="inp-lbl"
+          for="admin-today-wrap-date-input"
+        >
+          Wrap Date
+        </label>
+
+        <input
+          class="admin-dialog-wrap-input"
+          type="text"
+          id="admin-today-wrap-date-input"
+          value="${esc(displayDate(localDateISO()))}"
+          placeholder="dd/mm/yyyy"
+          inputmode="numeric"
+          maxlength="10"
+        >
+      </div>
+
+      <div class="admin-dialog-split">
+        <button
+          class="admin-dialog-action undo"
+          type="button"
+          data-admin-dialog-close
+        >Cancel</button>
+
+        <button
+          class="admin-dialog-action approve"
+          type="button"
+          data-admin-dialog-action="today-wrap-save"
+        >Confirm</button>
+      </div>
+    `
   });
 }
 
@@ -4728,14 +4902,46 @@ async function updateCurrentPlayerBet(name, betTime, betDate='') {
   return true;
 }
 
-async function confirmTodayWrap(wrapTime) {
+async function confirmTodayWrap(wrapTime, wrapDate = '') {
   if (!IS_ADMIN || !S.today || S.today.wrapTime) return false;
+
   const normalizedWrap = normalizeHMSInput(wrapTime);
-  if (!normalizedWrap) { toast('Enter wrap time', 'err'); return false; }
-  if (!isValidHMS(normalizedWrap)) { toast('Use a valid wrap time (HH:MM or HH:MM:SS)', 'err'); return false; }
+
+  if (!normalizedWrap) {
+    toast('Enter wrap time', 'err');
+    return false;
+  }
+
+  if (!isValidHMS(normalizedWrap)) {
+    toast('Use a valid wrap time (HH:MM or HH:MM:SS)', 'err');
+    return false;
+  }
+
+  const normalizedWrapDate =
+    String(wrapDate || '').trim() ||
+    inferBetDate(normalizedWrap, S.today);
+
+  if (!dateFromISO(normalizedWrapDate)) {
+    toast('Use a valid wrap date', 'err');
+    return false;
+  }
 
   const prevS = cloneState();
-  const { winner, winners, points, noWinner, penalties } = calcWinner(S.today.guesses, normalizedWrap, S.today);
+
+  S.today.wrapDate = normalizedWrapDate;
+
+  const {
+    winner,
+    winners,
+    points,
+    noWinner,
+    penalties
+  } = calcWinner(
+    S.today.guesses,
+    normalizedWrap,
+    S.today
+  );
+
   S.today.wrapTime = normalizedWrap;
   S.today.winner = winner;
   S.today.winners = winners;
@@ -4744,14 +4950,20 @@ async function confirmTodayWrap(wrapTime) {
   S.today.penalties = penalties || [];
 
   if (!noWinner) {
-    winners.forEach(w => applyScoreDelta(w.name, points));
+    winners.forEach(w =>
+      applyScoreDelta(w.name, points)
+    );
   }
+
   applyDayPenalties(S.today, 1);
+
   const saved = await saveS();
+
   if (!saved) {
     restoreAfterFailedSave(prevS);
     return false;
   }
+
   render();
   return true;
 }
@@ -4957,10 +5169,20 @@ async function handleAdminDialogAction(btn) {
   }
 
   if (action === 'history-wrap-save') {
+    const wrapDate = parseDateInput(
+      document.getElementById('admin-history-wrap-date-input')?.value || ''
+    );
+
+    if (!wrapDate) {
+      toast('Use a valid wrap date', 'err');
+      return;
+    }
+
     const updated = await updateHistoryWrapTime(
       date,
       unit,
-      document.getElementById('admin-history-wrap-input')?.value
+      document.getElementById('admin-history-wrap-input')?.value,
+      wrapDate
     );
 
     if (updated) closeAdminDialog();
@@ -4999,12 +5221,29 @@ async function handleAdminDialogAction(btn) {
     return;
   }
   if (action === 'today-wrap-approve') {
-    const saved = await confirmTodayWrap(btn.dataset.wrapTime);
+    const saved = await confirmTodayWrap(
+      btn.dataset.wrapTime,
+      localDateISO()
+    );
+
     if (saved) closeAdminDialog();
     return;
   }
   if (action === 'today-wrap-save') {
-    const saved = await confirmTodayWrap(document.getElementById('admin-today-wrap-input')?.value);
+    const wrapDate = parseDateInput(
+      document.getElementById('admin-today-wrap-date-input')?.value || ''
+    );
+
+    if (!wrapDate) {
+      toast('Use a valid wrap date', 'err');
+      return;
+    }
+
+    const saved = await confirmTodayWrap(
+      document.getElementById('admin-today-wrap-input')?.value,
+      wrapDate
+    );
+
     if (saved) closeAdminDialog();
     return;
   }
