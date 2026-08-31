@@ -34,11 +34,26 @@ let S = {
 const APP_MODE = document.documentElement.dataset.appMode || 'player';
 const URL_ADMIN_MODE = /(?:^|[?&])admin(?:=|&|$)/.test(location.search);
 const IS_ADMIN = APP_MODE === 'admin' || URL_ADMIN_MODE;
+/*
+ * LOCAL TEST MODE
+ *
+ * Quando l'app gira da localhost non deve leggere
+ * né scrivere alcun dato nel Firebase di produzione.
+ *
+ * GitHub Pages continua invece a usare Firebase normalmente.
+ */
+const LOCAL_TEST_MODE =
+  location.hostname === 'localhost' ||
+  location.hostname === '127.0.0.1';
+
+const LOCAL_TEST_STORAGE_KEY =
+  'totoswrap-local-test-state';
 
 function openPlayerVersion() {
   location.href = './';
 }
 let _tab = 'today';
+let _activeLiveUnit = null;
 let _clockInterval = null;
 let _lastRenderedLocalDate = localDateISO();
 let _toastTO = null;
@@ -786,19 +801,56 @@ function faceIconSrc(name) {
   return fileBase ? `faceicons/${encodeURIComponent(fileBase)}.png` : 'imgs/tunacan.png';
 }
 
-function latestWinnerName() {
-  const completed = [];
-  if (S.today?.wrapTime) completed.push(S.today);
-  completed.push(...(S.days || []).slice().reverse());
-  for (const day of completed) {
-    if (day?.noWinner) continue;
-    const winners = Array.isArray(day?.winners)
-      ? day.winners.map(w => typeof w === 'string' ? w : w?.name).filter(Boolean)
+function getLatestWinningHistoryEntry() {
+  const entries = getHistoryEntries();
+
+  for (let i = entries.length - 1; i >= 0; i -= 1) {
+    const day = entries[i];
+
+    if (!day || day.noWinner) {
+      continue;
+    }
+
+    const winners = Array.isArray(day.winners)
+      ? day.winners
+          .map(w =>
+            typeof w === 'string'
+              ? w
+              : w?.name
+          )
+          .filter(Boolean)
       : [];
-    if (winners.length) return winners[0];
-    if (day?.winner) return day.winner;
+
+    if (winners.length || day.winner) {
+      return day;
+    }
   }
-  return '';
+
+  return null;
+}
+
+function latestWinnerName() {
+  const day = getLatestWinningHistoryEntry();
+
+  if (!day) {
+    return '';
+  }
+
+  const winners = Array.isArray(day.winners)
+    ? day.winners
+        .map(w =>
+          typeof w === 'string'
+            ? w
+            : w?.name
+        )
+        .filter(Boolean)
+    : [];
+
+  if (winners.length) {
+    return winners[0];
+  }
+
+  return day.winner || '';
 }
 
 function esc(value) {
@@ -913,6 +965,21 @@ function getLiveGames(state = S) {
 function getActiveUnit(state = S) {
   const liveGames = getLiveGames(state);
 
+  /*
+   * La unità visualizzata è una scelta locale
+   * del singolo browser.
+   */
+  if (
+    _activeLiveUnit &&
+    liveGames[_activeLiveUnit]
+  ) {
+    return _activeLiveUnit;
+  }
+
+  /*
+   * Fallback per stati già salvati durante
+   * la migrazione.
+   */
   if (
     state?.activeUnit &&
     liveGames[state.activeUnit]
@@ -934,7 +1001,46 @@ function getActiveGame(state = S) {
   return liveGames[unit] || state?.today || null;
 }
 
-function normalizeState(state) {
+function setActiveUnit(unit, state = S) {
+  const unitKey = String(unit || '').trim();
+  const liveGames = getLiveGames(state);
+
+  if (!unitKey || !liveGames[unitKey]) {
+    return false;
+  }
+
+  /*
+   * Questa è una preferenza locale:
+   * NON deve causare un saveS().
+   */
+  _activeLiveUnit = unitKey;
+
+  /*
+   * today continua a essere l'alias usato
+   * dal vecchio codice operativo.
+   */
+  state.today = liveGames[unitKey];
+
+  return true;
+}
+
+function getLiveUnitKeys(state = S) {
+  return Object.keys(getLiveGames(state));
+}
+
+function hasLiveUnit(unit, state = S) {
+  const unitKey = String(unit || '').trim();
+
+  return Boolean(
+    unitKey &&
+    getLiveGames(state)[unitKey]
+  );
+}
+
+function normalizeState(
+  state,
+  { respectLocalSelection = true } = {}
+) {
   const source =
     state && typeof state === 'object'
       ? state
@@ -964,45 +1070,43 @@ function normalizeState(state) {
     source.today || null;
 
   let activeUnit =
+    (
+      respectLocalSelection &&
+      _activeLiveUnit &&
+      liveGames[_activeLiveUnit]
+        ? _activeLiveUnit
+        : ''
+    ) ||
     String(source.activeUnit || '').trim() ||
     legacyToday?.unit ||
     Object.keys(liveGames)[0] ||
     'main';
 
   /*
-   * Compatibilità con il vecchio modello.
-   *
-   * Se arriva un vecchio stato con solo `today`,
-   * quella partita viene automaticamente inserita
-   * dentro liveGames.
-   *
-   * Inoltre, durante la fase di migrazione,
-   * `today` resta autorevole per la unità attiva:
-   * così tutto il codice esistente che modifica
-   * S.today continua a funzionare.
-   */
-  if (hasTodayProperty) {
-    if (legacyToday) {
-      const todayUnit =
-        legacyToday.unit ||
-        activeUnit ||
-        'main';
+  * Compatibilità con il vecchio modello.
+  *
+  * Se arriva un vecchio stato con solo `today`,
+  * quella partita viene automaticamente inserita
+  * dentro liveGames.
+  *
+  * La scelta della unità visualizzata resta invece
+  * locale al singolo browser tramite _activeLiveUnit.
+  */
 
-      activeUnit = todayUnit;
-      liveGames[todayUnit] = legacyToday;
-    } else if (
-      activeUnit &&
-      liveGames[activeUnit]
+  if (hasTodayProperty && legacyToday) {
+    const todayUnit =
+      legacyToday.unit ||
+      activeUnit ||
+      'main';
+
+    liveGames[todayUnit] = legacyToday;
+
+    if (
+      !respectLocalSelection ||
+      !_activeLiveUnit ||
+      !liveGames[_activeLiveUnit]
     ) {
-      /*
-       * Il vecchio codice può ancora fare:
-       *
-       * S.today = null
-       *
-       * In questa fase lo interpretiamo come:
-       * rimuovi la partita attualmente selezionata.
-       */
-      delete liveGames[activeUnit];
+      activeUnit = todayUnit;
     }
   }
 
@@ -1079,7 +1183,87 @@ function cloneState() {
   return JSON.parse(JSON.stringify(S));
 }
 
+function getStateForSave() {
+  const state =
+    cloneState();
+
+  const liveGames =
+    getLiveGames(state);
+
+  const liveUnits =
+    Object.keys(liveGames);
+
+  /*
+   * activeUnit/today esistono ancora soltanto
+   * per compatibilità con il vecchio modello.
+   *
+   * Non devono rappresentare quale unità sta
+   * guardando il singolo browser.
+   *
+   * Per Firebase scegliamo quindi un alias
+   * deterministico:
+   * - Main, se esiste;
+   * - altrimenti la prima unità live disponibile.
+   */
+  const canonicalUnit =
+    liveGames.main
+      ? 'main'
+      : (liveUnits[0] || 'main');
+
+  state.activeUnit =
+    canonicalUnit;
+
+  state.today =
+    liveGames[canonicalUnit] ||
+    null;
+
+  return state;
+}
+
 async function exportProjectBackup() {
+    if (LOCAL_TEST_MODE) {
+    const json =
+      JSON.stringify(
+        getStateForSave(),
+        null,
+        2
+      );
+
+    const blob =
+      new Blob(
+        [json],
+        { type: 'application/json' }
+      );
+
+    const url =
+      URL.createObjectURL(blob);
+
+    const stamp =
+      localDateISO().replace(/-/g, '');
+
+    const link =
+      document.createElement('a');
+
+    link.href = url;
+    link.download =
+      `totowrap-local-test-backup_${stamp}.json`;
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    setTimeout(
+      () => URL.revokeObjectURL(url),
+      1000
+    );
+
+    toast(
+      'Local test backup exported',
+      'ok'
+    );
+
+    return;
+  }
   if (!IS_ADMIN || !currentUser) {
     toast('Admin only', 'err');
     return;
@@ -1189,19 +1373,72 @@ function hasRosterDuplicateName(name, ignoreIdx=-1) {
 
 async function saveS() {
   _lastSaveWasConflict = false;
-  if (!IS_ADMIN || !currentUser) {
-    toast("Sign in as admin to save changes", "err");
-    render();
-    return false;
-  }
+
   if (stateHasDuplicateNames()) {
     toast("Duplicate names", "err");
     render();
     return false;
   }
-  const localVersion = Number(S._version) || 0;
-  const nextState = normalizeState(cloneState());
-  nextState._version = localVersion + 1;
+
+  /*
+   * In LOCAL TEST MODE salviamo esclusivamente
+   * nel browser. Nessuna scrittura Firestore.
+   */
+  if (LOCAL_TEST_MODE) {
+    try {
+      const nextState =
+        normalizeState(
+          getStateForSave(),
+          { respectLocalSelection: false }
+        );
+
+      nextState._version =
+        (Number(S._version) || 0) + 1;
+
+      localStorage.setItem(
+        LOCAL_TEST_STORAGE_KEY,
+        JSON.stringify(nextState)
+      );
+
+      /*
+       * Manteniamo la selezione dell'unità
+       * corrente locale, come nel normale saveS().
+       */
+      S = normalizeState(nextState);
+
+      return true;
+    } catch (e) {
+      console.error(
+        'Local test save error:',
+        e
+      );
+
+      toast(
+        'Local test save failed',
+        'err'
+      );
+
+      return false;
+    }
+  }
+  if (!IS_ADMIN || !currentUser) {
+    toast("Sign in as admin to save changes", "err");
+    render();
+    return false;
+  }
+  const localVersion =
+    Number(S._version) || 0;
+
+  const nextState =
+    normalizeState(
+      getStateForSave(),
+      {
+        respectLocalSelection: false
+      }
+    );
+
+  nextState._version =
+    localVersion + 1;
   try {
     await runTransaction(db, async transaction => {
       const snap = await transaction.get(STATE_REF);
@@ -1217,7 +1454,13 @@ async function saveS() {
 
       transaction.set(STATE_REF, nextState);
     });
-    S = nextState;
+    /*
+    * Firebase salva un alias canonico di today/activeUnit,
+    * ma questo browser deve continuare a visualizzare
+    * la propria unità locale.
+    */
+    S = normalizeState(nextState);
+
     return true;
   } catch(e) {
     console.error("Save error:", e);
@@ -1288,17 +1531,44 @@ function nowSec() { const d=new Date(); return d.getHours()*3600+d.getMinutes()*
 function nowHMS() { const d=new Date(); return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`; }
 function localDateISO(d=new Date()) { return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
 function currentGameDateISO(d = new Date()) {
-  const gameDate = new Date(d);
+  /*
+   * LOCAL TEST ONLY
+   *
+   * Permette di simulare una gameDate diversa
+   * senza modificare l'orologio del computer.
+   *
+   * Su GitHub Pages questo blocco è ignorato.
+   */
+  if (LOCAL_TEST_MODE) {
+    try {
+      const override =
+        localStorage.getItem(
+          'totoswrap-local-test-game-date'
+        );
+
+      if (
+        override &&
+        /^\d{4}-\d{2}-\d{2}$/.test(override) &&
+        dateFromISO(override)
+      ) {
+        return override;
+      }
+    } catch (_) {}
+  }
+
+  const gameDate =
+    new Date(d);
 
   // La giornata TotoWrap cambia alle 05:00.
   // Tra 00:00 e 04:59 siamo ancora nel gameDate precedente.
   if (gameDate.getHours() < 5) {
-    gameDate.setDate(gameDate.getDate() - 1);
+    gameDate.setDate(
+      gameDate.getDate() - 1
+    );
   }
 
   return localDateISO(gameDate);
 }
-
 function unitNameFromIndex(index) {
   const names = [
     'main',
@@ -1346,15 +1616,31 @@ function formatUnitLabel(unit) {
 }
 
 function nextUnitForDate(gameDate) {
-  const usedUnits = new Set(
-    (S.days || [])
-      .filter(day => displayToISO(day.date) === gameDate)
-      .map(day => day.unit || 'main')
-  );
+  const usedUnits = new Set();
+
+  /*
+   * Un nome unità è occupato sia se la partita
+   * è già nello storico, sia se è ancora live.
+   */
+  (S.days || [])
+    .filter(day => displayToISO(day.date) === gameDate)
+    .forEach(day => {
+      usedUnits.add(day.unit || 'main');
+    });
+
+  Object.values(getLiveGames())
+    .filter(day => displayToISO(day?.date) === gameDate)
+    .forEach(day => {
+      usedUnits.add(day.unit || 'main');
+    });
 
   let index = 0;
 
-  while (usedUnits.has(unitNameFromIndex(index))) {
+  while (
+    usedUnits.has(
+      unitNameFromIndex(index)
+    )
+  ) {
     index += 1;
   }
 
@@ -1883,7 +2169,8 @@ async function copyCurrentBetsRecap() {
     toast('No wrap time to copy', 'err');
     return false;
   }
-  const dayNumber = S.days.length + 1;
+  const dayNumber =
+    getInternalProjectDayNumber();
   const dayContext = {
     approvedAt: S.today.approvedAt,
     approvedDate: S.today.approvedDate || S.today.date,
@@ -2215,7 +2502,12 @@ function getPreviousStreak(playerName) {
     gamesByDate.get(gameDate).push(day);
   });
 
-  const dateGroups = [...gamesByDate.values()];
+  const dateGroups =
+    [...gamesByDate.entries()]
+      .sort(([dateA], [dateB]) =>
+        dateA.localeCompare(dateB)
+      )
+      .map(([, games]) => games);
   let count = 0;
 
   for (let i = dateGroups.length - 1; i >= 0; i--) {
@@ -2765,6 +3057,10 @@ function renderAdminLogin() {
 }
 
 function bindAdminLogin() {
+    if (LOCAL_TEST_MODE) {
+    return;
+  }
+
   document.getElementById('admin-login-btn')?.addEventListener('click', async () => {
     const email = document.getElementById('admin-email')?.value.trim();
     const password = document.getElementById('admin-password')?.value;
@@ -2935,7 +3231,18 @@ function formatSignedPoints(value) {
 }
 
 function syncCrazyDayBootLoader() {
-  const cfg = S.today?.wrapTime ? null : getCrazyDayConfig(S.today);
+  const activeCrazyDayGame =
+    Object.values(getLiveGames()).find(
+      day =>
+        day &&
+        !day.wrapTime &&
+        getCrazyDayConfig(day)
+    );
+
+  const cfg =
+    activeCrazyDayGame
+      ? getCrazyDayConfig(activeCrazyDayGame)
+      : null;
   if (!cfg) {
     try {
       localStorage.removeItem(BOOT_CRAZY_DAY_STORAGE_KEY);
@@ -2976,15 +3283,18 @@ function renderCompletedToday(t, canStartNextDay=false) {
   const winnerTag = canStartNextDay ? 'button type="button" data-share-result' : 'div';
   const winnerCloseTag = canStartNextDay ? 'button' : 'div';
   const nextDayBtn = canStartNextDay
-    ? '<button class="btn btn-p next-day-btn" id="new-day-btn">Start Next Game</button>'
+    ? '<button class="btn btn-p next-day-btn" id="archive-unit-btn">Archive Unit</button>'
     : '';
   const completedViewClass = canStartNextDay ? 'today-fixed-view today-completed-view has-next-day-action' : 'today-fixed-view today-completed-view';
   const fridayBanner = renderFridayWrapBanner(t);
   const unitLabel = formatUnitLabel(t.unit);
+  const unitSwitcher =
+    renderLiveUnitSwitcher();
 
   if (t.noWinner) {
     return `
     <div class="${completedViewClass}">
+    ${unitSwitcher}
       <${winnerTag} class="winner-banner no-winner-banner">
         <span class="winner-sub">${esc(unitLabel)} Complete</span>
         <span class="winner-name" style="font-size: 1.35rem; color: var(--red); white-space: nowrap;">That was a real mattanza!</span>
@@ -3020,6 +3330,7 @@ function renderCompletedToday(t, canStartNextDay=false) {
   const todayWinnerStr = formatSafeNames(todayWinnerNames);
   return `
   <div class="${completedViewClass}">
+  ${unitSwitcher}
   <${winnerTag} class="winner-banner">
     <span class="winner-sub">${esc(unitLabel)} Winner</span>
     <span class="winner-name" style="font-size: 2.2rem;">${todayWinnerStr}</span>
@@ -3402,10 +3713,103 @@ function renderActiveTodayRows(t, sg, out, slices) {
   }).join('');
 }
 
+function renderLiveUnitSwitcher() {
+  const liveGames = getLiveGames();
+  const units = Object.keys(liveGames);
+
+  /*
+   * Con una sola partita live non serve mostrare
+   * alcun selettore.
+   */
+  if (
+    units.length < 2 &&
+    !(IS_ADMIN && units.length > 0)
+  ) {
+    return '';
+  }
+
+  const activeUnit = getActiveUnit();
+
+  return `
+    <div class="live-unit-switcher" role="group" aria-label="Live unit">
+      ${units.map(unit => {
+        const game = liveGames[unit];
+        const selected = unit === activeUnit;
+        const label = formatUnitLabel(unit);
+        const estWrap = game?.estWrap || '--:--';
+
+        return `
+          <button
+            class="live-unit-option${selected ? ' on' : ''}"
+            type="button"
+            data-live-unit="${esc(unit)}"
+            aria-pressed="${selected ? 'true' : 'false'}"
+          >
+            <span class="live-unit-option-name">${esc(label)}</span>
+            <span class="live-unit-option-wrap">Est. ${esc(estWrap)}</span>
+          </button>
+        `;
+      }).join('')}
+      ${IS_ADMIN ? `
+        <button
+          class="live-unit-option live-unit-add"
+          type="button"
+          id="add-live-unit-btn"
+          aria-label="Add another live unit"
+        >
+          <span class="live-unit-option-name">+ Add Unit</span>
+          <span class="live-unit-option-wrap">New live game</span>
+        </button>
+      `: ''}
+    </div>
+  `;
+}
+
+function bindLiveUnitSwitcher() {
+  document
+    .querySelectorAll('[data-live-unit]')
+    .forEach(button => {
+      button.addEventListener('click', () => {
+        const unit =
+          button.dataset.liveUnit;
+
+        if (
+          !unit ||
+          unit === getActiveUnit()
+        ) {
+          return;
+        }
+
+        if (!setActiveUnit(unit)) {
+          return;
+        }
+
+        /*
+         * IMPORTANTE:
+         *
+         * il cambio unità è esclusivamente locale.
+         * Qui NON deve esserci saveS().
+         */
+        render();
+      });
+    });
+  document
+    .getElementById('add-live-unit-btn')
+    ?.addEventListener(
+      'click',
+      createNewLiveUnit
+    );
+}
+
 function renderPlayerToday() {
   const t = S.today;
-  const lastDay = S.days && S.days.length > 0 ? S.days[S.days.length - 1] : null;
-  const statusHeader = renderPlayerStatusHeader(lastDay);
+  const lastDay =
+    getLatestHistoryEntry();
+  const lastWinningDay =
+    getLatestWinningHistoryEntry();
+  const statusHeader = renderPlayerStatusHeader(lastWinningDay);
+  const unitSwitcher =
+    renderLiveUnitSwitcher();
 
   if (!t) {
     return `
@@ -3427,6 +3831,7 @@ function renderPlayerToday() {
   if (!hasValidGuesses) {
     return `
   <div class="tab-page-frame pregame-boundary-frame">
+  ${unitSwitcher}
   ${renderBetClosePlayerCard(t)}
   ${renderCrazyDayIndicator(t)}
   ${renderMondayWaitingBanner(t)}
@@ -3442,6 +3847,7 @@ function renderPlayerToday() {
 
   return `
   <div class="today-fixed-view">
+  ${unitSwitcher}
   <div class="card">
     <div style="display: flex; align-items: center; justify-content: center;">
       <div class="big-clock js-clock">--:--:--</div>
@@ -3462,6 +3868,8 @@ function bindPlayerNav() {
       setMainTab(btn.dataset.tab);
     });
   });
+
+  bindLiveUnitSwitcher();
 }
 
 function renderMain() {
@@ -3498,9 +3906,12 @@ ${renderDesktopLiveBar()}
 
 function renderToday() {
   const t = S.today;
-  const lastDay = S.days && S.days.length > 0 ? S.days[S.days.length - 1] : null;
-  const statusHeader = renderPlayerStatusHeader(lastDay);
+  const lastWinningDay =
+    getLatestWinningHistoryEntry();
+  const statusHeader = renderPlayerStatusHeader(lastWinningDay);
   const unitLabel = t ? formatUnitLabel(t.unit) : '';
+  const unitSwitcher =
+    renderLiveUnitSwitcher();
 
   if (!t) {
     return `<div class="tab-page-frame"><div class="card">
@@ -3533,6 +3944,7 @@ function renderToday() {
     const slices = boundaries(t.guesses, t);
     return `
       <div class="today-fixed-view">
+      ${unitSwitcher}
       ${clockCard}
       ${renderCrazyDayIndicator(t)}
       <div class="card today-scroll-card"><div class="card-lbl">${statusHeader}</div>
@@ -3542,12 +3954,13 @@ function renderToday() {
     `;
   }
   return `<div class="tab-page-frame">
+    ${unitSwitcher}
     <div class="card">
       <div class="card-lbl">${esc(unitLabel)} · Set Wrap Time</div>
       <p class="mono dim" style="margin-bottom:10px">Set the estimated wrap time players see before the game starts.</p>
       <div class="admin-time-save-row admin-wrap-save-row">
         <input type="text" class="admin-time-input" id="est-wrap-input" value="${esc(t.estWrap && t.estWrap !== '--:--' ? t.estWrap : '')}" placeholder="hh:mm" inputmode="text" maxlength="5" aria-label="Estimated wrap time">
-        <input type="text" class="admin-date-input" id="est-wrap-date-input" value="${esc(displayDate(t.estWrapDate || localDateISO()))}" placeholder="dd/mm/yyyy" inputmode="numeric" maxlength="10" aria-label="Wrap date">
+        <input type="text" class="admin-date-input" id="est-wrap-date-input" value="${esc(displayDate(t.estWrapDate || t.date || currentGameDateISO()))}" placeholder="dd/mm/yyyy" inputmode="numeric" maxlength="10" aria-label="Wrap date">
         <button class="settings-delete admin-time-delete-btn" id="clear-est-wrap-btn" type="button" title="Clear wrap time" aria-label="Clear wrap time">×</button>
         <button class="settings-save admin-time-save-btn" id="save-est-wrap-btn" type="button" title="Save wrap time" aria-label="Save wrap time">✓</button>
       </div>
@@ -4254,43 +4667,159 @@ function renderBoardPlayerStats(name) {
 }
 
 function getHistoryEntries() {
-  const all = [...S.days];
-  if (S.today && S.today.wrapTime) all.push(S.today);
-  return all;
+  const all = [
+    ...(S.days || [])
+  ];
+
+  const archivedKeys =
+    new Set(
+      all.map(day => {
+        const date =
+          displayToISO(day?.date);
+
+        const unit =
+          day?.unit || 'main';
+
+        return `${date}-${unit}`;
+      })
+    );
+
+  Object.values(
+    getLiveGames()
+  ).forEach(day => {
+    if (!day?.wrapTime) {
+      return;
+    }
+
+    const date =
+      displayToISO(day.date);
+
+    const unit =
+      day.unit || 'main';
+
+    const key =
+      `${date}-${unit}`;
+
+    /*
+     * Evita di mostrare due volte la stessa
+     * date+unit durante eventuali stati
+     * transitori o dati legacy.
+     */
+    if (archivedKeys.has(key)) {
+      return;
+    }
+
+    all.push(day);
+    archivedKeys.add(key);
+  });
+
+  return all.sort((a, b) => {
+    const dateA =
+      getWrapDateISO(a) ||
+      displayToISO(a?.date) ||
+      '';
+
+    const dateB =
+      getWrapDateISO(b) ||
+      displayToISO(b?.date) ||
+      '';
+
+    if (dateA !== dateB) {
+      return dateA.localeCompare(dateB);
+    }
+
+    const timeA =
+      a?.wrapTime && isValidHMS(a.wrapTime)
+        ? toSec(a.wrapTime)
+        : (
+            a?.wrapTime && isValidHM(a.wrapTime)
+              ? toSec(a.wrapTime)
+              : 0
+          );
+
+    const timeB =
+      b?.wrapTime && isValidHMS(b.wrapTime)
+        ? toSec(b.wrapTime)
+        : (
+            b?.wrapTime && isValidHM(b.wrapTime)
+              ? toSec(b.wrapTime)
+              : 0
+          );
+
+    if (timeA !== timeB) {
+      return timeA - timeB;
+    }
+
+    return String(a?.unit || 'main')
+      .localeCompare(String(b?.unit || 'main'));
+  });
 }
 
-function deleteHistoryDayByDate(date, unit = 'main') {
-  const isoDate = displayToISO(date);
-  const unitKey = unit || 'main';
+function getLatestHistoryEntry() {
+  const entries = getHistoryEntries();
+  return entries.length
+    ? entries[entries.length - 1]
+    : null;
+}
 
-  const idx = S.days.findIndex(day =>
-    displayToISO(day.date) === isoDate &&
-    (day.unit || 'main') === unitKey
-  );
+function deleteHistoryDayByDate(
+  date,
+  unit = 'main'
+) {
+  const isoDate =
+    displayToISO(date);
+
+  const unitKey =
+    unit || 'main';
+
+  const idx =
+    S.days.findIndex(day =>
+      displayToISO(day.date) === isoDate &&
+      (day.unit || 'main') === unitKey
+    );
 
   if (idx !== -1) {
-    return { kind: 'history', idx };
+    return {
+      kind: 'history',
+      idx
+    };
   }
 
-  if (
-    S.today &&
-    displayToISO(S.today.date) === isoDate &&
-    (S.today.unit || 'main') === unitKey
-  ) {
-    return { kind: 'today' };
+  const liveEntry =
+    Object.entries(
+      getLiveGames()
+    ).find(([, day]) =>
+      day &&
+      day.wrapTime &&
+      displayToISO(day.date) === isoDate &&
+      (day.unit || 'main') === unitKey
+    );
+
+  if (liveEntry) {
+    return {
+      kind: 'live',
+      unitKey: liveEntry[0]
+    };
   }
 
   return null;
 }
 
-function findHistoryEntryByDate(date, unit = 'main') {
-  const isoDate = displayToISO(date);
-  const unitKey = unit || 'main';
+function findHistoryEntryByDate(
+  date,
+  unit = 'main'
+) {
+  const isoDate =
+    displayToISO(date);
 
-  const historyIdx = S.days.findIndex(day =>
-    displayToISO(day.date) === isoDate &&
-    (day.unit || 'main') === unitKey
-  );
+  const unitKey =
+    unit || 'main';
+
+  const historyIdx =
+    S.days.findIndex(day =>
+      displayToISO(day.date) === isoDate &&
+      (day.unit || 'main') === unitKey
+    );
 
   if (historyIdx !== -1) {
     return {
@@ -4300,16 +4829,22 @@ function findHistoryEntryByDate(date, unit = 'main') {
     };
   }
 
-  if (
-    S.today &&
-    S.today.wrapTime &&
-    displayToISO(S.today.date) === isoDate &&
-    (S.today.unit || 'main') === unitKey
-  ) {
+  const liveEntry =
+    Object.entries(
+      getLiveGames()
+    ).find(([, day]) =>
+      day &&
+      day.wrapTime &&
+      displayToISO(day.date) === isoDate &&
+      (day.unit || 'main') === unitKey
+    );
+
+  if (liveEntry) {
     return {
-      kind: 'today',
+      kind: 'live',
       idx: -1,
-      day: S.today
+      unitKey: liveEntry[0],
+      day: liveEntry[1]
     };
   }
 
@@ -4804,6 +5339,21 @@ async function addHistoryPlayerBet(
     return false;
   }
 
+  const duplicateTimeGuess =
+    (target.day.guesses || []).find(guess =>
+      guess?.time &&
+      nameKey(guess.name) !== nameKey(name) &&
+      normalizeHMInput(String(guess.time).trim()) === normalizedBet
+    );
+
+  if (duplicateTimeGuess) {
+    toast(
+      `Bet time ${normalizedBet} is already used by ${duplicateTimeGuess.name}`,
+      'err'
+    );
+    return false;
+  }
+
   const prevS = cloneState();
 
   const gameDate =
@@ -5016,6 +5566,21 @@ async function addCurrentPlayerBet(name, betTime, betDate='') {
     return false;
   }
 
+  const takenBy = (S.today.guesses || []).find(
+    g =>
+      g !== existingGuess &&
+      g?.time &&
+      normalizeHMInput(String(g.time).trim()) === normalizedBet
+  );
+
+  if (takenBy) {
+    toast(
+      `${normalizedBet} is already taken by ${takenBy.name}`,
+      'err'
+    );
+    return false;
+  }
+
   const prevS = cloneState();
   existingGuess.time = normalizedBet;
   existingGuess.date = normalizedDate || inferBetDate(normalizedBet, S.today);
@@ -5046,12 +5611,11 @@ async function updateCurrentPlayerBet(name, betTime, betDate='') {
     return false;
   }
 
-  const prevS = cloneState();
-
   const takenBy = (S.today.guesses || []).find(
     g =>
       g !== existingGuess &&
-      g?.time === normalizedBet
+      g?.time &&
+      normalizeHMInput(String(g.time).trim()) === normalizedBet
   );
 
   if (takenBy) {
@@ -5061,6 +5625,8 @@ async function updateCurrentPlayerBet(name, betTime, betDate='') {
     );
     return false;
   }
+
+  const prevS = cloneState();
   
   existingGuess.time = normalizedBet;
   existingGuess.date = normalizedDate || inferBetDate(normalizedBet, S.today);
@@ -5074,7 +5640,12 @@ async function updateCurrentPlayerBet(name, betTime, betDate='') {
 async function confirmTodayWrap(wrapTime, wrapDate = '') {
   if (!IS_ADMIN || !S.today || S.today.wrapTime) return false;
 
-  const normalizedWrap = normalizeHMSInput(wrapTime);
+  const currentGame = S.today;
+  const currentUnit =
+    currentGame.unit || 'main';
+
+  const normalizedWrap =
+    normalizeHMSInput(wrapTime);
 
   if (!normalizedWrap) {
     toast('Enter wrap time', 'err');
@@ -5082,22 +5653,34 @@ async function confirmTodayWrap(wrapTime, wrapDate = '') {
   }
 
   if (!isValidHMS(normalizedWrap)) {
-    toast('Use a valid wrap time (HH:MM or HH:MM:SS)', 'err');
+    toast(
+      'Use a valid wrap time (HH:MM or HH:MM:SS)',
+      'err'
+    );
     return false;
   }
 
   const normalizedWrapDate =
     String(wrapDate || '').trim() ||
-    inferBetDate(normalizedWrap, S.today);
+    inferBetDate(
+      normalizedWrap,
+      currentGame
+    );
 
   if (!dateFromISO(normalizedWrapDate)) {
     toast('Use a valid wrap date', 'err');
     return false;
   }
 
-  const prevS = cloneState();
+  const prevS =
+    cloneState();
 
-  S.today.wrapDate = normalizedWrapDate;
+  /*
+   * Da questo punto lavoriamo direttamente
+   * sull'unità che il browser sta visualizzando.
+   */
+  currentGame.wrapDate =
+    normalizedWrapDate;
 
   const {
     winner,
@@ -5106,34 +5689,73 @@ async function confirmTodayWrap(wrapTime, wrapDate = '') {
     noWinner,
     penalties
   } = calcWinner(
-    S.today.guesses,
+    currentGame.guesses,
     normalizedWrap,
-    S.today
+    currentGame
   );
 
-  S.today.wrapTime = normalizedWrap;
-  S.today.winner = winner;
-  S.today.winners = winners;
-  S.today.points = points;
-  S.today.noWinner = noWinner;
-  S.today.penalties = penalties || [];
+  currentGame.wrapTime =
+    normalizedWrap;
 
+  currentGame.winner =
+    winner;
+
+  currentGame.winners =
+    winners;
+
+  currentGame.points =
+    points;
+
+  currentGame.noWinner =
+    noWinner;
+
+  currentGame.penalties =
+    penalties || [];
+
+  /*
+   * Applichiamo punteggio e penalità
+   * esclusivamente per questa unità.
+   */
   if (!noWinner) {
     winners.forEach(w =>
-      applyScoreDelta(w.name, points)
+      applyScoreDelta(
+        w.name,
+        points
+      )
     );
   }
 
-  applyDayPenalties(S.today, 1);
+  applyDayPenalties(
+    currentGame,
+    1
+  );
 
-  const saved = await saveS();
+  /*
+  * L'Official Wrap conclude questa unità,
+  * ma NON la archivia ancora.
+  *
+  * La manteniamo dentro liveGames così:
+  * - il risultato resta visibile;
+  * - share result continua a funzionare;
+  * - exact-win confetti continua a funzionare;
+  * - le altre unità live continuano indipendentemente.
+  */
+  const saved =
+    await saveS();
 
   if (!saved) {
     restoreAfterFailedSave(prevS);
     return false;
   }
 
+  /*
+  * Rimaniamo sulla stessa unità appena conclusa
+  * per mostrare la schermata Results.
+  */
+  setActiveUnit(currentUnit);
+
   render();
+
   return true;
 }
 
@@ -5245,6 +5867,34 @@ async function clearEstimatedWrapTime() {
   return true;
 }
 
+function setCrazyDayForLiveGameDate(
+  gameDate,
+  crazyDay
+) {
+  const isoDate =
+    displayToISO(gameDate);
+
+  Object.values(
+    getLiveGames()
+  ).forEach(day => {
+    if (
+      !day ||
+      displayToISO(day.date) !== isoDate
+    ) {
+      return;
+    }
+
+    if (crazyDay) {
+      day.crazyDay =
+        JSON.parse(
+          JSON.stringify(crazyDay)
+        );
+    } else {
+      delete day.crazyDay;
+    }
+  });
+}
+
 function readCrazyDayInput(id) {
   const value = Number(document.getElementById(id)?.value);
   return Number.isFinite(value) ? value : null;
@@ -5270,8 +5920,24 @@ async function saveCrazyDaySettings() {
     toast('Enter Crazy Day points', 'err');
     return false;
   }
-  const prevS = cloneState();
-  S.today.crazyDay = { enabled: true, regularPoints, perfectPoints, penaltyPoints };
+  const prevS =
+    cloneState();
+
+  const gameDate =
+    displayToISO(S.today.date);
+
+  const crazyDay = {
+    enabled: true,
+    regularPoints,
+    perfectPoints,
+    penaltyPoints
+  };
+
+  setCrazyDayForLiveGameDate(
+    gameDate,
+    crazyDay
+  );
+
   _crazyDayPanelOpen = true;
   const saved = await saveS();
   if (!saved) { restoreAfterFailedSave(prevS); return false; }
@@ -5293,8 +5959,17 @@ async function clearCrazyDaySettings() {
     render();
     return true;
   }
-  const prevS = cloneState();
-  delete S.today.crazyDay;
+  const prevS =
+    cloneState();
+
+  const gameDate =
+    displayToISO(S.today.date);
+
+  setCrazyDayForLiveGameDate(
+    gameDate,
+    null
+  );
+
   _crazyDayPanelOpen = false;
   const saved = await saveS();
   if (!saved) { restoreAfterFailedSave(prevS); return false; }
@@ -5437,27 +6112,71 @@ async function handleAdminDialogAction(btn) {
 }
 
 function getMultiUnitBonusCandidates(gameDate) {
-  const isoDate = displayToISO(gameDate);
+  const isoDate =
+    displayToISO(gameDate);
 
+  /*
+   * Una partita completata può trovarsi:
+   *
+   * - in History (S.days)
+   * - ancora in liveGames dopo Official Wrap
+   *
+   * Dobbiamo considerare TUTTE le unità concluse,
+   * non soltanto S.today.
+   */
   const completedGames = [
     ...(S.days || []),
-    ...(S.today?.wrapTime ? [S.today] : [])
+    ...Object.values(getLiveGames())
   ].filter(day =>
     day?.wrapTime &&
     displayToISO(day.date) === isoDate
   );
 
-  const winsByPlayer = new Map();
+  /*
+   * Protezione contro eventuali duplicati:
+   * durante una transizione una stessa date+unit
+   * non deve essere contata due volte.
+   */
+  const uniqueGames =
+    new Map();
 
   completedGames.forEach(day => {
-    if (day.noWinner) return;
+    const unit =
+      day.unit || 'main';
 
-    const winnerNames = Array.isArray(day.winners)
-      ? day.winners.map(w => w.name).filter(Boolean)
-      : (day.winner ? [day.winner] : []);
+    const key =
+      `${isoDate}-${unit}`;
+
+    if (!uniqueGames.has(key)) {
+      uniqueGames.set(
+        key,
+        day
+      );
+    }
+  });
+
+  const winsByPlayer =
+    new Map();
+
+  uniqueGames.forEach(day => {
+    if (day.noWinner) {
+      return;
+    }
+
+    const winnerNames =
+      Array.isArray(day.winners)
+        ? day.winners
+            .map(w => w.name)
+            .filter(Boolean)
+        : (
+            day.winner
+              ? [day.winner]
+              : []
+          );
 
     winnerNames.forEach(name => {
-      const key = nameKey(name);
+      const key =
+        nameKey(name);
 
       if (!winsByPlayer.has(key)) {
         winsByPlayer.set(key, {
@@ -5471,10 +6190,14 @@ function getMultiUnitBonusCandidates(gameDate) {
   });
 
   return [...winsByPlayer.values()]
-    .filter(entry => entry.wins >= 2)
+    .filter(entry =>
+      entry.wins >= 2
+    )
     .sort((a, b) =>
       b.wins - a.wins ||
-      a.player.localeCompare(b.player)
+      a.player.localeCompare(
+        b.player
+      )
     );
 }
 
@@ -5914,11 +6637,34 @@ function recalculateCompletedDay(day) {
 function recalculateCompletedResultsForCurrentBoundaryRule() {
   let changed = false;
 
-  const completedDays = [...(S.days || [])];
+  const completedDays = [];
 
-  if (S.today?.wrapTime) {
-    completedDays.push(S.today);
-  }
+  const seenCompletedGames =
+    new Set();
+
+  [
+    ...(S.days || []),
+    ...Object.values(getLiveGames())
+      .filter(day => day?.wrapTime)
+  ].forEach(day => {
+    if (!day?.wrapTime) return;
+
+    const gameDate =
+      displayToISO(day.date);
+
+    const unit =
+      day.unit || 'main';
+
+    const key =
+      `${gameDate}-${unit}`;
+
+    if (seenCompletedGames.has(key)) {
+      return;
+    }
+
+    seenCompletedGames.add(key);
+    completedDays.push(day);
+  });
 
   completedDays.forEach(day => {
 
@@ -6003,7 +6749,16 @@ function recalculateCompletedResultsForCurrentBoundaryRule() {
 }
 
 async function maybeSaveTerritoryRuleMigration() {
-  if (!_territoryRuleMigrationPending || _territoryRuleMigrationSaving || !IS_ADMIN || !currentUser) return;
+  if (LOCAL_TEST_MODE) return;
+
+  if (
+    !_territoryRuleMigrationPending ||
+    _territoryRuleMigrationSaving ||
+    !IS_ADMIN ||
+    !currentUser
+  ) {
+    return;
+  }
   _territoryRuleMigrationSaving = true;
   const saved = await saveS();
   _territoryRuleMigrationSaving = false;
@@ -6022,7 +6777,10 @@ function removeAutoAddedPlayersFromDeletedDays(deletedDays) {
   if (!autoAddedKeys.size) return;
 
   const usedKeys = new Set();
-  const remainingDays = [...S.days, S.today].filter(Boolean);
+  const remainingDays = [
+    ...(S.days || []),
+    ...Object.values(getLiveGames())
+  ].filter(Boolean);
   remainingDays.forEach(day => {
     (day.guesses || []).forEach(guess => usedKeys.add(nameKey(guess.name)));
     (day.winners || []).forEach(winner => usedKeys.add(nameKey(winner.name)));
@@ -6053,13 +6811,17 @@ async function deleteHistoryDay(
   unit = 'main',
   confirmed = false
 ) {
-  const target = deleteHistoryDayByDate(
-    date,
-    unit
-  );
+  const target =
+    deleteHistoryDayByDate(
+      date,
+      unit
+    );
 
   if (!target) {
-    toast('History game not found', 'err');
+    toast(
+      'History game not found',
+      'err'
+    );
     return;
   }
 
@@ -6078,20 +6840,39 @@ async function deleteHistoryDay(
     return;
   }
 
-  const prevS = cloneState();
+  const prevS =
+    cloneState();
+
+  const prevActiveLiveUnit =
+    _activeLiveUnit;
 
   const gameDate =
     displayToISO(date);
 
   const previousBonusRecord =
-    getMultiUnitBonusRecord(gameDate);
+    getMultiUnitBonusRecord(
+      gameDate
+    );
 
   const day =
     target.kind === 'history'
       ? S.days[target.idx]
-      : S.today;
+      : S.liveGames?.[
+          target.unitKey
+        ];
 
-  // Roll back only this game's score changes.
+  if (!day) {
+    toast(
+      'History game not found',
+      'err'
+    );
+    return;
+  }
+
+  /*
+   * Roll back soltanto i punteggi
+   * appartenenti alla partita eliminata.
+   */
   adjustCompletedDayScores(
     day,
     -1
@@ -6103,7 +6884,63 @@ async function deleteHistoryDay(
       1
     );
   } else {
-    S.today = null;
+    /*
+     * La partita è ancora dentro liveGames.
+     * Eliminiamo esclusivamente la unità
+     * richiesta, non quella selezionata.
+     */
+    if (
+      isLiveGamesObject(
+        S.liveGames
+      )
+    ) {
+      delete S.liveGames[
+        target.unitKey
+      ];
+    }
+
+    /*
+     * Se abbiamo eliminato proprio la unità
+     * visualizzata nel browser, scegliamo
+     * una delle unità live rimaste.
+     *
+     * Se invece era selezionata un'altra
+     * unità, la lasciamo invariata.
+     */
+    if (
+      _activeLiveUnit ===
+        target.unitKey ||
+      (S.today?.unit || 'main') ===
+        (day.unit || target.unitKey)
+    ) {
+      _activeLiveUnit =
+        null;
+
+      const remainingUnits =
+        Object.keys(
+          getLiveGames()
+        );
+
+      if (remainingUnits.length) {
+        const nextUnit =
+          remainingUnits[0];
+
+        _activeLiveUnit =
+          nextUnit;
+
+        S.activeUnit =
+          nextUnit;
+
+        S.today =
+          S.liveGames[nextUnit];
+      } else {
+        S.activeUnit =
+          'main';
+
+        S.today =
+          null;
+      }
+    }
   }
 
   removeAutoAddedPlayersFromDeletedDays(
@@ -6119,8 +6956,40 @@ async function deleteHistoryDay(
     await saveS();
 
   if (!saved) {
-    restoreAfterFailedSave(prevS);
+    _activeLiveUnit =
+      prevActiveLiveUnit;
+    restoreAfterFailedSave(
+      prevS
+    );
     return;
+  }
+
+  /*
+   * Riallineiamo esplicitamente la selezione
+   * locale dopo il salvataggio.
+   */
+  if (
+    target.kind === 'live'
+  ) {
+    const remainingUnits =
+      Object.keys(
+        getLiveGames()
+      );
+
+    if (
+      _activeLiveUnit &&
+      S.liveGames?.[_activeLiveUnit]
+    ) {
+      setActiveUnit(
+        _activeLiveUnit
+      );
+    } else if (
+      remainingUnits.length
+    ) {
+      setActiveUnit(
+        remainingUnits[0]
+      );
+    }
   }
 
   toast(
@@ -6129,6 +6998,94 @@ async function deleteHistoryDay(
   );
 
   render();
+}
+
+async function archiveCurrentLiveUnit() {
+  if (
+    !IS_ADMIN ||
+    !S.today ||
+    !S.today.wrapTime
+  ) {
+    return false;
+  }
+
+  const prevS = cloneState();
+
+  const prevActiveLiveUnit =
+    _activeLiveUnit;
+
+  const currentGame = S.today;
+  const currentUnit =
+    currentGame.unit || 'main';
+
+  const currentDate =
+    displayToISO(currentGame.date);
+
+  /*
+   * Aggiungiamo allo storico solo se non esiste
+   * già la stessa combinazione gameDate + unit.
+   */
+  const alreadyArchived =
+    (S.days || []).some(day =>
+      displayToISO(day.date) === currentDate &&
+      (day.unit || 'main') === currentUnit
+    );
+
+  if (!alreadyArchived) {
+    S.days.push(
+      JSON.parse(
+        JSON.stringify(currentGame)
+      )
+    );
+  }
+
+  /*
+   * Da questo momento la partita non è più una
+   * live unit, ma rimane normalmente in History.
+   */
+  if (isLiveGamesObject(S.liveGames)) {
+    delete S.liveGames[currentUnit];
+  }
+
+  if (_activeLiveUnit === currentUnit) {
+    _activeLiveUnit = null;
+  }
+
+  const remainingUnits =
+    Object.keys(getLiveGames());
+
+  if (remainingUnits.length) {
+    const nextUnit =
+      remainingUnits[0];
+
+    _activeLiveUnit =
+      nextUnit;
+
+    S.today =
+      S.liveGames[nextUnit];
+  } else {
+    S.today = null;
+  }
+
+  const saved = await saveS();
+
+  if (!saved) {
+    _activeLiveUnit =
+      prevActiveLiveUnit;
+
+    restoreAfterFailedSave(prevS);
+    return false;
+  }
+
+  if (remainingUnits.length) {
+    setActiveUnit(
+      remainingUnits[0]
+    );
+  }
+
+  render();
+
+  return true;
 }
 
 async function deleteCurrentDayAndMatchingHistory() {
@@ -6175,8 +7132,11 @@ async function deleteCurrentDayAndMatchingHistory() {
   const prevS =
     cloneState();
 
+  const prevActiveLiveUnit =
+    _activeLiveUnit;
+
   const previousBonusRecord =
-    getMultiUnitBonusRecord(isoDate);  
+    getMultiUnitBonusRecord(isoDate);
 
   const deletedDays = [
     S.today,
@@ -6209,7 +7169,45 @@ async function deleteCurrentDayAndMatchingHistory() {
     )
   );
 
-  S.today = null;
+  /*
+  * Eliminiamo esclusivamente la unità corrente.
+  * Le altre partite live devono continuare a esistere.
+  */
+  if (isLiveGamesObject(S.liveGames)) {
+    delete S.liveGames[unit];
+  }
+
+  /*
+  * Se il browser stava visualizzando proprio questa unità,
+  * dimentichiamo la selezione locale.
+  */
+  if (_activeLiveUnit === unit) {
+    _activeLiveUnit = null;
+  }
+
+  /*
+  * Passiamo automaticamente a un'altra eventuale
+  * partita live.
+  */
+  const remainingLiveUnits =
+    Object.keys(getLiveGames());
+
+  if (remainingLiveUnits.length) {
+    const nextActiveUnit =
+      remainingLiveUnits[0];
+
+    _activeLiveUnit =
+      nextActiveUnit;
+
+    S.activeUnit =
+      nextActiveUnit;
+
+    S.today =
+      S.liveGames[nextActiveUnit];
+  } else {
+    S.activeUnit = 'main';
+    S.today = null;
+  }
 
   removeAutoAddedPlayersFromDeletedDays(
     deletedDays
@@ -6224,6 +7222,8 @@ async function deleteCurrentDayAndMatchingHistory() {
     await saveS();
 
   if (!saved) {
+    _activeLiveUnit =
+      prevActiveLiveUnit;
     restoreAfterFailedSave(prevS);
     return;
   }
@@ -6385,7 +7385,8 @@ function renderHistory() {
 
 function renderSettings() {
   const pl = getAlphabeticalPlayerRoster();
-  const hasCurrentDay = S.today !== null;
+  const hasCurrentDay =
+    Object.keys(getLiveGames()).length > 0;
   return `<div class="tab-page-frame"><div class="card"><div class="card-lbl">Editable Player Roster</div>
 ${pl.map((p, idx)=> {
   const realIdx = S.playerRoster.findIndex(orig => orig.name === p.name);
@@ -6452,8 +7453,17 @@ async function cancelCrazyDayForSafety() {
     S.today.wrapTime ||
     S.today.guesses?.some(g => g.time)
   ) return true;
-  const prevS = cloneState();
-  delete S.today.crazyDay;
+  const prevS =
+    cloneState();
+
+  const gameDate =
+    displayToISO(S.today.date);
+
+  setCrazyDayForLiveGameDate(
+    gameDate,
+    null
+  );
+
   _crazyDayPanelOpen = false;
   const saved = await saveS();
   if (!saved) {
@@ -6892,16 +7902,42 @@ async function savePlayer(idx) {
         day.addedPlayers = day.addedPlayers.map(name => name === oldName ? newName : name);
       }
     });
-    if (S.today && S.today.guesses) {
-      S.today.guesses.forEach(g => { if (g.name === oldName) g.name = newName; });
-      if (S.today.winner === oldName) S.today.winner = newName;
-      if (S.today.winners) {
-        S.today.winners.forEach(w => { if (w.name === oldName) w.name = newName; });
+    Object.values(
+      getLiveGames()
+    ).forEach(day => {
+      if (!day) return;
+
+      (day.guesses || []).forEach(g => {
+        if (g.name === oldName) {
+          g.name = newName;
+        }
+      });
+
+      if (day.winner === oldName) {
+        day.winner = newName;
       }
-      if (S.today.addedPlayers) {
-        S.today.addedPlayers = S.today.addedPlayers.map(name => name === oldName ? newName : name);
+
+      if (day.winners) {
+        day.winners.forEach(w => {
+          if (w.name === oldName) {
+            w.name = newName;
+          }
+        });
       }
-    }
+
+      if (day.addedPlayers) {
+        day.addedPlayers =
+          day.addedPlayers.map(name =>
+            name === oldName
+              ? newName
+              : name
+          );
+      }
+    });
+    renamePlayerInMultiUnitBonuses(
+      oldName,
+      newName
+    );
   }
   S.scores[newName] = newPoints;
   S.playerRoster[idx].active =
@@ -6918,6 +7954,58 @@ function removePlayerFromDay(day, name) {
   if (day.guesses) day.guesses = day.guesses.filter(g => nameKey(g.name) !== key);
   if (day.addedPlayers) day.addedPlayers = day.addedPlayers.filter(playerName => nameKey(playerName) !== key);
   recalculateCompletedDay(day);
+}
+
+function renamePlayerInMultiUnitBonuses(
+  oldName,
+  newName
+) {
+  if (
+    !S.multiUnitBonuses ||
+    typeof S.multiUnitBonuses !== 'object'
+  ) {
+    return;
+  }
+
+  const oldKey =
+    nameKey(oldName);
+
+  const newKey =
+    nameKey(newName);
+
+  Object.keys(
+    S.multiUnitBonuses
+  ).forEach(date => {
+    const dateRecord =
+      S.multiUnitBonuses[date];
+
+    if (
+      !dateRecord ||
+      typeof dateRecord !== 'object'
+    ) {
+      return;
+    }
+
+    const oldRecord =
+      dateRecord[oldKey];
+
+    if (!oldRecord) {
+      return;
+    }
+
+    /*
+     * Manteniamo intatti punti, numero di wins
+     * e status del bonus già deciso.
+     */
+    dateRecord[newKey] = {
+      ...oldRecord,
+      player: newName
+    };
+
+    if (newKey !== oldKey) {
+      delete dateRecord[oldKey];
+    }
+  });
 }
 
 function removePlayerFromMultiUnitBonuses(name) {
@@ -6955,7 +8043,10 @@ async function deletePlayer(idx) {
   if (!confirm(`Delete ${player.name}?`)) return;
   const prevS = cloneState();
   const name = player.name;
-  const daysToUpdate = [...S.days, S.today].filter(Boolean);
+  const daysToUpdate = [
+    ...(S.days || []),
+    ...Object.values(getLiveGames())
+  ].filter(Boolean);
   daysToUpdate.forEach(day => adjustCompletedDayScores(day, -1));
   S.playerRoster.splice(idx, 1);
   delete S.scores[name];
@@ -6970,16 +8061,312 @@ async function deletePlayer(idx) {
   render();
 }
 
-function bindMain() {
-  document.getElementById('admin-logout-btn')?.addEventListener('click', async () => {
-    try {
-      await signOut(auth);
-      toast('Signed out', 'ok');
-    } catch(e) {
-      console.error("Sign-out error:", e);
-      toast('Sign-out failed', 'err');
+async function createNewLiveUnit() {
+  if (!IS_ADMIN || !currentUser) {
+    return false;
+  }
+
+  const prevS =
+    cloneState();
+
+  const prevActiveLiveUnit =
+    _activeLiveUnit;
+
+  /*
+   * La giornata TotoWrap cambia alle 05:00.
+   */
+  const gameDate =
+    currentGameDateISO();
+
+  const liveGames =
+    getLiveGames();
+
+  /*
+   * Prima di creare qualcosa controlliamo se
+   * esistono ancora unità appartenenti a una
+   * gameDate precedente.
+   */
+  const previousLiveGames =
+    Object.values(liveGames)
+      .filter(day =>
+        day &&
+        displayToISO(day.date) !== gameDate
+      );
+
+  if (previousLiveGames.length > 0) {
+    /*
+     * Una nuova giornata NON può iniziare
+     * mentre una vecchia unità è ancora
+     * incompleta.
+     */
+    const unfinishedGames =
+      previousLiveGames.filter(day =>
+        !day.wrapTime
+      );
+
+    if (unfinishedGames.length > 0) {
+      const firstUnfinished =
+        unfinishedGames[0];
+
+      const unfinishedUnit =
+        firstUnfinished.unit || 'main';
+
+      if (liveGames[unfinishedUnit]) {
+        setActiveUnit(
+          unfinishedUnit
+        );
+      }
+
+      render();
+
+      toast(
+        `${formatUnitLabel(unfinishedUnit)} from ${displayDate(firstUnfinished.date)} must be completed before starting a new day`,
+        'err'
+      );
+
+      return false;
     }
-  });
+
+    /*
+     * Tutte le vecchie unità live sono COMPLETE.
+     *
+     * Possono teoricamente esserci più gameDate
+     * residue a causa di vecchi stati o test:
+     * gestiamole separatamente e in sicurezza.
+     */
+    const previousDates =
+      [
+        ...new Set(
+          previousLiveGames.map(day =>
+            displayToISO(day.date)
+          )
+        )
+      ];
+
+    for (const previousDate of previousDates) {
+      /*
+       * Multi-Unit Bonus:
+       * deve essere deciso una sola volta
+       * prima di chiudere definitivamente
+       * la gameDate.
+       */
+      if (
+        !hasMultiUnitBonusDecision(
+          previousDate
+        )
+      ) {
+        const candidates =
+          getMultiUnitBonusCandidates(
+            previousDate
+          );
+
+        if (candidates.length > 0) {
+          const decisions =
+            await requestMultiUnitBonusDecision(
+              previousDate,
+              candidates
+            );
+
+          applyMultiUnitBonusDecisions(
+            previousDate,
+            decisions
+          );
+        } else {
+          /*
+           * Registriamo comunque che per questa
+           * data il controllo bonus è già stato
+           * effettuato.
+           *
+           * {} è truthy, quindi
+           * hasMultiUnitBonusDecision()
+           * non riproporrà la decisione.
+           */
+          applyMultiUnitBonusDecisions(
+            previousDate,
+            []
+          );
+        }
+      }
+
+      /*
+       * Archiviamo tutte le unità COMPLETE
+       * ancora live della vecchia gameDate.
+       *
+       * I punteggi NON vengono riapplicati:
+       * erano già stati assegnati al momento
+       * dell'Official Wrap.
+       */
+      Object.entries(
+        getLiveGames()
+      ).forEach(([unitKey, day]) => {
+        if (
+          !day ||
+          !day.wrapTime ||
+          displayToISO(day.date) !== previousDate
+        ) {
+          return;
+        }
+
+        const unit =
+          day.unit || unitKey || 'main';
+
+        const alreadyArchived =
+          (S.days || []).some(historyDay =>
+            displayToISO(historyDay.date) === previousDate &&
+            (historyDay.unit || 'main') === unit
+          );
+
+        if (!alreadyArchived) {
+          S.days.push(
+            JSON.parse(
+              JSON.stringify(day)
+            )
+          );
+        }
+
+        delete S.liveGames[unitKey];
+      });
+    }
+
+    _activeLiveUnit =
+      null;
+  }
+
+  /*
+   * Ora sappiamo che qualsiasi live game
+   * rimasto appartiene necessariamente
+   * alla gameDate corrente.
+   */
+  const unit =
+    nextUnitForDate(gameDate);
+
+  /*
+   * Crazy Day appartiene alla gameDate
+   * ed è deciso dalla Main Unit.
+   *
+   * Quindi una nuova Second/Third/etc.
+   * deve ereditare specificamente dalla
+   * Main della stessa data, non da una
+   * unità casuale.
+   */
+  const sameDateMainLive =
+    Object.values(
+      getLiveGames()
+    ).find(day =>
+      displayToISO(day?.date) === gameDate &&
+      (day.unit || 'main') === 'main'
+    );
+
+  const sameDateMainHistory =
+    (S.days || []).find(day =>
+      displayToISO(day?.date) === gameDate &&
+      (day.unit || 'main') === 'main'
+    );
+
+  const crazyDaySource =
+    sameDateMainLive ||
+    sameDateMainHistory ||
+    null;
+
+  const inheritedCrazyDay =
+    crazyDaySource?.crazyDay
+      ? JSON.parse(
+          JSON.stringify(
+            crazyDaySource.crazyDay
+          )
+        )
+      : null;
+
+  const newGame = {
+    date: gameDate,
+    unit,
+    guesses: [],
+    wrapTime: null,
+    wrapDate: null,
+    winner: null,
+    winners: [],
+    points: null,
+    noWinner: false,
+    penalties: [],
+    crazyDay: inheritedCrazyDay,
+    estWrap: null,
+    estWrapDate: null,
+    betCloseAt: null,
+    betCloseDate: null,
+    approvedAt: null,
+    approvedDate: null
+  };
+
+  if (!isLiveGamesObject(S.liveGames)) {
+    S.liveGames = {};
+  }
+
+  /*
+   * A questo punto non può più esistere
+   * una vecchia unità con la stessa chiave:
+   * le vecchie gameDate complete sono state
+   * archiviate e quelle incomplete vengono
+   * bloccate prima di arrivare qui.
+   */
+  S.liveGames[unit] =
+    newGame;
+
+  _activeLiveUnit =
+    unit;
+
+  S.today =
+    newGame;
+
+  S.activeUnit =
+    unit;
+
+  const saved =
+    await saveS();
+
+  if (!saved) {
+    _activeLiveUnit =
+      prevActiveLiveUnit;
+    restoreAfterFailedSave(prevS);
+    return false;
+  }
+
+  setActiveUnit(unit);
+
+  render();
+
+  return true;
+}
+
+function bindMain() {
+  bindLiveUnitSwitcher();
+  document
+  .getElementById('admin-logout-btn')
+  ?.addEventListener(
+    'click',
+    async () => {
+      if (LOCAL_TEST_MODE) {
+        toast(
+          'Local test admin',
+          'ok'
+        );
+        return;
+      }
+
+      try {
+        await signOut(auth);
+        toast('Signed out', 'ok');
+      } catch (e) {
+        console.error(
+          'Sign-out error:',
+          e
+        );
+        toast(
+          'Sign-out failed',
+          'err'
+        );
+      }
+    }
+  );
   document.getElementById('player-version-btn')?.addEventListener('click', openPlayerVersion);
   document.getElementById('export-backup-btn')?.addEventListener('click', exportProjectBackup);
   document.querySelectorAll('[data-final-recap-trigger]').forEach(btn => {
@@ -6988,103 +8375,12 @@ function bindMain() {
     });
   });
   document.querySelectorAll('.nav-btn').forEach(btn=>btn.addEventListener('click',()=>setMainTab(btn.dataset.tab)));
-  document.getElementById('new-day-btn')?.addEventListener('click', async () => {
-    const prevS = cloneState();
-
-    const completedToday =
-      S.today?.wrapTime
-        ? S.today
-        : null;
-
-    const previousGameDate =
-      completedToday
-        ? displayToISO(completedToday.date)
-        : null;
-
-    // La giornata TotoWrap cambia alle 05:00, non a mezzanotte.
-    const gameDate =
-      currentGameDateISO();
-
-    /*
-    * Il bonus multi-unit viene chiesto soltanto
-    * quando stiamo ABBANDONANDO il gameDate appena concluso.
-    *
-    * Non viene mai ricalcolato automaticamente
-    * sullo storico importato.
-    */
-    if (
-      completedToday &&
-      previousGameDate &&
-     previousGameDate !== gameDate &&
-      !hasMultiUnitBonusDecision(previousGameDate)
-    ) {
-      const candidates =
-        getMultiUnitBonusCandidates(previousGameDate);
-
-      if (candidates.length > 0) {
-        const decisions =
-          await requestMultiUnitBonusDecision(
-            previousGameDate,
-            candidates
-          );
-
-        applyMultiUnitBonusDecisions(
-          previousGameDate,
-          decisions
-        );
-      }
-    }
-
-    // Ora archiviamo la partita appena conclusa.
-    if (completedToday) {
-      S.days.push({ ...S.today });
-    }
-
-    // Se nello stesso gameDate esistono già partite concluse,
-    // la nuova diventa second, third, ecc.
-    const unit =
-      nextUnitForDate(gameDate);
-    const previousGameDateUnits = (S.days || []).filter(
-      day => displayToISO(day.date) === gameDate
+  document
+    .getElementById('new-day-btn')
+    ?.addEventListener(
+      'click',
+      createNewLiveUnit
     );
-
-    const inheritedCrazyDay =
-      previousGameDateUnits.length > 0
-        ? (
-            previousGameDateUnits[0].crazyDay
-              ? JSON.parse(JSON.stringify(previousGameDateUnits[0].crazyDay))
-              : null
-          )
-        : null;
-
-    S.today = {
-      date: gameDate,
-      unit,
-      guesses: [],
-      wrapTime: null,
-      winner: null,
-      winners: [],
-      points: null,
-      noWinner: false,
-      penalties: [],
-      crazyDay: inheritedCrazyDay,
-      estWrap: null,
-      estWrapDate: null,
-      betCloseAt: null,
-      betCloseDate: null,
-      approvedAt: null,
-      approvedDate: null
-    };
-
-    const saved = await saveS();
-
-    if (!saved) {
-      restoreAfterFailedSave(prevS);
-      return;
-    }
-
-    render();
-  });
   document.getElementById('parse-btn')?.addEventListener('click', showPreview);
   document.getElementById('chat-upload-input')?.addEventListener('change', e => {
     handleChatUpload(e.target.files?.[0]);
@@ -7112,6 +8408,12 @@ function bindMain() {
   document.getElementById('delete-day-btn')?.addEventListener('click', () => {
     deleteCurrentDayAndMatchingHistory();
   });
+  document
+    .getElementById('archive-unit-btn')
+    ?.addEventListener(
+      'click',
+      archiveCurrentLiveUnit
+    );
   document.getElementById('reset-btn')?.addEventListener('click',async ()=>{
     if(confirm('Reset all data?')){
       const prevS = cloneState();
@@ -7130,40 +8432,169 @@ function bindMain() {
   });
 }
 
-onAuthStateChanged(auth, user => {
-  currentUser = user;
-  authReady = true;
-  render();
-  maybeSaveTerritoryRuleMigration();
-});
-
-onSnapshot(STATE_REF, (snap) => {
-  _stateLoadFailed = false;
-  if(snap.exists()) {
-    S = normalizeState(snap.data());
-  } else {
-    S = normalizeState({});
-  }
-  if (recalculateCompletedResultsForCurrentBoundaryRule()) {
-    _territoryRuleMigrationPending = true;
-  }
-  storeBootPlayerNames();
-  syncCrazyDayBootLoader();
-  _stateReady = true;
-  render();
-  window.__TOTOWRAP_RECAP_STATE__ = JSON.parse(JSON.stringify(S));
-  window.__TOTOWRAP_RECAP_ACCURACY_GRAPH__ = playerName => {
-    const previousPlayer = _closenessPlayer;
-    _closenessPlayer = playerName;
-    const holder = document.createElement('div');
-    holder.innerHTML = renderBoardCloseness(getSortedPlayerRoster());
-    const graph = holder.querySelector('.closeness-graph');
-    _closenessPlayer = previousPlayer;
-    return graph ? graph.outerHTML : '';
+if (LOCAL_TEST_MODE) {
+  /*
+   * In locale non utilizziamo Firebase Auth.
+   * Creiamo soltanto un utente fittizio affinché
+   * l'interfaccia admin funzioni normalmente.
+   */
+  currentUser = {
+    uid: 'local-test-admin',
+    email: 'local@test'
   };
-  window.dispatchEvent(new CustomEvent('totowrap-recap-state-ready'));
-  maybeSaveTerritoryRuleMigration();
-}, (err) => {
-  console.error("Firestore error:", err);
-  if (!_stateReady) showConnectionError();
-});
+
+  authReady = true;
+} else {
+  onAuthStateChanged(auth, user => {
+    currentUser = user;
+    authReady = true;
+    render();
+    maybeSaveTerritoryRuleMigration();
+  });
+}
+
+if (LOCAL_TEST_MODE) {
+  /*
+   * LOCAL TEST MODE:
+   * carichiamo esclusivamente lo stato salvato
+   * nel browser e non apriamo alcun listener Firestore.
+   */
+  try {
+    const storedState =
+      localStorage.getItem(
+        LOCAL_TEST_STORAGE_KEY
+      );
+
+    S = storedState
+      ? normalizeState(
+          JSON.parse(storedState)
+        )
+      : normalizeState({});
+
+    _stateLoadFailed = false;
+    _stateReady = true;
+
+    storeBootPlayerNames();
+    syncCrazyDayBootLoader();
+
+    render();
+
+    window.__TOTOWRAP_RECAP_STATE__ =
+      JSON.parse(JSON.stringify(S));
+
+    window.__TOTOWRAP_RECAP_ACCURACY_GRAPH__ =
+      playerName => {
+        const previousPlayer =
+          _closenessPlayer;
+
+        _closenessPlayer =
+          playerName;
+
+        const holder =
+          document.createElement('div');
+
+        holder.innerHTML =
+          renderBoardCloseness(
+            getSortedPlayerRoster()
+          );
+
+        const graph =
+          holder.querySelector(
+            '.closeness-graph'
+          );
+
+        _closenessPlayer =
+          previousPlayer;
+
+        return graph
+          ? graph.outerHTML
+          : '';
+      };
+
+    window.dispatchEvent(
+      new CustomEvent(
+        'totowrap-recap-state-ready'
+      )
+    );
+  } catch (e) {
+    console.error(
+      'Local test state load error:',
+      e
+    );
+
+    S = normalizeState({});
+    _stateReady = true;
+    render();
+  }
+} else {
+  onSnapshot(STATE_REF, (snap) => {
+    _stateLoadFailed = false;
+
+    if (snap.exists()) {
+      S = normalizeState(snap.data());
+    } else {
+      S = normalizeState({});
+    }
+
+    if (
+      recalculateCompletedResultsForCurrentBoundaryRule()
+    ) {
+      _territoryRuleMigrationPending = true;
+    }
+
+    storeBootPlayerNames();
+    syncCrazyDayBootLoader();
+
+    _stateReady = true;
+    render();
+
+    window.__TOTOWRAP_RECAP_STATE__ =
+      JSON.parse(JSON.stringify(S));
+
+    window.__TOTOWRAP_RECAP_ACCURACY_GRAPH__ =
+      playerName => {
+        const previousPlayer =
+          _closenessPlayer;
+
+        _closenessPlayer =
+          playerName;
+
+        const holder =
+          document.createElement('div');
+
+        holder.innerHTML =
+          renderBoardCloseness(
+            getSortedPlayerRoster()
+          );
+
+        const graph =
+          holder.querySelector(
+            '.closeness-graph'
+          );
+
+        _closenessPlayer =
+          previousPlayer;
+
+        return graph
+          ? graph.outerHTML
+          : '';
+      };
+
+    window.dispatchEvent(
+      new CustomEvent(
+        'totowrap-recap-state-ready'
+      )
+    );
+
+    maybeSaveTerritoryRuleMigration();
+  }, (err) => {
+    console.error(
+      "Firestore error:",
+      err
+    );
+
+    if (!_stateReady) {
+      showConnectionError();
+    }
+  });
+}
