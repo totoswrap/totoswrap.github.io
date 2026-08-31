@@ -21,46 +21,43 @@
   let isFirstPhrase = true;
   const nameTag = name => `<span class="boot-player-name">${escapeHTML(name)}</span>`;
   const leadWithNameTag = (lead, name) => `<span class="boot-player-name">${escapeHTML(lead)} ${escapeHTML(name)}</span>`;
+  // ============================================================
+  // LOADER PHRASES
+  // Edit the text in this section to customise the loading screen.
+  // ============================================================
+
+  const FIXED_BOOT_PHRASES = [
+    '99% of players stop playing before winning. Keep gambling!',
+    'Never bet close to Giulia, or you will make her cry!',
+    'And today too, unfortunately, Labadessa lost at TotoWrap...',
+    'TotoWrap is love, TotoWrap is life.',
+    'La ludopatia è un problema solo se perdi!',
+    'You miss 100% of the bets you don’t place.',
+    'Your strategy is so confusing that it fooled even you.',
+    '<span class="boot-phrase-right">"Let me fly!"\n- Conor Kennedy</span>',
+    '<span class="boot-phrase-right">"Questa <u>non</u> è una dittatura!"</span>',
+    'I love the smell of TotoWrap in the morning',
+    'Facciamo un referendum?',
+    'Viva la Edocrazia!',
+    'Vita sprecata che sei...'
+  ];
+
+  const PLAYER_BOOT_PHRASES = [
+    name => `Dude, let's focus. There's no way ${nameTag(name)} is better than you!`,
+    name => `Bet responsibly. Unless you’re ${nameTag(name)}, then just don’t bet.`,
+    name => `Today’s forecast: 100% chance of ${nameTag(name)} forgetting to bet.`,
+    name => `${nameTag(name)} continua così, il tuo talento è nascosto benissimo.`,
+    name => `${leadWithNameTag('Anche oggi', name)} ha fatto un bel buco nell’acqua.`
+  ];
+
   const phrases = [
-    () => '99% of players stop playing before winning. Keep gambling!',
-    () => 'Che ti sei perso due Range Rover?',
-    () => 'Never bet the same time as Beatrice K. or you will make her cry!',
-    () => 'E anche oggi, purtroppo, Luigi ha perso al TotoWrap...',
-    () => 'TotoWrap is love, TotoWrap is life.',
-    () => 'La ludopatia è un problema solo se perdi!',
-    () => 'You miss 100% of the bets you don’t place.',
-    () => 'Your strategy is so confusing that it fooled even you.',
-    () => '<span class="boot-phrase-right">"Se oggi non vinco, mi licenzio"\n- Marco Mattioli</span>',
-    () => '<span class="boot-phrase-right">"Questa <u>non</u> è una dittatura!"</span>',
-    () => 'I love the smell of TotoWrap in the morning',
-    () => 'Facciamo un referendum?',
-    () => 'Viva la Edocrazia!',
-    () => 'Vita sprecata che sei...',
-    () => {
+    ...FIXED_BOOT_PHRASES.map(text => () => text),
+
+    ...PLAYER_BOOT_PHRASES.map(makePhrase => () => {
       const storedNames = getPlayerNames();
       const name = storedNames[randomInt(storedNames.length)];
-      return name ? `Dude, let's focus. There's no way ${nameTag(name)} is better than you!` : '';
-    },
-    () => {
-      const storedNames = getPlayerNames();
-      const name = storedNames[randomInt(storedNames.length)];
-      return name ? `Bet responsibly. Unless you’re ${nameTag(name)}, then just don’t bet.` : '';
-    },
-    () => {
-      const storedNames = getPlayerNames();
-      const name = storedNames[randomInt(storedNames.length)];
-      return name ? `Today’s forecast: 100% chance of ${nameTag(name)} blaming lag.` : '';
-    },
-    () => {
-      const storedNames = getPlayerNames();
-      const name = storedNames[randomInt(storedNames.length)];
-      return name ? `${nameTag(name)} continua così, il tuo talento è nascosto benissimo.` : '';
-    },
-    () => {
-      const storedNames = getPlayerNames();
-      const name = storedNames[randomInt(storedNames.length)];
-      return name ? `${leadWithNameTag('Anche oggi', name)} ha fatto un bel buco nell’acqua.` : '';
-    }
+      return name ? makePhrase(name) : '';
+    })
   ];
 
   function escapeHTML(value) {

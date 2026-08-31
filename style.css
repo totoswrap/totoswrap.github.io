@@ -134,11 +134,12 @@ body::before {
   transform: translate(-50%, -50%);
   width: 320px;
   height: 320px;
-  background-image: url('imgs/tunacan.png');
+  background-image: url('imgs/totoswrap.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   filter: brightness(95%);
+  opacity: 0.18;
   z-index: 0;
   pointer-events: none;
 }
@@ -744,7 +745,8 @@ input::placeholder, textarea::placeholder { color: var(--dim); }
 .board-rank-1 { color:#d6ad45; }
 .board-rank-2 { color:#c5ccd3; }
 .board-rank-3 { color:#b87955; }
-.board-player-name { min-width:0; display:block; overflow:visible; border:0; background:none; padding:0; color:var(--dim); font-family:'Alte Haas Grotesk', sans-serif; font-size:1.18rem; font-weight:500; line-height:1; text-align:left; white-space:nowrap; cursor:pointer; }
+.board-player-name { min-width:0; display:inline-flex; align-items:center; gap:5px; overflow:visible; border:0; background:none; padding:0; color:var(--dim); font-family:'Alte Haas Grotesk', sans-serif; font-size:1.18rem; font-weight:500; line-height:1; text-align:left; white-space:nowrap; cursor:pointer; }
+.board-player-icon { width:18px; height:18px; flex:0 0 18px; object-fit:contain; }
 .board-player-wins { width:64px; justify-self:start; color:var(--dim); font-family:'Alte Haas Grotesk', sans-serif; font-size:.62rem; line-height:1; white-space:nowrap; text-align:left; }
 .board-player-points { width:100%; min-width:42px; display:inline-flex; align-items:baseline; justify-content:flex-end; gap:3px; font-family:'Alte Haas Grotesk', sans-serif; font-weight:bold; font-size:1.25rem; line-height:1; text-align:right; white-space:nowrap; }
 .board-player-points strong { font:inherit; line-height:1; }
@@ -1059,4 +1061,13 @@ html.android-glass-fallback :is(.result-share-panel,.admin-dialog-panel) {
   background:linear-gradient(135deg,rgba(66,84,119,.98),rgba(38,55,89,.99)),#263759;
   -webkit-backdrop-filter:none;
   backdrop-filter:none;
+}
+
+.player-name-icon {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin-left: 4px;
+  object-fit: contain;
+  vertical-align: -4px;
 }

@@ -60,6 +60,63 @@ let _toastTO = null;
 let currentUser = null;
 let authReady = false;
 const LOGO_STEP_SEC = 12.5;
+
+const CUSTOM_UI_TEXT = {
+  noWinner: "Nobody wins, everybody's happy!",
+
+  forgotBet:
+    'This assassin forgot to bet today',
+
+  playerCountSingular:
+    'ASSASSIN PLAYING',
+
+  playerCountPlural:
+    'ASSASSINS PLAYING',
+
+  beforeFirstTerritory: time =>
+    `Ouch!<br>Everyone will lose if we wrap before ${time}`,
+
+  nextElimination: (names, time) =>
+    `Next elimination ${names} in ${time}`,
+
+  finalTerritory: (names, time) => `
+      <div>
+        C'mon ${names}, it's not over until it's over!<br>
+        Just keep running little assassin, you have ${time} left!
+      </div>
+    `,
+
+  afterLastTerritory:
+    'Well, that was awkward...',
+
+  fridayBanner:
+    'Have a good weekend and get some rest, even though you spent the whole workweek betting, as usual!',
+
+  mondayBanner:
+    "A full week of betting is waiting for you, but let's pretend to work so Lawrence doesn't get mad!",
+
+  noWinnerBanner:
+    'That was a real slaughter!',
+
+  wrapOutsideAllBets: wrapTime =>
+    `Wrap at ${wrapTime} was outside all bets`
+};
+
+const CUSTOM_UI_ASSETS = {
+  logoPrimary: 'imgs/totowrap.png',
+  logoSecondary: 'imgs/totoswrap.png',
+
+  playerFallback: 'imgs/assassin.png',
+
+  shareWatermark: 'imgs/assassin.png',
+
+  accuracyWinMarker: 'imgs/assassin.png',
+
+  playerNameIcon: 'imgs/assassinalpha.png',
+  playerGuessIcon: 'imgs/assassinalphaGUESS.png',
+  playerOutIcon: 'imgs/assassinalphaOUT.png',
+};
+
 const _logoStartedAt = performance.now();
 let _lastConfettiWinner = null;
 let _boardView = 'list';
@@ -780,10 +837,10 @@ function get3DLogoHTML() {
   return `
   <div class="logo-3d-container ${mode}" style="--logo-delay:-${elapsed.toFixed(3)}s">
     <div class="logo-3d-inner">
-      <img src="imgs/tonnowrap.png" class="face face-1">
-      <img src="imgs/tuna.png"      class="face face-2">
-      <img src="imgs/totowrap.png"  class="face face-3">
-      <img src="imgs/tuna.png"      class="face face-4">
+      <img src="${CUSTOM_UI_ASSETS.logoPrimary}" class="face face-1">
+      <img src="${CUSTOM_UI_ASSETS.logoSecondary}" class="face face-2">
+      <img src="${CUSTOM_UI_ASSETS.logoPrimary}" class="face face-3">
+      <img src="${CUSTOM_UI_ASSETS.logoSecondary}" class="face face-4">
     </div>
   </div>`;
 }
@@ -798,7 +855,7 @@ function formatNames(names) {
 
 function faceIconSrc(name) {
   const fileBase = String(name || '').replace(/[.\s]/g, '');
-  return fileBase ? `faceicons/${encodeURIComponent(fileBase)}.png` : 'imgs/tunacan.png';
+  return fileBase ? `faceicons/${encodeURIComponent(fileBase)}.png` : CUSTOM_UI_ASSETS.playerFallback;
 }
 
 function getLatestWinningHistoryEntry() {
@@ -933,7 +990,7 @@ function renderPreviousWinnerTag(day) {
   if (!validNames.length) return '';
 
   const plainLabel = `LAST ${validNames.length > 1 ? 'WINNERS' : 'WINNER'}: ${formatNames(validNames)} 🦈`;
-  const htmlLabel = `LAST ${validNames.length > 1 ? 'WINNERS' : 'WINNER'}: ${formatSafeNames(validNames)} 🦈`;
+  const htmlLabel = `LAST ${validNames.length > 1 ? 'WINNERS' : 'WINNER'}: ${formatSafeNames(validNames)} <img class="player-name-icon" src="${esc(CUSTOM_UI_ASSETS.playerNameIcon)}" alt="">`;
   const marqueeItems = Array.from({ length: 4 }, (_, idx) =>
     `<span class="prev-winner-item"${idx ? ' aria-hidden="true"' : ''}>${htmlLabel}</span>`
   ).join('');
@@ -2125,7 +2182,7 @@ function parsePaste(text) {
 function formatConfirmedBetsClipboard(dayNumber, wrapTime, guesses, dayContext) {
   const rows = sortedGuesses(guesses.filter(g => g.time), dayContext)
     .map(g => `${g.name} - ${g.time}`);
-  return [`_TonnoWrap recap - ${displayDayLabel(dayNumber)}_`, '', `*Wrap ${wrapTime}*`, '', ...rows].join('\n');
+  return [`_TotoSWrap recap - ${displayDayLabel(dayNumber)}_`, '', `*Wrap ${wrapTime}*`, '', ...rows].join('\n');
 }
 
 async function copyTextToClipboard(text) {
@@ -2387,7 +2444,7 @@ function calcWinner(guesses, wrapHMSInput, day=S.today) {
   
   if (!winningSlice) {
     return {
-      winner: "Nobody wins, everytuna's happy!",
+      winner: CUSTOM_UI_TEXT.noWinner,
       winners: [],
       points: 0,
       noWinner: true,
@@ -2653,7 +2710,7 @@ function tickClock() {
   const nextBoundary = slices.find(s => s.end >= cur);
   const firstTerritoryStart = slices[0]?.start;
   if (Number.isFinite(firstTerritoryStart) && cur < firstTerritoryStart) {
-    countdownEl.innerHTML = `Ouch!<br>Everyone will lose if we wrap before ${secToHMS(firstTerritoryStart - cur)}`;
+    countdownEl.innerHTML = CUSTOM_UI_TEXT.beforeFirstTerritory(secToHMS(firstTerritoryStart - cur));
     countdownEl.style.display = 'block';
     refreshStatusBadges();
     return;
@@ -2668,7 +2725,7 @@ function tickClock() {
     
     const styledNames = nextBoundary.names.map(name => `<span class="countdown-elimination-name">${esc(name)}</span>`);
     
-    countdownEl.innerHTML = `Next elimination ${formatNames(styledNames)} in ${secToHMS(diff)}`;
+    countdownEl.innerHTML = CUSTOM_UI_TEXT.nextElimination(formatNames(styledNames), secToHMS(diff));
     countdownEl.style.display = 'block';
   } else if (isFinalTerritory) {
   // PHASE 2: Everyone else is out - The "Lucky Day"
@@ -2676,15 +2733,10 @@ function tickClock() {
     const styledWinners = winnersToday.map(name => `<span class="countdown-name">${esc(name)}</span>`);
     const diff = Math.max(0, (nextBoundary.end + 1) - cur);
     
-    countdownEl.innerHTML = `
-      <div>
-        C'mon ${formatNames(styledWinners)}, it's not over until it's over!<br>
-        Just keep swimming little tuna, you have ${secToHMS(diff)} left!
-      </div>
-    `;
+    countdownEl.innerHTML = CUSTOM_UI_TEXT.finalTerritory(formatNames(styledWinners), secToHMS(diff));
     countdownEl.style.display = 'block';
   } else {
-    countdownEl.innerHTML = 'Well, that was awkward...';
+    countdownEl.innerHTML = CUSTOM_UI_TEXT.afterLastTerritory;
     countdownEl.style.display = 'block';
   }
   
@@ -2716,20 +2768,24 @@ function refreshStatusBadges() {
       if (el instanceof HTMLButtonElement) el.disabled = true;
       if (nameTextEl && nameEmojiEl) {
         nameTextEl.textContent = g.name;
-        nameEmojiEl.textContent = ' 🍣';
+        nameEmojiEl.innerHTML = `<img class="player-name-icon" src="${esc(CUSTOM_UI_ASSETS.playerOutIcon)}" alt="">`;
       } else {
-        nameEl.textContent = g.name + ' 🍣';
+        nameEl.innerHTML = `${esc(g.name)}<img class="player-name-icon" src="${esc(CUSTOM_UI_ASSETS.playerOutIcon)}" alt="">`;
       }
     }
     else{
       playerRow?.classList.remove('territory-ended');
       el.className = el instanceof HTMLButtonElement && IS_ADMIN ? 'badge b-in current-bet-edit-action' : 'badge b-in';
       el.textContent='IN';
+      const playerStateIcon = g.time
+        ? CUSTOM_UI_ASSETS.playerNameIcon
+        : CUSTOM_UI_ASSETS.playerGuessIcon;
+
       if (nameTextEl && nameEmojiEl) {
         nameTextEl.textContent = g.name;
-        nameEmojiEl.textContent = ' 🐟';
+        nameEmojiEl.innerHTML = `<img class="player-name-icon" src="${esc(playerStateIcon)}" alt="">`;
       } else {
-        nameEl.textContent = g.name + ' 🐟';
+        nameEl.innerHTML = `${esc(g.name)}<img class="player-name-icon" src="${esc(playerStateIcon)}" alt="">`;
       }
     }
   });
@@ -3143,7 +3199,7 @@ function renderDesktopProjectProgress() {
         </span>
       </span>
       <span class="desktop-project-progress-face desktop-project-progress-back">
-        <img src="${esc(faceIconSrc(winnerName))}" alt="" onerror="this.onerror=null;this.src='imgs/tunacan.png'">
+        <img src="${esc(faceIconSrc(winnerName))}" alt="" onerror="this.onerror=null;this.src='${esc(CUSTOM_UI_ASSETS.playerFallback)}'">
       </span>
     </span>
   </button>`;
@@ -3217,12 +3273,12 @@ function renderFridayWrapBanner(day) {
   const startDate = dateFromISO(startDateISO);
   const daysSinceStart = dateDiffDays(startDateISO, localDateISO());
   if (!startDate || startDate.getDay() !== 5 || daysSinceStart < 0 || daysSinceStart > 2) return '';
-  return `<div class="weekday-message-banner">Have a good weekend and get some rest, even though you spent the whole workweek betting, as usual!</div>`;
+  return `<div class="weekday-message-banner">${CUSTOM_UI_TEXT.fridayBanner}</div>`;
 }
 
 function renderMondayWaitingBanner(day) {
   if (new Date().getDay() !== 1) return '';
-  return `<div class="weekday-message-banner">A full week of betting is waiting for you, but let's pretend to work so Colette doesn't get mad!</div>`;
+  return `<div class="weekday-message-banner">${CUSTOM_UI_TEXT.mondayBanner}</div>`;
 }
 
 function formatSignedPoints(value) {
@@ -3297,8 +3353,8 @@ function renderCompletedToday(t, canStartNextDay=false) {
     ${unitSwitcher}
       <${winnerTag} class="winner-banner no-winner-banner">
         <span class="winner-sub">${esc(unitLabel)} Complete</span>
-        <span class="winner-name" style="font-size: 1.35rem; color: var(--red); white-space: nowrap;">That was a real mattanza!</span>
-	        <span class="winner-pts">Wrap at ${esc(t.wrapTime)} was outside all bets</span>
+        <span class="winner-name" style="font-size: 1.35rem; color: var(--red); white-space: nowrap;">${CUSTOM_UI_TEXT.noWinnerBanner}</span>
+	        <span class="winner-pts">${CUSTOM_UI_TEXT.wrapOutsideAllBets(esc(t.wrapTime))}</span>
       </${winnerCloseTag}>
       ${renderCrazyDayIndicator(t)}
       ${fridayBanner}
@@ -3311,13 +3367,13 @@ function renderCompletedToday(t, canStartNextDay=false) {
           return `
           <div class="row">
             <div class="row-name" data-today-accuracy-player="${esc(g.name)}">
-	              <span>${esc(g.name)} ${g.time ? '🍣' : '🎣'}</span>
+	              <span>${esc(g.name)}<img class="player-name-icon" src="${esc(g.time ? CUSTOM_UI_ASSETS.playerOutIcon : CUSTOM_UI_ASSETS.playerGuessIcon)}" alt=""></span>
               ${g.time ? st.pill : ''}
             </div>
             ${g.time ? `
 	              <div class="row-time">${esc(g.time)}</div>
 	              <div class="badge ${penaltyStatus ? penaltyStatus.cls : 'b-out'}">${penaltyStatus ? penaltyStatus.text : 'OUT'}</div>
-            ` : `<div class="badge b-missing${penalty?.reason === 'missed-bet' ? ' b-missing-penalty' : ''}">This tuna forgot to bet today</div>`}
+            ` : `<div class="badge b-missing${penalty?.reason === 'missed-bet' ? ' b-missing-penalty' : ''}">${CUSTOM_UI_TEXT.forgotBet}</div>`}
           </div>`;
         }).join('')}
         </div>
@@ -3345,13 +3401,19 @@ function renderCompletedToday(t, canStartNextDay=false) {
       const isWinner = todayWinnerNames.includes(g.name);
       const penalty = penaltiesByPlayer.get(nameKey(g.name));
       const penaltyStatus = todayPenaltyStatus(penalty);
-      const displayEmoji = isWinner ? '🦈' : (!g.time ? '🎣' : '🍣');
+      const resultPlayerIcon = isWinner
+        ? CUSTOM_UI_ASSETS.playerNameIcon
+        : (
+            g.time
+              ? CUSTOM_UI_ASSETS.playerOutIcon
+              : CUSTOM_UI_ASSETS.playerGuessIcon
+          );
       const prob = g.time ? getWinProbability(g.name, t.guesses, t) : null;
 
       return `
       <div class="row${isWinner ? ' golden-winner-row' : ''}">
         <div class="row-name" data-today-accuracy-player="${esc(g.name)}">
-	          <span><span${isWinner ? ' class="today-result-winner-name"' : ''}>${esc(g.name)}</span> ${displayEmoji}</span>
+	          <span><span${isWinner ? ' class="today-result-winner-name"' : ''}>${esc(g.name)}</span><img class="player-name-icon" src="${esc(resultPlayerIcon)}" alt=""></span>
           ${g.time ? st.pill : ''}
         </div>
         
@@ -3365,7 +3427,7 @@ function renderCompletedToday(t, canStartNextDay=false) {
           <div class="badge ${isWinner ? 'b-win' : (penaltyStatus ? penaltyStatus.cls : 'b-out')}">
             ${isWinner ? 'WIN' : (penaltyStatus ? penaltyStatus.text : 'OUT')}
           </div>
-        ` : `<div class="badge b-missing${penalty?.reason === 'missed-bet' ? ' b-missing-penalty' : ''}">This tuna forgot to bet today</div>`}
+        ` : `<div class="badge b-missing${penalty?.reason === 'missed-bet' ? ' b-missing-penalty' : ''}">${CUSTOM_UI_TEXT.forgotBet}</div>`}
       </div>`;
     }).join('')}
     </div>
@@ -3407,7 +3469,7 @@ function getShareResultInfo(day, dayNumber=null) {
 function renderShareResultCard(info) {
   return `<article class="result-share-card${info.noWinner ? ' no-winner' : ''}">
     <div class="result-share-top">
-      <div class="result-share-brand"><img src="imgs/totowrap.png" alt="TotoWrap"></div>
+      <div class="result-share-brand"><img src="${CUSTOM_UI_ASSETS.logoPrimary}" alt="TotoWrap"></div>
       <div class="result-share-meta"><span>${esc(info.dayLabel)}</span><span>-</span><span>Estimated Wrap ${esc(info.estWrap)}</span></div>
     </div>
     <div class="result-share-main">
@@ -3513,7 +3575,7 @@ async function renderShareResultBlob() {
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, imageSize, imageSize);
 
-  const canImg = await loadShareImage('imgs/tunacan.png');
+  const canImg = await loadShareImage(CUSTOM_UI_ASSETS.shareWatermark);
   if (canImg) {
     ctx.save();
     ctx.globalAlpha = .14;
@@ -3528,7 +3590,7 @@ async function renderShareResultBlob() {
   ctx.stroke();
 
   ctx.textBaseline = 'middle';
-  const logoImg = await loadShareImage('imgs/totowrap.png');
+  const logoImg = await loadShareImage(CUSTOM_UI_ASSETS.logoPrimary);
   if (logoImg) {
     ctx.drawImage(logoImg, 80, 84, 220, 69);
   } else {
@@ -3642,7 +3704,7 @@ function openStandingsExportDialog() {
   if (!IS_ADMIN || !currentUser || _tab !== 'board' || _boardView !== 'list') return;
   openAdminDialog({
     title: 'Save Final Standings',
-    copy: 'Download a high-resolution transparent PNG using the approved TonnoWrap leaderboard layout.',
+    copy: 'Download a high-resolution transparent PNG using the approved TotoSWrap leaderboard layout.',
     showClose: false,
     body: `<div class="admin-dialog-split">
       <button class="admin-dialog-action undo" type="button" data-admin-dialog-close>Cancel</button>
@@ -3660,7 +3722,7 @@ async function downloadStandingsExport() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `tonnowrap-final-standings-${localDateISO().replace(/-/g, '')}.png`;
+    link.download = `totoswrap-final-standings-${localDateISO().replace(/-/g, '')}.png`;
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -3679,7 +3741,6 @@ function renderActiveTodayRows(t, sg, out, slices) {
   return sg.map(g => {
     const st = getPreviousStreak(g.name);
     const isOut = out.has(g.name);
-    const displayEmoji = !g.time ? '🎣' : (isOut ? '🍣' : '🐟');
     const playerIdx = t.guesses.indexOf(g);
     const playerId = playerDomId(playerIdx);
     const prob = g.time ? getWinProbability(g.name, t.guesses, t) : null;
@@ -3690,7 +3751,7 @@ function renderActiveTodayRows(t, sg, out, slices) {
     <div class="row${boundaryInfo ? ' row-with-boundary' : ''}${isOut ? ' territory-ended' : ''}">
       <div class="row-name row-name-stack${activeNames.has(g.name) ? ' territory-active' : ''}" data-today-accuracy-player="${esc(g.name)}">
         <div class="row-name-main">
-          <span id="name-span-${playerId}"><span class="today-live-name-text">${esc(g.name)}</span><span class="today-live-name-emoji"> ${displayEmoji}</span></span>
+          <span id="name-span-${playerId}"><span class="today-live-name-text">${esc(g.name)}</span><span class="today-live-name-emoji"><img class="player-name-icon" src="${esc(isOut ? CUSTOM_UI_ASSETS.playerOutIcon : (!g.time ? CUSTOM_UI_ASSETS.playerGuessIcon : CUSTOM_UI_ASSETS.playerNameIcon))}" alt=""></span></span>
           ${g.time ? st.pill : ''}
         </div>
         ${boundaryInfo ? `<div class="row-boundary">${boundaryInfo}</div>` : ''}
@@ -3707,8 +3768,8 @@ function renderActiveTodayRows(t, sg, out, slices) {
           ? `<button class="badge b-in current-bet-edit-action" id="st-${playerId}" type="button" data-current-bet-player="${esc(g.name)}" aria-label="Edit ${esc(g.name)} bet">IN</button>`
           : `<div class="badge ${isOut ? 'b-out' : 'b-in'}" id="st-${playerId}">${isOut ? 'OUT' : 'IN'}</div>`}
       ` : IS_ADMIN && S.today && !S.today.wrapTime
-        ? `<button class="badge b-missing missing-bet-action" type="button" data-current-bet-player="${esc(g.name)}">This tuna forgot to bet today</button>`
-        : `<div class="badge b-missing">This tuna forgot to bet today</div>`}
+        ? `<button class="badge b-missing missing-bet-action" type="button" data-current-bet-player="${esc(g.name)}">${CUSTOM_UI_TEXT.forgotBet}</button>`
+        : `<div class="badge b-missing">${CUSTOM_UI_TEXT.forgotBet}</div>`}
     </div>`;
   }).join('');
 }
@@ -4328,7 +4389,7 @@ function renderBoardCloseness(pl) {
   const markerHtml = points.map(point => {
     const pos = pointPosition(point);
     const marker = point.won
-      ? '<img class="closeness-win-marker" src="imgs/tuna.png" alt="" aria-hidden="true">'
+      ? `<img class="closeness-win-marker" src="${esc(CUSTOM_UI_ASSETS.accuracyWinMarker)}" alt="" aria-hidden="true">`
       : `<span class="closeness-dot" style="background:${colorOf(point.name)};"></span>`;
     return `<a class="closeness-marker" href="#history-${encodeURIComponent(point.date)}" data-closeness-date="${esc(point.date)}" data-closeness-unit="${esc(point.unit)}" style="left:${pos.left.toFixed(2)}%; top:${pos.top.toFixed(2)}%;" title="${esc(point.name)} - ${esc(formatBoardExactCompactGap(point.gap))} off on ${esc(displayDayLabel(point.day + 1))}" aria-label="Open ${esc(displayDayLabel(point.day + 1))} in history">
       ${marker}
@@ -4476,7 +4537,7 @@ function renderBoard(view=_boardView) {
   return `<div class="board-player${isOpen ? ' open' : ''}">
     <div class="board-row">
       <div class="board-rank${medalRankClass}">${rank}</div>
-      <button class="board-player-name" type="button" data-board-player="${esc(openKey)}">${esc(p.name)}</button>
+      <button class="board-player-name" type="button" data-board-player="${esc(openKey)}"><span>${esc(p.name)}</span><img class="board-player-icon" src="${esc(CUSTOM_UI_ASSETS.playerNameIcon)}" alt=""></button>
       <div class="board-player-wins">${wins} ${countWord(wins, 'game', 'games')} won</div>
       <div class="board-player-points accent"><strong>${score}</strong><span class="mono dim">${countWord(score, 'pt', 'pts')}</span></div>
     </div>
@@ -4487,7 +4548,11 @@ function renderBoard(view=_boardView) {
     pl.filter(player => player.active !== false).length;
 
   return `<div class="card board-fixed-card board-standings-card">${toolbar}
-    <div class="standings-player-count">${activePlayerCount} ${countWord(activePlayerCount, 'TUNA PLAYING', 'TUNAS PLAYING')}</div>
+    <div class="standings-player-count">${activePlayerCount} ${countWord(
+      activePlayerCount,
+      CUSTOM_UI_TEXT.playerCountSingular,
+      CUSTOM_UI_TEXT.playerCountPlural
+    )}</div>
     <div class="standings-scroll-list">${standingsRows}</div>
   </div>`;
 }
@@ -7316,7 +7381,7 @@ function renderHistory() {
                 ` : penaltyPoints ? `
                   <div class="badge b-history-forgot">Forgot to bet</div>
                   <div class="badge b-penalty">${compactSignedPoints(penaltyPoints)}</div>
-                ` : `<div class="badge b-missing">This tuna forgot to bet today</div>`}
+                ` : `<div class="badge b-missing">${CUSTOM_UI_TEXT.forgotBet}</div>`}
               </div>`;
             }).join('')}
           </div>
@@ -7374,7 +7439,7 @@ function renderHistory() {
             ` : penaltyPoints ? `
               <div class="badge b-history-forgot">Forgot to bet</div>
               <div class="badge b-penalty">${compactSignedPoints(penaltyPoints)}</div>
-            ` : `<div class="badge b-missing">This tuna forgot to bet today</div>`}
+            ` : `<div class="badge b-missing">${CUSTOM_UI_TEXT.forgotBet}</div>`}
           </div>`;
         }).join('')}
       </div>
@@ -7598,7 +7663,7 @@ async function showPreview() {
           ${g.time ? `
             <input type="text" class="bet-time-input" id="bet-time-${g._previewIdx}" value="${esc(g.time)}" placeholder="hh:mm" inputmode="text" maxlength="5" aria-label="${esc(g.name)} bet time">
             <input type="text" class="bet-date-input" id="bet-date-${g._previewIdx}" value="${esc(displayDate(g.date) || g.date)}" placeholder="dd/mm/yyyy" inputmode="numeric" maxlength="10" aria-label="${esc(g.name)} bet date">
-          ` : `<div class="badge b-missing">This tuna forgot to bet today</div>`}
+          ` : `<div class="badge b-missing">${CUSTOM_UI_TEXT.forgotBet}</div>`}
         </div>`;
       }).join('')}
     </div>

@@ -367,7 +367,7 @@
   }
   function finalStandingsImageFrame(data) {
     if (data.finalStandingsImageSrc) {
-      return `<div class="final-recap-standings-image-frame" data-final-standings-image><img class="final-recap-standings-image" src="${esc(data.finalStandingsImageSrc)}" alt="Final TonnoWrap standings"></div>`;
+      return `<div class="final-recap-standings-image-frame" data-final-standings-image><img class="final-recap-standings-image" src="${esc(data.finalStandingsImageSrc)}" alt="Final TotoSWrap standings"></div>`;
     }
     return '<div class="final-recap-standings-image-frame" data-final-standings-image><span>Could not create final standings image.</span></div>';
   }
@@ -506,7 +506,7 @@
         </div>`
       : '<div class="final-recap-empty">Nobody landed an exact bet.</div>';
     return [
-      screen('TonnoWrap final recap',openingTitle,openingCopy,'','final-recap-opening-screen'),
+      screen('TotoSWrap final recap',openingTitle,openingCopy,'','final-recap-opening-screen'),
       screen('The project in numbers',projectDayTitle,'',`<div class="final-recap-stat-grid">${stat(players,word(players,'Tuna played','Tunas played'))}${stat(data.totalBets,word(data.totalBets,'Bet placed','Bets placed'))}${stat(data.totalForgot,word(data.totalForgot,'Forgotten bet','Forgotten bets'))}</div>`),
       screen('Perfect timing',`<span class="final-recap-number">${data.exactDays}</span> exact ${word(data.exactDays,'bet','bets')}`,'',exactCards),
       screen('Nobody won',`<span class="final-recap-number">${data.noWinnerEntries.length}</span> no-winner ${word(data.noWinnerEntries.length,'day','days')}`,'Expected wrap compared with the official wrap.',noWinnerRows(data.noWinnerEntries)),
@@ -842,7 +842,7 @@
     const button = document.createElement('button');
     button.className = 'final-recap-entry';
     button.type = 'button';
-    button.textContent = 'View TonnoWrap Recap';
+    button.textContent = 'View TotoSWrap Recap';
     button.addEventListener('click', openRecap);
     document.body.appendChild(button);
   }

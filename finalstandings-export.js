@@ -193,7 +193,7 @@
     const zeroNames = entries.filter(entry => entry.score <= 0).map(entry => entry.name.toUpperCase());
 
     if (!options.omitLogo) {
-      const logo = await loadImage(options.logoSrc || 'imgs/tonnowrapbig.png');
+      const logo = await loadImage(options.logoSrc || 'imgs/totoswrapbig.png');
       if (logo) {
         const logoWidth = 860;
         const logoHeight = logoWidth * logo.height / logo.width;
@@ -202,7 +202,7 @@
         ctx.fillStyle = yellow;
         ctx.textAlign = 'center';
         ctx.font = "bold 150px 'Alte Haas Grotesk', sans-serif";
-        ctx.fillText('TonnoWrap', canvas.width / 2, 300);
+        ctx.fillText('TotoSWrap', canvas.width / 2, 300);
       }
     }
 
