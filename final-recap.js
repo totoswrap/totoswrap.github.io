@@ -375,7 +375,11 @@
         if (!winners.has(guess.name) && gap !== null) {
           if (possiblyWrongWithinSec(guess.name,day,60)) player.closeWrong += 1;
           const territoryGap = wrongTerritoryGap(guess.name,day);
-          if (territoryGap !== null && (!closestWrong || territoryGap < closestWrong.gap)) {
+          if (
+            String(day?.date || day?.approvedDate || '') >= '2026-08-24' &&
+            territoryGap !== null &&
+            (!closestWrong || territoryGap < closestWrong.gap)
+          ) {
             closestWrong = {...item,gap:territoryGap};
           }
         }
