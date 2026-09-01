@@ -59,6 +59,18 @@
     if (explicitDate && baseDate) return dayDiff(baseDate, explicitDate) * DAY_SECONDS + sec;
     return sec <= start ? sec + DAY_SECONDS : sec;
   };
+  const alignClockSecToReference = (time, referenceSec) => {
+    const sec = clockSec(time);
+    if (sec === null || referenceSec === null) return null;
+    const candidates = [sec - DAY_SECONDS, sec, sec + DAY_SECONDS];
+    return candidates.reduce((best, candidate) =>
+      Math.abs(candidate - referenceSec) < Math.abs(best - referenceSec) ? candidate : best
+    );
+  };
+  const wrapTimelineSec = day =>
+    gameSec(day?.wrapTime, day, day?.wrapDate || null);
+  const betTimelineSec = (guess, referenceSec) =>
+    alignClockSecToReference(guess?.time, referenceSec);
   const betGap = (guess, day) => {
     if (day?.noWinner) {
       const betClock = clockSec(guess?.time);
@@ -67,14 +79,14 @@
       const raw = Math.abs(betClock - wrapClock);
       return Math.min(raw,DAY_SECONDS - raw);
     }
-    const bet = gameSec(guess?.time, day, guess?.date || null);
-    const wrap = gameSec(day?.wrapTime, day);
+    const wrap = wrapTimelineSec(day);
+    const bet = betTimelineSec(guess, wrap);
     return bet === null || wrap === null ? null : Math.abs(bet - wrap);
   };
   const betMinuteGap = (guess, day) => {
     if (!guess?.time || !day?.wrapTime) return null;
-    const bet = gameSec(guess.time, day, guess.date || null);
-    const wrap = gameSec(day.wrapTime, day);
+    const wrap = wrapTimelineSec(day);
+    const bet = betTimelineSec(guess, wrap);
     if (bet === null || wrap === null) return null;
     const betEnd = bet + 59;
     if (wrap >= bet && wrap <= betEnd) return 0;
@@ -85,10 +97,12 @@
     const guess = (day?.guesses || []).find(item => item.name === name);
     return betMinuteGap(guess, day) === 0;
   };
-  const territoryBoundaries = day => {
+  const territoryBoundaries = (day, referenceSec=null) => {
     const valid = (day?.guesses || []).filter(guess => guess?.time).map(guess => ({
       name:guess.name,
-      sec:gameSec(guess.time,day,guess.date || null)
+      sec:referenceSec === null
+        ? gameSec(guess.time,day,guess.date || null)
+        : betTimelineSec(guess,referenceSec)
     })).filter(guess => guess.sec !== null).sort((a,b) => a.sec-b.sec);
     const groups = [];
     valid.forEach(guess => {
@@ -103,8 +117,8 @@
     }));
   };
   const wrongTerritoryGap = (name, day) => {
-    const wrap = gameSec(day?.wrapTime,day);
-    const slice = territoryBoundaries(day).find(item => item.names.includes(name));
+    const wrap = wrapTimelineSec(day);
+    const slice = territoryBoundaries(day,wrap).find(item => item.names.includes(name));
     if (wrap === null || !slice || (wrap >= slice.start && wrap <= slice.end)) return null;
     return wrap < slice.start ? slice.start - wrap : wrap - slice.end;
   };
