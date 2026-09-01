@@ -97,7 +97,22 @@
     const guess = (day?.guesses || []).find(item => item.name === name);
     return betMinuteGap(guess, day) === 0;
   };
+  const territoryCalculationMode = day => {
+    const storedMode = day?.historicalImport?.calculationMode;
+    if (storedMode === 'legacy' || storedMode === 'current') return storedMode;
+    return String(day?.date || '') <= '2026-06-29' ? 'legacy' : 'current';
+  };
+  const territoryBoundarySec = (prevSec,nextSec,mode) =>
+    mode === 'legacy'
+      ? Math.floor((prevSec + nextSec) / 2) + 1
+      : Math.floor((prevSec + 60 + nextSec) / 2);
+  const hasOuterTerritoryLimit = day => {
+    const gameDate = String(day?.date || day?.approvedDate || '');
+    return !gameDate || gameDate >= '2026-07-16';
+  };
   const territoryBoundaries = (day, referenceSec=null) => {
+    const mode = territoryCalculationMode(day);
+    const outerLimit = hasOuterTerritoryLimit(day);
     const valid = (day?.guesses || []).filter(guess => guess?.time).map(guess => ({
       name:guess.name,
       sec:referenceSec === null
@@ -112,8 +127,12 @@
     });
     return groups.map((group,index) => ({
       names:group.names,
-      start:index ? Math.floor((groups[index-1].sec + 60 + group.sec) / 2) : group.sec - 1800,
-      end:index < groups.length - 1 ? Math.floor((group.sec + 60 + groups[index+1].sec) / 2) - 1 : group.sec + 59 + 1800
+      start:index
+        ? territoryBoundarySec(groups[index-1].sec,group.sec,mode)
+        : outerLimit ? group.sec - 1800 : Number.NEGATIVE_INFINITY,
+      end:index < groups.length - 1
+        ? territoryBoundarySec(group.sec,groups[index+1].sec,mode) - 1
+        : outerLimit ? group.sec + 59 + 1800 : Number.POSITIVE_INFINITY
     }));
   };
   const wrongTerritoryGap = (name, day) => {
@@ -121,6 +140,56 @@
     const slice = territoryBoundaries(day,wrap).find(item => item.names.includes(name));
     if (wrap === null || !slice || (wrap >= slice.start && wrap <= slice.end)) return null;
     return wrap < slice.start ? slice.start - wrap : wrap - slice.end;
+  };
+  const territoryGapAtWrapSec = (name, day, wrapSec) => {
+    const slice = territoryBoundaries(day,wrapSec).find(item => item.names.includes(name));
+    if (!slice || (wrapSec >= slice.start && wrapSec <= slice.end)) return null;
+    return wrapSec < slice.start ? slice.start - wrapSec : wrapSec - slice.end;
+  };
+  const compatibleHistoricalWrapSecs = day => {
+    const wrap = wrapTimelineSec(day);
+    if (wrap === null) return [];
+    const winners = winnerNames(day);
+    if (!winners.length) return [];
+
+    const base = Math.floor(wrap / 60) * 60;
+    const compatible = [];
+
+    for (let second = 0; second < 60; second += 1) {
+      const candidate = base + second;
+      const slices = territoryBoundaries(day,candidate);
+      const winningSlice = slices.find(slice =>
+        candidate >= slice.start && candidate <= slice.end
+      );
+      if (
+        winningSlice &&
+        winningSlice.names.length === winners.length &&
+        winners.every(name => winningSlice.names.includes(name))
+      ) {
+        compatible.push(candidate);
+      }
+    }
+
+    return compatible;
+  };
+  const possiblyWrongWithinSec = (name, day, thresholdSec) => {
+    const historical =
+      day?.historicalImport?.source === 'migration-data.json' &&
+      /^\d{1,2}:\d{2}$/.test(String(day?.wrapTime || ''));
+
+    if (!historical) {
+      const gap = wrongTerritoryGap(name,day);
+      return gap !== null && gap < thresholdSec;
+    }
+
+    const candidates = compatibleHistoricalWrapSecs(day);
+    if (!candidates.length) return false;
+
+    const gaps = candidates.map(wrapSec =>
+      territoryGapAtWrapSec(name,day,wrapSec)
+    );
+
+    return gaps.some(gap => gap !== null && gap < thresholdSec);
   };
   const compactTime = seconds => {
     if (seconds === null || !Number.isFinite(seconds)) return '—';
@@ -294,7 +363,7 @@
         if (!winners.size && gap !== null && (!furthestNoWinner || gap > furthestNoWinner.gap)) furthestNoWinner = item;
         if (winners.size && gap !== null && (!furthestWinningDay || gap > furthestWinningDay.gap)) furthestWinningDay = item;
         if (!winners.has(guess.name) && gap !== null) {
-          if (gap < 300) player.closeWrong += 1;
+          if (possiblyWrongWithinSec(guess.name,day,60)) player.closeWrong += 1;
           const territoryGap = wrongTerritoryGap(guess.name,day);
           if (territoryGap !== null && (!closestWrong || territoryGap < closestWrong.gap)) {
             closestWrong = {...item,gap:territoryGap};
@@ -529,7 +598,7 @@
       screen('The highs and lows','Every second counted','',`<div class="final-recap-showcase-grid">
         ${splitShowcaseAward('Closest wrong bet',data.closestWrong?.name || '—',data.closestWrong ? compactTime(data.closestWrong.gap) : '—','green')}
         ${furthestComparisonCard(data.furthestNoWinner,data.furthestWinningDay)}
-        ${splitShowcaseAward('Most wrong bets within 5 minutes',data.closeWrongLeaders.length ? data.closeWrongLeaders.map(item => item.name).join(', ') : '—',data.closeWrongLeaders.length ? `${data.closeWrongLeaders[0].closeWrong} ${word(data.closeWrongLeaders[0].closeWrong,'bet','bets')}` : '—','gold')}
+        ${splitShowcaseAward('Most bets less than 1 minute away from winning',data.closeWrongLeaders.length ? data.closeWrongLeaders.map(item => item.name).join(', ') : '—',data.closeWrongLeaders.length ? `${data.closeWrongLeaders[0].closeWrong} ${word(data.closeWrongLeaders[0].closeWrong,'bet','bets')}` : '—','gold')}
       </div>`),
       screen('Showing up matters','The regulars','',`<div class="final-recap-showcase-grid">
         ${splitShowcaseAward('Most bets placed',data.mostReliable.length ? data.mostReliable.map(item => item.name).join(', ') : '—',data.mostReliable.length ? `${data.mostReliable[0].bets} ${word(data.mostReliable[0].bets,'bet','bets')}` : '—','green')}
