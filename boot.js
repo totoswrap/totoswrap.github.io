@@ -2,8 +2,6 @@
   const phrase = document.querySelector('[data-boot-phrase]');
   if (!phrase) return;
   const regularLogoLayer = document.querySelector('[data-boot-logo-layer="regular"]');
-  const edoardoLogoLayer = document.querySelector('[data-boot-logo-layer="edoardo"]');
-  const edoardoLogo = document.querySelector('[data-boot-edoardo-logo]');
   const bootContent = document.querySelector('.boot-content');
 
   if (phrase.dataset.bootPhraseReady === 'true') return;
@@ -132,7 +130,6 @@
     if (!loaderIsActive() || !bootContent) return;
     stopPhraseRotation();
     regularLogoLayer?.classList.remove('is-visible');
-    edoardoLogoLayer?.classList.remove('is-visible');
     phrase.classList.remove('is-ready', 'is-exiting');
     phrase.classList.add('is-loading');
     phrase.innerHTML = '';
@@ -199,7 +196,6 @@
     crazy?.classList.remove('is-visible');
     bootContent.classList.remove('is-crazy-day');
     regularLogoLayer?.classList.add('is-visible');
-    edoardoLogoLayer?.classList.remove('is-visible');
     if (!phraseTimer) showNextPhrase();
   }
 
@@ -212,16 +208,8 @@
     return choices[randomInt(choices.length)] || available[0] || null;
   }
 
-  function phraseContainsEdoardo(text) {
-    return /(?:^|[^A-Za-zÀ-ÖØ-öø-ÿ])Edoardo(?:[^A-Za-zÀ-ÖØ-öø-ÿ]|$)/i.test(text);
-  }
-
-  function showLogoForPhrase(text, firstPhrase) {
-    if (!regularLogoLayer || !edoardoLogoLayer || !edoardoLogo) return;
-    const showEdoardo = phraseContainsEdoardo(text);
-    regularLogoLayer.classList.toggle('is-visible', !showEdoardo);
-    edoardoLogoLayer.classList.toggle('is-visible', showEdoardo);
-    edoardoLogo.classList.toggle('is-rotating', showEdoardo && !firstPhrase);
+  function showLogoForPhrase() {
+    regularLogoLayer?.classList.add('is-visible');
   }
 
   function showNextPhrase() {
