@@ -38,7 +38,7 @@
     'Facciamo un referendum?',
     'Viva la Edocrazia!',
     'Vita sprecata che sei...',
-    'Mancano 2 setup.'
+    'Mancano 2 setup'
   ];
 
   const PLAYER_BOOT_PHRASES = [
