@@ -235,8 +235,12 @@ function scrollDirectHistoryRowToTop(row) {
 }
 
 function storeBootPlayerNames() {
-  const names = [...new Set((S.playerRoster || []).map(player => String(player.name || '').trim()).filter(Boolean))];
-  if (!names.length) return;
+  const names = [...new Set(
+    (S.playerRoster || [])
+      .filter(player => player.active !== false)
+      .map(player => String(player.name || '').trim())
+      .filter(Boolean)
+  )];
   try {
     localStorage.setItem(BOOT_PLAYER_NAMES_STORAGE_KEY, JSON.stringify(names));
   } catch (_) {}
