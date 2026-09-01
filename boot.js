@@ -29,7 +29,7 @@
   const FIXED_BOOT_PHRASES = [
     '99% of players stop playing before winning. Keep gambling!',
     'Never bet close to Giulia, or you will make her cry!',
-    'And today too, unfortunately, Labadessa lost at TotoWrap...',
+    'And today too, unfortunately, Lior loses a point...',
     'TotoWrap is love, TotoWrap is life.',
     'La ludopatia è un problema solo se perdi!',
     'You miss 100% of the bets you don’t place.',
@@ -39,7 +39,8 @@
     'I love the smell of TotoWrap in the morning',
     'Facciamo un referendum?',
     'Viva la Edocrazia!',
-    'Vita sprecata che sei...'
+    'Vita sprecata che sei...',
+    'Mancano 2 setup.'
   ];
 
   const PLAYER_BOOT_PHRASES = [
@@ -47,7 +48,7 @@
     name => `Bet responsibly. Unless you’re ${nameTag(name)}, then just don’t bet.`,
     name => `Today’s forecast: 100% chance of ${nameTag(name)} forgetting to bet.`,
     name => `${nameTag(name)} continua così, il tuo talento è nascosto benissimo.`,
-    name => `${leadWithNameTag('Anche oggi', name)} ha fatto un bel buco nell’acqua.`
+    name => `${leadWithNameTag('Anche oggi', name)} vince domani.`
   ];
 
   const phrases = [
