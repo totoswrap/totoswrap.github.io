@@ -360,8 +360,18 @@
           player.gapPoints.push({dayIndex,gap});
         }
         const item = {name:guess.name,gap,date:day.date || '',bet:guess.time,wrap:day.wrapTime,dayIndex};
-        if (!winners.size && gap !== null && (!furthestNoWinner || gap > furthestNoWinner.gap)) furthestNoWinner = item;
-        if (winners.size && gap !== null && (!furthestWinningDay || gap > furthestWinningDay.gap)) furthestWinningDay = item;
+        if (
+          hasOuterTerritoryLimit(day) &&
+          !winners.size &&
+          gap !== null &&
+          (!furthestNoWinner || gap > furthestNoWinner.gap)
+        ) furthestNoWinner = item;
+        if (
+          hasOuterTerritoryLimit(day) &&
+          winners.size &&
+          gap !== null &&
+          (!furthestWinningDay || gap > furthestWinningDay.gap)
+        ) furthestWinningDay = item;
         if (!winners.has(guess.name) && gap !== null) {
           if (possiblyWrongWithinSec(guess.name,day,60)) player.closeWrong += 1;
           const territoryGap = wrongTerritoryGap(guess.name,day);

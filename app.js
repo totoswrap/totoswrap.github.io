@@ -2299,8 +2299,23 @@ function buildFullGuessList(parsed) {
   return result;
 }
 
-function betBlockBoundarySec(prevSec, nextSec) {
-  return Math.floor((prevSec + 60 + nextSec) / 2);
+function territoryCalculationMode(day=S.today) {
+  const storedMode = day?.historicalImport?.calculationMode;
+  if (storedMode === 'legacy' || storedMode === 'current') return storedMode;
+  return String(day?.date || day?.approvedDate || '') <= '2026-06-29'
+    ? 'legacy'
+    : 'current';
+}
+
+function hasOuterTerritoryLimit(day=S.today) {
+  const gameDate = String(day?.date || day?.approvedDate || '');
+  return !gameDate || gameDate >= '2026-07-16';
+}
+
+function betBlockBoundarySec(prevSec, nextSec, mode='current') {
+  return mode === 'legacy'
+    ? Math.floor((prevSec + nextSec) / 2) + 1
+    : Math.floor((prevSec + 60 + nextSec) / 2);
 }
 function sortedGuesses(guesses, day=S.today) {
   // 1. Filter and sort players who DID bet
@@ -2353,6 +2368,8 @@ function getWinProbability(playerName, allGuesses, day=S.today) {
 function boundaries(guesses, day=S.today, referenceSec=null) {
 
   const start = approvalSec(day);
+  const mode = territoryCalculationMode(day);
+  const outerLimit = hasOuterTerritoryLimit(day);
 
   const timelineSec = g =>
     referenceSec === null
@@ -2394,11 +2411,11 @@ function boundaries(guesses, day=S.today, referenceSec=null) {
 
     if (i > 0) {
 
-      const prevMid = betBlockBoundarySec(groups[i-1].sec, groups[i].sec);
+      const prevMid = betBlockBoundarySec(groups[i-1].sec, groups[i].sec, mode);
 
       startSec = prevMid;
 
-    } else {
+    } else if (outerLimit) {
 
       startSec = groups[0].sec - 1800;
 
@@ -2406,11 +2423,11 @@ function boundaries(guesses, day=S.today, referenceSec=null) {
 
     if (i < groups.length - 1) {
 
-      const nextMid = betBlockBoundarySec(groups[i].sec, groups[i+1].sec);
+      const nextMid = betBlockBoundarySec(groups[i].sec, groups[i+1].sec, mode);
 
       endSec = nextMid - 1;
 
-    } else {
+    } else if (outerLimit) {
 
       endSec = groups[groups.length - 1].sec + 59 + 1800;
 
