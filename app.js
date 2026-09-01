@@ -1783,43 +1783,76 @@ function normalizeGameSec(time, day=S.today, explicitDate=null) {
   return sec <= start ? sec + DAY_SEC : sec;
 }
 function guessGameSec(g, day=S.today) { return normalizeGameSec(g.time, day, g.date || null); }
-function betMinuteDistanceFromWrapSec(guess, day=S.today) {
-  if (!guess?.time || !day?.wrapTime) return null;
-  const wrapSec = normalizeGameSec(
-    day.wrapTime,
-    day,
-    day.wrapDate || null
+
+function alignClockSecToReference(time, referenceSec) {
+  const sec = typeof time === 'number' ? time : toSec(time);
+  const candidates = [sec - DAY_SEC, sec, sec + DAY_SEC];
+  return candidates.reduce((best, candidate) =>
+    Math.abs(candidate - referenceSec) < Math.abs(best - referenceSec) ? candidate : best
   );
-  const betStart = guessGameSec(guess, day);
-  const betEnd = betStart + 59;
-  if (wrapSec >= betStart && wrapSec <= betEnd) return 0;
-  return wrapSec < betStart ? betStart - wrapSec : wrapSec - betEnd;
 }
-function betMinuteOffsetFromWrap(guess, day=S.today) {
-  if (!guess?.time || !day?.wrapTime) return null;
-  const wrapSec = normalizeGameSec(
-    day.wrapTime,
-    day,
-    day.wrapDate || null
-  );
-  const betStart = guessGameSec(guess, day);
-  const betEnd = betStart + 59;
-  if (wrapSec >= betStart && wrapSec <= betEnd) return { distance: 0, direction: 'exact' };
-  if (wrapSec < betStart) return { distance: betStart - wrapSec, direction: 'after' };
-  return { distance: wrapSec - betEnd, direction: 'before' };
+
+function betTimelineSec(guess, referenceSec) {
+  return alignClockSecToReference(guess.time, referenceSec);
 }
-function betMinuteDistanceFromWrapInputSec(guess, wrapHMSInput, day=S.today) {
-  if (!guess?.time || !wrapHMSInput) return null;
-  const wrapSec = normalizeGameSec(
+
+function wrapTimelineSec(wrapHMSInput, day=S.today) {
+  return normalizeGameSec(
     wrapHMSInput,
     day,
     day?.wrapDate || null
   );
-  const betStart = guessGameSec(guess, day);
-  const betEnd = betStart + 59;
-  if (wrapSec >= betStart && wrapSec <= betEnd) return 0;
-  return wrapSec < betStart ? betStart - wrapSec : wrapSec - betEnd;
 }
+function betMinuteDistanceFromWrapSec(guess, day=S.today) {
+
+  if (!guess?.time || !day?.wrapTime) return null;
+
+  const wrapSec = wrapTimelineSec(day.wrapTime, day);
+
+  const betStart = betTimelineSec(guess, wrapSec);
+
+  const betEnd = betStart + 59;
+
+  if (wrapSec >= betStart && wrapSec <= betEnd) return 0;
+
+  return wrapSec < betStart ? betStart - wrapSec : wrapSec - betEnd;
+
+}
+
+function betMinuteOffsetFromWrap(guess, day=S.today) {
+
+  if (!guess?.time || !day?.wrapTime) return null;
+
+  const wrapSec = wrapTimelineSec(day.wrapTime, day);
+
+  const betStart = betTimelineSec(guess, wrapSec);
+
+  const betEnd = betStart + 59;
+
+  if (wrapSec >= betStart && wrapSec <= betEnd) return { distance: 0, direction: 'exact' };
+
+  if (wrapSec < betStart) return { distance: betStart - wrapSec, direction: 'after' };
+
+  return { distance: wrapSec - betEnd, direction: 'before' };
+
+}
+
+function betMinuteDistanceFromWrapInputSec(guess, wrapHMSInput, day=S.today) {
+
+  if (!guess?.time || !wrapHMSInput) return null;
+
+  const wrapSec = wrapTimelineSec(wrapHMSInput, day);
+
+  const betStart = betTimelineSec(guess, wrapSec);
+
+  const betEnd = betStart + 59;
+
+  if (wrapSec >= betStart && wrapSec <= betEnd) return 0;
+
+  return wrapSec < betStart ? betStart - wrapSec : wrapSec - betEnd;
+
+}
+
 function isExactBetForWrap(guess, wrapHMSInput, day=S.today) {
   return betMinuteDistanceFromWrapInputSec(guess, wrapHMSInput, day) === 0;
 }
@@ -2317,53 +2350,96 @@ function getWinProbability(playerName, allGuesses, day=S.today) {
   };
 }
 
-function boundaries(guesses, day=S.today) {
+function boundaries(guesses, day=S.today, referenceSec=null) {
+
   const start = approvalSec(day);
-  const valid = guesses.filter(g => g.time).sort((a,b) => guessGameSec(a, day) - guessGameSec(b, day));
+
+  const timelineSec = g =>
+    referenceSec === null
+      ? guessGameSec(g, day)
+      : betTimelineSec(g, referenceSec);
+
+  const valid = guesses
+    .filter(g => g.time)
+    .sort((a,b) => timelineSec(a) - timelineSec(b));
+
   if (valid.length === 0) return [];
 
   const groups = [];
+
   valid.forEach(g => {
-    const sec = guessGameSec(g, day);
+
+    const sec = timelineSec(g);
+
     const existing = groups.find(grp => grp.sec === sec);
+
     if (existing) {
+
       existing.names.push(g.name);
+
     } else {
+
       groups.push({ names: [g.name], sec: sec });
+
     }
+
   });
 
   const slices = [];
+
   for (let i = 0; i < groups.length; i++) {
+
     let startSec = start === null ? 0 : start + 1;
     let endSec = start === null ? DAY_SEC - 1 : start + DAY_SEC;
 
     if (i > 0) {
-        const prevMid = betBlockBoundarySec(groups[i-1].sec, groups[i].sec);
-        startSec = prevMid;
+
+      const prevMid = betBlockBoundarySec(groups[i-1].sec, groups[i].sec);
+
+      startSec = prevMid;
+
     } else {
-        startSec = groups[0].sec - 1800;
+
+      startSec = groups[0].sec - 1800;
+
     }
-    
+
     if (i < groups.length - 1) {
-        const nextMid = betBlockBoundarySec(groups[i].sec, groups[i+1].sec);
-        endSec = nextMid - 1;
+
+      const nextMid = betBlockBoundarySec(groups[i].sec, groups[i+1].sec);
+
+      endSec = nextMid - 1;
+
     } else {
-        endSec = groups[groups.length - 1].sec + 59 + 1800;
+
+      endSec = groups[groups.length - 1].sec + 59 + 1800;
+
     }
 
     slices.push({
+
       names: groups[i].names,
+
       sec: groups[i].sec,
+
       exactStart: groups[i].sec,
+
       exactEnd: groups[i].sec + 59,
+
       start: startSec,
+
       end: endSec,
+
       startStr: secToClock(startSec),
+
       endStr: secToClock(endSec)
+
     });
+
   }
+
   return slices;
+
 }
 
 function eliminated(guesses, curSec, day=S.today) {
@@ -2393,15 +2469,17 @@ function getDayScoring(day=S.today) {
 }
 
 function guessWrapDistanceSec(guess, wrapHMSInput, day, noWinner=false) {
+
   if (!guess?.time || !wrapHMSInput) return null;
+
   if (noWinner) return clockDistanceSec(guess.time, wrapHMSInput);
-  const guessSec = guessGameSec(guess, day);
-  const wrapSec = normalizeGameSec(
-    wrapHMSInput,
-    day,
-    day?.wrapDate || null
-  );
+
+  const wrapSec = wrapTimelineSec(wrapHMSInput, day);
+
+  const guessSec = betTimelineSec(guess, wrapSec);
+
   return Math.abs(guessSec - wrapSec);
+
 }
 
 function calcCrazyDayPenalties(guesses, wrapHMSInput, day, noWinner=false, excludedNames=[]) {
@@ -2436,39 +2514,63 @@ function calcCrazyDayPenalties(guesses, wrapHMSInput, day, noWinner=false, exclu
 }
 
 function calcWinner(guesses, wrapHMSInput, day=S.today) {
-  const wrapSec = normalizeGameSec(
-    wrapHMSInput,
-    day,
-    day?.wrapDate || null
-  );
-  const slices = boundaries(guesses, day);
+
+  const wrapSec = wrapTimelineSec(wrapHMSInput, day);
+
+  const slices = boundaries(guesses, day, wrapSec);
+
   const scoring = getDayScoring(day);
-  
+
   const winningSlice = slices.find(s => wrapSec >= s.start && wrapSec <= s.end);
-  
+
   if (!winningSlice) {
+
     return {
+
       winner: CUSTOM_UI_TEXT.noWinner,
+
       winners: [],
+
       points: 0,
+
       noWinner: true,
+
       penalties: []
+
     };
+
   }
 
   const winnerName = winningSlice.names[0];
+
   const winners = winningSlice.names.map(name => ({ name }));
-  
+
   const firstWinnerGuess = guesses.find(g => g.name === winnerName);
-  const points = isExactBetForWrap(firstWinnerGuess, wrapHMSInput, day) ? scoring.perfectPoints : scoring.regularPoints;
+
+  const points = isExactBetForWrap(firstWinnerGuess, wrapHMSInput, day)
+    ? scoring.perfectPoints
+    : scoring.regularPoints;
 
   return {
+
     winner: winnerName,
+
     winners,
+
     points,
+
     noWinner: false,
-    penalties: calcCrazyDayPenalties(guesses, wrapHMSInput, day, false, winningSlice.names)
+
+    penalties: calcCrazyDayPenalties(
+      guesses,
+      wrapHMSInput,
+      day,
+      false,
+      winningSlice.names
+    )
+
   };
+
 }
 
 function dayPenaltyMap(day) {
@@ -4296,15 +4398,15 @@ function clockDistanceSec(a, b) {
 }
 
 function boardClosenessGap(guess, day) {
+
   if (day?.noWinner) return clockDistanceSec(guess.time, day.wrapTime);
-  return Math.abs(
-    guessGameSec(guess, day) -
-    normalizeGameSec(
-      day.wrapTime,
-      day,
-      day?.wrapDate || null
-    )
-  );
+
+  const wrapSec = wrapTimelineSec(day.wrapTime, day);
+
+  const guessSec = betTimelineSec(guess, wrapSec);
+
+  return Math.abs(guessSec - wrapSec);
+
 }
 
 function didPlayerWinDay(name, day) {
@@ -4608,15 +4710,19 @@ function formatBoardExactCompactGap(totalSec) {
 }
 
 function wrongTerritoryGap(name, day) {
+
   if (!day?.wrapTime || !day.guesses?.length) return null;
-  const wrapSec = normalizeGameSec(
-    day.wrapTime,
-    day,
-    day?.wrapDate || null
-  );
-  const slice = boundaries(day.guesses, day).find(s => s.names.includes(name));
+
+  const wrapSec = wrapTimelineSec(day.wrapTime, day);
+
+  const slices = boundaries(day.guesses, day, wrapSec);
+
+  const slice = slices.find(s => s.names.includes(name));
+
   if (!slice || (wrapSec >= slice.start && wrapSec <= slice.end)) return null;
+
   return wrapSec < slice.start ? slice.start - wrapSec : wrapSec - slice.end;
+
 }
 
 function openHistoryDay(date, unit = 'main') {
