@@ -4019,7 +4019,7 @@ function renderToday() {
       <div class="card-lbl">${esc(unitLabel)} · Set Wrap Time</div>
       <p class="mono dim" style="margin-bottom:10px">Set the estimated wrap time players see before the game starts.</p>
       <div class="admin-time-save-row admin-wrap-save-row">
-        <input type="text" class="admin-time-input" id="est-wrap-input" value="${esc(t.estWrap && t.estWrap !== '--:--' ? t.estWrap : '')}" placeholder="hh:mm" inputmode="text" maxlength="5" aria-label="Estimated wrap time">
+        <input type="text" class="admin-time-input" id="est-wrap-input" value="${esc(t.estWrap && t.estWrap !== '--:--' ? t.estWrap : '')}" placeholder="hh:mm" inputmode="numeric" maxlength="5" aria-label="Estimated wrap time">
         <input type="text" class="admin-date-input" id="est-wrap-date-input" value="${esc(displayDate(t.estWrapDate || t.date || currentGameDateISO()))}" placeholder="dd/mm/yyyy" inputmode="numeric" maxlength="10" aria-label="Wrap date">
         <button class="settings-delete admin-time-delete-btn" id="clear-est-wrap-btn" type="button" title="Clear wrap time" aria-label="Clear wrap time">×</button>
         <button class="settings-save admin-time-save-btn" id="save-est-wrap-btn" type="button" title="Save wrap time" aria-label="Save wrap time">✓</button>
@@ -4036,7 +4036,7 @@ function renderToday() {
           id="bet-close-input"
           value="${esc(t.betCloseAt || '')}"
           placeholder="hh:mm"
-          inputmode="text"
+          inputmode="numeric"
           maxlength="5"
           aria-label="Closing bet time"
         >
@@ -5080,6 +5080,7 @@ function openHistoryBetTimeDialog(date, unit = 'main', name) {
           type="text"
           id="admin-history-bet-input"
           placeholder="hh:mm"
+          inputmode="numeric"
           maxlength="5"
           pattern="[0-9]{2}:[0-9]{2}"
         >
@@ -5167,6 +5168,7 @@ function openHistoryWrapDialog(date, unit = 'main') {
           id="admin-history-wrap-input"
           value="${esc(currentWrap)}"
           placeholder="hh:mm:ss"
+          inputmode="numeric"
           maxlength="8"
           pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
         >
@@ -5489,6 +5491,7 @@ function openManualTodayWrapDialog() {
           type="text"
           id="admin-today-wrap-input"
           placeholder="hh:mm:ss"
+          inputmode="numeric"
           maxlength="8"
           pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
         >
@@ -5530,6 +5533,52 @@ function openManualTodayWrapDialog() {
   });
 }
 
+function formatNumericDateInput(value) {
+  const digits = String(value || '').replace(/\D/g, '').slice(0, 8);
+
+  if (digits.length <= 2) return digits;
+  if (digits.length <= 4) return `${digits.slice(0, 2)}/${digits.slice(2)}`;
+
+  return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
+}
+
+function formatNumericTimeInput(value) {
+  const digits = String(value || '').replace(/\D/g, '').slice(0, 4);
+
+  if (digits.length <= 2) return digits;
+
+  return `${digits.slice(0, 2)}:${digits.slice(2)}`;
+}
+
+function formatNumericTimeSecondsInput(value) {
+  const digits = String(value || '').replace(/\D/g, '').slice(0, 6);
+
+  if (digits.length <= 2) return digits;
+  if (digits.length <= 4) return `${digits.slice(0, 2)}:${digits.slice(2)}`;
+
+  return `${digits.slice(0, 2)}:${digits.slice(2, 4)}:${digits.slice(4)}`;
+}
+
+document.addEventListener('input', event => {
+  const input = event.target;
+
+  if (!(input instanceof HTMLInputElement)) return;
+
+  if (input.placeholder === 'dd/mm/yyyy') {
+    input.value = formatNumericDateInput(input.value);
+    return;
+  }
+
+  if (input.placeholder === 'hh:mm') {
+    input.value = formatNumericTimeInput(input.value);
+    return;
+  }
+
+  if (input.placeholder === 'hh:mm:ss') {
+    input.value = formatNumericTimeSecondsInput(input.value);
+  }
+});
+
 function openCurrentBetDialog(name) {
   if (!IS_ADMIN || !S.today || S.today.wrapTime) return;
   const playerName = String(name || '').trim();
@@ -5547,7 +5596,7 @@ function openCurrentBetDialog(name) {
     focusSelector: '#admin-current-bet-input',
     body: `<div class="admin-dialog-input-wrap">
       <label class="inp-lbl" for="admin-current-bet-input">Bet Time (HH:MM)</label>
-      <input class="admin-dialog-wrap-input" type="text" id="admin-current-bet-input" value="${esc(currentBet)}" placeholder="hh:mm" maxlength="5" pattern="[0-9]{2}:[0-9]{2}">
+      <input class="admin-dialog-wrap-input" type="text" id="admin-current-bet-input" value="${esc(currentBet)}" placeholder="hh:mm" inputmode="numeric" maxlength="5" pattern="[0-9]{2}:[0-9]{2}">
     </div>
     <div class="admin-dialog-input-wrap">
       <label class="inp-lbl" for="admin-current-bet-date-input">Bet Date (Optional)</label>
@@ -7660,7 +7709,7 @@ async function showPreview() {
             ${esc(g.name)} ${isDup ? '<span class="red" style="font-size:0.5rem; font-weight:bold;">(DUPLICATE)</span>' : ''}
           </div>
           ${g.time ? `
-            <input type="text" class="bet-time-input" id="bet-time-${g._previewIdx}" value="${esc(g.time)}" placeholder="hh:mm" inputmode="text" maxlength="5" aria-label="${esc(g.name)} bet time">
+            <input type="text" class="bet-time-input" id="bet-time-${g._previewIdx}" value="${esc(g.time)}" placeholder="hh:mm" inputmode="numeric" maxlength="5" aria-label="${esc(g.name)} bet time">
             <input type="text" class="bet-date-input" id="bet-date-${g._previewIdx}" value="${esc(displayDate(g.date) || g.date)}" placeholder="dd/mm/yyyy" inputmode="numeric" maxlength="10" aria-label="${esc(g.name)} bet date">
           ` : `<div class="badge b-missing">${CUSTOM_UI_TEXT.forgotBet}</div>`}
         </div>`;
