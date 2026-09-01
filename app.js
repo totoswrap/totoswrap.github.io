@@ -3269,10 +3269,9 @@ function getWrapDateISO(day) {
 }
 
 function renderFridayWrapBanner(day) {
-  const startDateISO = approvalDateISO(day);
-  const startDate = dateFromISO(startDateISO);
-  const daysSinceStart = dateDiffDays(startDateISO, localDateISO());
-  if (!startDate || startDate.getDay() !== 5 || daysSinceStart < 0 || daysSinceStart > 2) return '';
+  const gameDateISO = displayToISO(day?.date);
+  const gameDate = dateFromISO(gameDateISO);
+  if (!gameDate || gameDate.getDay() !== 5) return '';
   return `<div class="weekday-message-banner">${CUSTOM_UI_TEXT.fridayBanner}</div>`;
 }
 
