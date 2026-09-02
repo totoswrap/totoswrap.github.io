@@ -3860,7 +3860,7 @@ function renderActiveTodayRows(t, sg, out, slices) {
   const cur = gameNowSec(t);
   const activeSlice = slices.find(slice => cur >= slice.start && cur <= slice.end);
   const activeNames = new Set(activeSlice?.names || []);
-  return sg.map(g => {
+  const rows = sg.map(g => {
     const st = getPreviousStreak(g.name);
     const isOut = out.has(g.name);
     const playerIdx = t.guesses.indexOf(g);
@@ -3894,7 +3894,41 @@ function renderActiveTodayRows(t, sg, out, slices) {
         : `<div class="badge b-missing">${CUSTOM_UI_TEXT.forgotBet}</div>`}
     </div>`;
   }).join('');
+  return rows + renderAddableCurrentPlayerRows(t);
 }
+
+function renderAddableCurrentPlayerRows(day=S.today) {
+  if (!IS_ADMIN || !day || day.wrapTime) return '';
+
+  const currentPlayerKeys = new Set(
+    (day.guesses || [])
+      .map(guess => nameKey(guess?.name))
+      .filter(Boolean)
+  );
+
+  const addablePlayers = (S.playerRoster || []).filter(player =>
+    player?.active !== false &&
+    player?.name &&
+    !currentPlayerKeys.has(nameKey(player.name))
+  );
+
+  if (!addablePlayers.length) return '';
+
+  return addablePlayers.map(player => `
+    <div class="row">
+      <div class="row-name">
+        <span>${esc(player.name)}</span>
+      </div>
+      <button
+        class="badge b-missing missing-bet-action"
+        type="button"
+        data-current-bet-player="${esc(player.name)}"
+        aria-label="Add ${esc(player.name)} bet"
+      >ADD BET</button>
+    </div>
+  `).join('');
+}
+
 
 function renderLiveUnitSwitcher() {
   const liveGames = getLiveGames();
@@ -5709,12 +5743,22 @@ document.addEventListener('input', event => {
 function openCurrentBetDialog(name) {
   if (!IS_ADMIN || !S.today || S.today.wrapTime) return;
   const playerName = String(name || '').trim();
-  const existingGuess = (S.today.guesses || []).find(g => nameKey(g.name) === nameKey(playerName));
-  if (!existingGuess) {
-    toast('Choose a current player', 'err');
+  const existingGuess = (S.today.guesses || []).find(
+    g => nameKey(g.name) === nameKey(playerName)
+  );
+  const rosterPlayer = (S.playerRoster || []).find(
+    player => nameKey(player?.name) === nameKey(playerName)
+  );
+
+  if (
+    !existingGuess &&
+    (!rosterPlayer || rosterPlayer.active === false)
+  ) {
+    toast('Choose an active player', 'err');
     return;
   }
-  const isEditing = Boolean(existingGuess.time);
+
+  const isEditing = Boolean(existingGuess?.time);
   const currentBet = isEditing ? existingGuess.time : '';
   const currentDate = isEditing && existingGuess.date ? displayDate(existingGuess.date) : '';
   openAdminDialog({
@@ -5781,15 +5825,26 @@ async function addRosterPlayer(name) {
 async function addCurrentPlayerBet(name, betTime, betDate='') {
   if (!IS_ADMIN || !S.today || S.today.wrapTime) return false;
   const playerName = String(name || '').trim();
-  const existingGuess = (S.today.guesses || []).find(g => nameKey(g.name) === nameKey(playerName));
-  if (!existingGuess) {
-    toast('Choose a current player', 'err');
+  const existingGuess = (S.today.guesses || []).find(
+    g => nameKey(g.name) === nameKey(playerName)
+  );
+  const rosterPlayer = (S.playerRoster || []).find(
+    player => nameKey(player?.name) === nameKey(playerName)
+  );
+
+  if (
+    !existingGuess &&
+    (!rosterPlayer || rosterPlayer.active === false)
+  ) {
+    toast('Choose an active player', 'err');
     return false;
   }
-  if (existingGuess.time) {
+
+  if (existingGuess?.time) {
     toast('Duplicate names', 'err');
     return false;
   }
+
   const normalizedBet = normalizeHMInput(betTime);
   if (!normalizedBet) {
     toast('Enter bet time', 'err');
@@ -5822,8 +5877,24 @@ async function addCurrentPlayerBet(name, betTime, betDate='') {
   }
 
   const prevS = cloneState();
-  existingGuess.time = normalizedBet;
-  existingGuess.date = normalizedDate || inferBetDate(normalizedBet, S.today);
+  const finalBetDate =
+    normalizedDate ||
+    inferBetDate(normalizedBet, S.today);
+
+  if (existingGuess) {
+    existingGuess.time = normalizedBet;
+    existingGuess.date = finalBetDate;
+  } else {
+    S.today.guesses = [
+      ...(S.today.guesses || []),
+      {
+        name: rosterPlayer.name,
+        time: normalizedBet,
+        date: finalBetDate
+      }
+    ];
+  }
+
   const saved = await saveS();
   if (!saved) { restoreAfterFailedSave(prevS); return false; }
   toast(`${playerName} bet added`, 'ok');
