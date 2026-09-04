@@ -4590,8 +4590,11 @@ function renderBoardCloseness(pl) {
     `<div class="closeness-y-tick" style="top:${tick.top}%"><span>${esc(formatBoardCompactGap(tick.value))}</span></div>`
   ).join('');
   const dayTicks = completed.map((_, idx) => {
+    const displayDay = displayDayNumber(idx + 1);
+    if (Number(displayDay) % 5 !== 0) return '';
+
     const left = maxDay ? (idx / maxDay) * 96 : 0;
-    return `<div class="closeness-x-tick" style="left:${left.toFixed(2)}%;"><span>${esc(displayDayNumber(idx + 1))}</span></div>`;
+    return `<div class="closeness-x-tick" style="left:${left.toFixed(2)}%;"><span>${esc(displayDay)}</span></div>`;
   }).join('');
 
   const compareAccuracyStats = (a, b) => {
