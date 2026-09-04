@@ -414,7 +414,9 @@
     const longestStreak = list.filter(item => item.longestWinStreak === maxStreak && maxStreak > 0).sort((a,b) => a.name.localeCompare(b.name));
     const maxCloseWrong = Math.max(0,...list.map(item => item.closeWrong));
     const closeWrongLeaders = list.filter(item => item.closeWrong === maxCloseWrong && maxCloseWrong > 0).sort((a,b) => a.name.localeCompare(b.name));
-    const winRateEligible = list.filter(item => item.winRate !== null);
+    const winRateEligible = list.filter(
+      item => item.winRate !== null && item.bets >= MIN_STATS_BETS
+    );
     const bestWinRatePlayer = [...winRateEligible].sort((a,b) =>
       (b.wins * a.bets) - (a.wins * b.bets) ||
       b.wins-a.wins ||
