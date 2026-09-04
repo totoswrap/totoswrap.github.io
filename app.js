@@ -4121,6 +4121,35 @@ ${renderDesktopLiveBar()}
 </div>`;
 }
 
+function renderCancelLiveUnitAction(day=S.today) {
+  if (!IS_ADMIN || !day || day.wrapTime) return '';
+
+  const liveGames = getLiveGames();
+  const liveUnits = Object.keys(liveGames);
+  const unit = day.unit || 'main';
+
+  /*
+   * Main può essere annullata soltanto quando
+   * è l'unica unità live.
+   */
+  if (
+    unit === 'main' &&
+    liveUnits.length !== 1
+  ) {
+    return '';
+  }
+
+  return `
+    <div class="center mt8">
+      <button
+        class="btn btn-d"
+        id="cancel-unit-btn"
+        type="button"
+      >Cancel Unit</button>
+    </div>
+  `;
+}
+
 function renderToday() {
   const t = S.today;
   const lastWinningDay =
@@ -4162,6 +4191,7 @@ function renderToday() {
     return `
       <div class="today-fixed-view">
       ${unitSwitcher}
+      ${renderCancelLiveUnitAction(t)}
       ${clockCard}
       ${renderCrazyDayIndicator(t)}
       <div class="card today-scroll-card"><div class="card-lbl">${statusHeader}</div>
@@ -4172,6 +4202,7 @@ function renderToday() {
   }
   return `<div class="tab-page-frame">
     ${unitSwitcher}
+    ${renderCancelLiveUnitAction(t)}
     <div class="card">
       <div class="card-lbl">${esc(unitLabel)} · Set Wrap Time</div>
       <p class="mono dim" style="margin-bottom:10px">Set the estimated wrap time players see before the game starts.</p>
@@ -6402,6 +6433,17 @@ async function handleAdminDialogAction(btn) {
     if (saved) closeAdminDialog();
     return;
   }
+  if (action === 'cancel-unit-confirm') {
+    const cancelled =
+      await cancelCurrentLiveUnit();
+
+    if (cancelled) {
+      closeAdminDialog();
+    }
+
+    return;
+  }
+
   if (action === 'current-bet-save') {
     const saved = await addCurrentPlayerBet(
       btn.dataset.currentBetPlayer,
@@ -7309,6 +7351,217 @@ async function deleteHistoryDay(
   );
 
   render();
+}
+
+function openCancelCurrentLiveUnitDialog() {
+  if (
+    !IS_ADMIN ||
+    !S.today ||
+    S.today.wrapTime
+  ) {
+    return;
+  }
+
+  const liveGames =
+    getLiveGames();
+
+  const currentUnit =
+    S.today.unit || 'main';
+
+  const liveUnits =
+    Object.keys(liveGames);
+
+  /*
+   * Stessa protezione della funzione
+   * che esegue realmente la cancellazione.
+   */
+  if (
+    currentUnit === 'main' &&
+    liveUnits.length !== 1
+  ) {
+    toast(
+      'Main Unit can only be cancelled when it is the only live unit',
+      'err'
+    );
+    return;
+  }
+
+  if (!liveGames[currentUnit]) {
+    toast(
+      'Live unit not found',
+      'err'
+    );
+    return;
+  }
+
+  const unitLabel =
+    formatUnitLabel(currentUnit);
+
+  openAdminDialog({
+    title: `Cancel ${unitLabel}`,
+    copy: 'This will permanently remove this open unit and its bets.',
+    showClose: false,
+    body: `<div class="admin-dialog-split">
+      <button
+        class="admin-dialog-action undo"
+        type="button"
+        data-admin-dialog-close
+      >Cancel</button>
+      <button
+        class="admin-dialog-action delete"
+        type="button"
+        data-admin-dialog-action="cancel-unit-confirm"
+      >Confirm</button>
+    </div>`
+  });
+}
+
+async function cancelCurrentLiveUnit() {
+  if (
+    !IS_ADMIN ||
+    !S.today ||
+    S.today.wrapTime
+  ) {
+    return false;
+  }
+
+  const liveGames = getLiveGames();
+  const currentGame = S.today;
+  const currentUnit =
+    currentGame.unit || 'main';
+  const liveUnits =
+    Object.keys(liveGames);
+
+  /*
+   * Main è cancellabile soltanto quando
+   * è l'unica unità live.
+   */
+  if (
+    currentUnit === 'main' &&
+    liveUnits.length !== 1
+  ) {
+    toast(
+      'Main Unit can only be cancelled when it is the only live unit',
+      'err'
+    );
+    return false;
+  }
+
+  /*
+   * Verifica difensiva:
+   * la unità visualizzata deve esistere
+   * realmente dentro liveGames.
+   */
+  if (!liveGames[currentUnit]) {
+    toast(
+      'Live unit not found',
+      'err'
+    );
+    return false;
+  }
+
+  const unitLabel =
+    formatUnitLabel(currentUnit);
+
+  const prevS =
+    cloneState();
+
+  const prevActiveLiveUnit =
+    _activeLiveUnit;
+
+  /*
+   * Cancel Unit NON modifica History,
+   * scores, streaks, roster,
+   * addedPlayers o bonus.
+   *
+   * Rimuove esclusivamente
+   * la live unit aperta.
+   */
+  delete S.liveGames[currentUnit];
+
+  if (_activeLiveUnit === currentUnit) {
+    _activeLiveUnit = null;
+  }
+
+  const remainingUnits =
+    Object.keys(getLiveGames());
+
+  if (remainingUnits.length) {
+    /*
+     * Se Main esiste ancora,
+     * torniamo sempre a Main.
+     *
+     * Altrimenti scegliamo una delle
+     * unità live rimaste.
+     */
+    const nextUnit =
+      S.liveGames.main
+        ? 'main'
+        : remainingUnits[0];
+
+    _activeLiveUnit =
+      nextUnit;
+
+    S.activeUnit =
+      nextUnit;
+
+    S.today =
+      S.liveGames[nextUnit];
+  } else {
+    /*
+     * Questo caso è consentito soltanto
+     * quando Main era l'unica unità live.
+     */
+    _activeLiveUnit =
+      null;
+
+    S.activeUnit =
+      'main';
+
+    S.today =
+      null;
+  }
+
+  const saved =
+    await saveS();
+
+  if (!saved) {
+    /*
+     * Se Firebase non salva,
+     * ripristiniamo integralmente
+     * lo stato precedente.
+     */
+    _activeLiveUnit =
+      prevActiveLiveUnit;
+
+    restoreAfterFailedSave(
+      prevS
+    );
+
+    return false;
+  }
+
+  /*
+   * Riallineiamo la selezione locale
+   * dopo il salvataggio.
+   */
+  if (
+    _activeLiveUnit &&
+    S.liveGames?.[_activeLiveUnit]
+  ) {
+    setActiveUnit(
+      _activeLiveUnit
+    );
+  }
+
+  toast(
+    `${unitLabel} cancelled`,
+    'ok'
+  );
+
+  render();
+
+  return true;
 }
 
 async function archiveCurrentLiveUnit() {
@@ -8719,6 +8972,13 @@ function bindMain() {
   document.getElementById('delete-day-btn')?.addEventListener('click', () => {
     deleteCurrentDayAndMatchingHistory();
   });
+  document
+    .getElementById('cancel-unit-btn')
+    ?.addEventListener(
+      'click',
+      openCancelCurrentLiveUnitDialog
+    );
+
   document
     .getElementById('archive-unit-btn')
     ?.addEventListener(
