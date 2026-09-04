@@ -1355,7 +1355,7 @@ const DISPLAY_TOTAL_DAYS = 119;
 
 function displayDayNumber(internalDayNumber) {
   const n = Number(internalDayNumber);
-  return Number.isFinite(n) ? n - 1 : '—';
+  return Number.isFinite(n) ? n : '—';
 }
 
 function displayDayLabel(internalDayNumber) {

@@ -567,10 +567,10 @@
 
   function buildScreens(data) {
     const projectDays = data.days.length;
-    const projectMainDays = displayedProjectTotalDays(Math.max(0,projectDays - 1));
+    const projectMainDays = displayedProjectTotalDays(projectDays);
     const openingTitle = `<span class="final-recap-opening-title"><span style="--opening-title-index:0">The</span><span style="--opening-title-index:1">Final</span><span style="--opening-title-index:2">Wrap</span></span>`;
     const openingCopy = `On day one, everyone would have sold their mother to win just one day of this amazing game.<br>On this very last day, everyone is missing their mom and we have only one winner.<br><br>It was an incredible journey full of turns, plot twists and revelations.<br>The people who seemed bad actually were bad. Only the greatest made it to the top and only the very best won.<br><br>Before celebrating, I'd like you to take a look at this incredible, amazing, unhealthy, sick hell we created, so we can remember what to do and what not to do on our next adventure!`;
-    const projectDayTitle = `<span class="final-recap-title-left"><span class="final-recap-title-line">${projectMainDays} ${word(projectMainDays,'Shooting day','Shooting days')}</span><span class="final-recap-title-line">1 Preshoot day</span></span>`;
+    const projectDayTitle = `<span class="final-recap-title-left"><span class="final-recap-title-line">${projectMainDays} ${word(projectMainDays,'Shooting day','Shooting days')}</span></span>`;
     const players = data.list.length;
     const podiumByRank = new Map(groupedFinalLeaderboard(data).filter(group => group.rank <= 3).map(group => [group.rank,group]));
     const podiumOrder = [podiumByRank.get(2),podiumByRank.get(1),podiumByRank.get(3)];
@@ -604,7 +604,7 @@
       : '<div class="final-recap-empty">Nobody landed an exact bet.</div>';
     return [
       screen('TotoSWrap final recap',openingTitle,openingCopy,'','final-recap-opening-screen'),
-      screen('The project in numbers',projectDayTitle,'',`<div class="final-recap-stat-grid">${stat(players,word(players,'Tuna played','Tunas played'))}${stat(data.totalBets,word(data.totalBets,'Bet placed','Bets placed'))}${stat(data.totalForgot,word(data.totalForgot,'Forgotten bet','Forgotten bets'))}</div>`),
+      screen('The project in numbers',projectDayTitle,'',`<div class="final-recap-stat-grid">${stat(players,word(players,'Assassin played','Assassins played'))}${stat(data.totalBets,word(data.totalBets,'Bet placed','Bets placed'))}${stat(data.totalForgot,word(data.totalForgot,'Forgotten bet','Forgotten bets'))}</div>`),
       screen('Perfect timing',`<span class="final-recap-number">${data.exactDays}</span> exact ${word(data.exactDays,'bet','bets')}`,'',exactCards),
       screen('Nobody won',`<span class="final-recap-number">${data.noWinnerEntries.length}</span> no-winner ${word(data.noWinnerEntries.length,'day','days')}`,'Expected wrap compared with the official wrap.',noWinnerRows(data.noWinnerEntries)),
       screen('Accuracy award',accuracyTitle('Most accurate'),accuracyCopy,`${accuracyGraph(data.mostAccurate)}<div class="final-recap-stat-grid">${stat(compactTime(data.mostAccurate?.avgGap),'Average distance')}${stat(data.mostAccurate?.bets || 0,word(data.mostAccurate?.bets || 0,'Bet measured','Bets measured'))}${stat(data.mostAccurate?.wins || 0,word(data.mostAccurate?.wins || 0,'Win','Wins'))}</div>`,'final-recap-accuracy-screen',accuracyName(data.mostAccurate,'is-green')),
@@ -636,7 +636,7 @@
         </div>
       </div>`,'final-recap-cog-screen'),
       screen('The race for first','Leaderboard lead changes',`${data.leadChanges.length} ${word(data.leadChanges.length,'change','changes')} at the top of the standings.`,leadChangeRows(data.leadChanges)),
-      screen('Final standings','The podium','Third place. Second place. And the winning tuna.',podiumHtml),
+      screen('Final standings','The podium','Third place. Second place. And the winning assassin.',podiumHtml),
       screen('','Thank you!','',`${finalStandingsImageFrame(data)}<p class="final-recap-closing-copy">It was an honor to swim together with you</p><button class="final-recap-replay" type="button" data-recap-replay>Rewatch recap again</button>`,'final-recap-shirt-screen')
     ];
   }
