@@ -252,6 +252,8 @@
     return (await loadCogImages()).length;
   }
 
+  const MIN_STATS_BETS = 36;
+
   function calculate(source) {
     const days = getCompletedDays(source);
     const players = (source.playerRoster || []).map(player => player.name).filter(Boolean);
@@ -398,11 +400,12 @@
 
     const list = [...stats.values()].map(player => ({
       ...player,
-      avgGap:player.gaps.length ? player.gaps.reduce((sum,value) => sum + value,0) / player.gaps.length : null
+      avgGap:player.gaps.length ? player.gaps.reduce((sum,value) => sum + value,0) / player.gaps.length : null,
+      winRate:player.bets > 0 ? player.wins / player.bets : null
     }));
     const leaderboard = [...list].sort((a,b) => b.score-a.score || b.wins-a.wins || a.name.localeCompare(b.name));
-    const mostAccurate = [...list].filter(item => item.avgGap !== null).sort((a,b) => a.avgGap-b.avgGap || b.bets-a.bets)[0] || null;
-    const leastAccurate = [...list].filter(item => item.avgGap !== null).sort((a,b) => b.avgGap-a.avgGap || b.bets-a.bets)[0] || null;
+    const mostAccurate = [...list].filter(item => item.avgGap !== null && item.bets >= MIN_STATS_BETS).sort((a,b) => a.avgGap-b.avgGap || b.bets-a.bets)[0] || null;
+    const leastAccurate = [...list].filter(item => item.avgGap !== null && item.bets >= MIN_STATS_BETS).sort((a,b) => b.avgGap-a.avgGap || b.bets-a.bets)[0] || null;
     const mostForgot = [...list].sort((a,b) => b.forgot-a.forgot || a.name.localeCompare(b.name))[0] || null;
     const exactPlayers = [...list].filter(item => item.exact > 0).sort((a,b) => b.exact-a.exact || b.wins-a.wins || a.name.localeCompare(b.name));
     const maxBets = Math.max(0,...list.map(item => item.bets));
@@ -411,7 +414,19 @@
     const longestStreak = list.filter(item => item.longestWinStreak === maxStreak && maxStreak > 0).sort((a,b) => a.name.localeCompare(b.name));
     const maxCloseWrong = Math.max(0,...list.map(item => item.closeWrong));
     const closeWrongLeaders = list.filter(item => item.closeWrong === maxCloseWrong && maxCloseWrong > 0).sort((a,b) => a.name.localeCompare(b.name));
-    return {days,list,leaderboard,totalBets,totalForgot,noWinnerEntries,exactDays,closestWrong,furthestNoWinner,furthestWinningDay,leadChanges,mostAccurate,leastAccurate,mostReliable,mostForgot,exactPlayers,longestStreak,closeWrongLeaders};
+    const winRateEligible = list.filter(item => item.winRate !== null);
+    const bestWinRatePlayer = [...winRateEligible].sort((a,b) =>
+      (b.wins * a.bets) - (a.wins * b.bets) ||
+      b.wins-a.wins ||
+      b.bets-a.bets ||
+      a.name.localeCompare(b.name)
+    )[0] || null;
+    const bestWinRate = bestWinRatePlayer
+      ? winRateEligible
+          .filter(item => item.wins * bestWinRatePlayer.bets === bestWinRatePlayer.wins * item.bets)
+          .sort((a,b) => b.wins-a.wins || b.bets-a.bets || a.name.localeCompare(b.name))
+      : [];
+    return {days,list,leaderboard,totalBets,totalForgot,noWinnerEntries,exactDays,closestWrong,furthestNoWinner,furthestWinningDay,leadChanges,mostAccurate,leastAccurate,mostReliable,mostForgot,exactPlayers,longestStreak,closeWrongLeaders,bestWinRate};
   }
 
   function stat(value, label) {
@@ -462,6 +477,24 @@
       ? group.players.map(player => `<span>${esc(player.name)}</span>`).join('')
       : '<span>—</span>';
   }
+  function thankYouStandings(data) {
+    const ranked = rankedFinalLeaderboard(data);
+    const top = ranked.filter(entry => entry.score > 0 && Number(entry.rank) <= 3);
+    const rest = ranked.filter(entry => !(entry.score > 0 && Number(entry.rank) <= 3));
+
+    const rows = entries => entries.map(entry => `<div class="final-recap-thankyou-row">
+      <span class="final-recap-thankyou-rank">${esc(entry.rank)}</span>
+      <strong>${esc(entry.name)}</strong>
+      <span>${entry.score} ${word(entry.score,'pt','pts')} · ${entry.wins} ${word(entry.wins,'win','wins')}</span>
+    </div>`).join('');
+
+    return `<div class="final-recap-thankyou-standings">
+      <div class="final-recap-thankyou-top">${rows(top)}</div>
+      <p class="final-recap-closing-copy">It was an honor to freerun with you</p>
+      <div class="final-recap-thankyou-rest">${rows(rest)}</div>
+    </div>`;
+  }
+
   function finalStandingsImageFrame(data) {
     if (data.finalStandingsImageSrc) {
       return `<div class="final-recap-standings-image-frame" data-final-standings-image><img class="final-recap-standings-image" src="${esc(data.finalStandingsImageSrc)}" alt="Final TotoSWrap standings"></div>`;
@@ -605,7 +638,7 @@
     return [
       screen('TotoSWrap final recap',openingTitle,openingCopy,'','final-recap-opening-screen'),
       screen('The project in numbers',projectDayTitle,'',`<div class="final-recap-stat-grid">${stat(players,word(players,'Assassin played','Assassins played'))}${stat(data.totalBets,word(data.totalBets,'Bet placed','Bets placed'))}${stat(data.totalForgot,word(data.totalForgot,'Forgotten bet','Forgotten bets'))}</div>`),
-      screen('Perfect timing',`<span class="final-recap-number">${data.exactDays}</span> exact ${word(data.exactDays,'bet','bets')}`,'',exactCards),
+      screen('Perfect timing',`<span class="final-recap-number">${data.exactDays}</span> exact ${word(data.exactDays,'bet','bets')}`,'',exactCards,'final-recap-exact-screen'),
       screen('Nobody won',`<span class="final-recap-number">${data.noWinnerEntries.length}</span> no-winner ${word(data.noWinnerEntries.length,'day','days')}`,'Expected wrap compared with the official wrap.',noWinnerRows(data.noWinnerEntries)),
       screen('Accuracy award',accuracyTitle('Most accurate'),accuracyCopy,`${accuracyGraph(data.mostAccurate)}<div class="final-recap-stat-grid">${stat(compactTime(data.mostAccurate?.avgGap),'Average distance')}${stat(data.mostAccurate?.bets || 0,word(data.mostAccurate?.bets || 0,'Bet measured','Bets measured'))}${stat(data.mostAccurate?.wins || 0,word(data.mostAccurate?.wins || 0,'Win','Wins'))}</div>`,'final-recap-accuracy-screen',accuracyName(data.mostAccurate,'is-green')),
       screen('Least accurate',accuracyTitle('Least accurate'),leastAccuracyCopy,`${accuracyGraph(data.leastAccurate)}<div class="final-recap-stat-grid">${stat(compactTime(data.leastAccurate?.avgGap),'Average distance')}${stat(data.leastAccurate?.bets || 0,word(data.leastAccurate?.bets || 0,'Bet measured','Bets measured'))}${stat(data.leastAccurate?.wins || 0,word(data.leastAccurate?.wins || 0,'Win','Wins'))}</div>`,'final-recap-accuracy-screen',accuracyName(data.leastAccurate,'is-red')),
@@ -618,6 +651,14 @@
         ${splitShowcaseAward('Most bets placed',data.mostReliable.length ? data.mostReliable.map(item => item.name).join(', ') : '—',data.mostReliable.length ? `${data.mostReliable[0].bets} ${word(data.mostReliable[0].bets,'bet','bets')}` : '—','green')}
         ${splitShowcaseAward('Most forgotten bets',data.mostForgot?.name || '—',data.mostForgot ? `${data.mostForgot.forgot} forgotten ${word(data.mostForgot.forgot,'bet','bets')}` : '—','red')}
         ${splitShowcaseAward('Longest winning streak',data.longestStreak.length ? data.longestStreak.map(item => item.name).join(', ') : '—',data.longestStreak.length ? `${data.longestStreak[0].longestWinStreak} consecutive ${word(data.longestStreak[0].longestWinStreak,'win','wins')}` : '—','gold')}
+      </div>`),
+      screen('Winning efficiency','Best win rate','',`<div class="final-recap-showcase-grid final-recap-single-showcase">
+        ${splitShowcaseAward(
+          'Best win rate',
+          data.bestWinRate.length ? data.bestWinRate.map(item => item.name).join(', ') : '—',
+          data.bestWinRate.length ? `${(data.bestWinRate[0].winRate * 100).toFixed(1)}% · ${data.bestWinRate[0].wins} ${word(data.bestWinRate[0].wins,'win','wins')} / ${data.bestWinRate[0].bets} ${word(data.bestWinRate[0].bets,'game','games')}` : '—',
+          'green'
+        )}
       </div>`),
       screen('Caught on camera','Reaction replay','',`<div class="final-recap-reaction-grid">
         ${reactionCard('Best reaction','media/best_reaction.mp4','green')}
@@ -635,9 +676,9 @@
           </div>
         </div>
       </div>`,'final-recap-cog-screen'),
-      screen('The race for first','Leaderboard lead changes',`${data.leadChanges.length} ${word(data.leadChanges.length,'change','changes')} at the top of the standings.`,leadChangeRows(data.leadChanges)),
+      screen('The race for first','Leaderboard lead changes',`${data.leadChanges.length} ${word(data.leadChanges.length,'change','changes')} at the top of the standings.`,leadChangeRows(data.leadChanges),'final-recap-lead-screen'),
       screen('Final standings','The podium','Third place. Second place. And the winning assassin.',podiumHtml),
-      screen('','Thank you!','',`${finalStandingsImageFrame(data)}<p class="final-recap-closing-copy">It was an honor to swim together with you</p><button class="final-recap-replay" type="button" data-recap-replay>Rewatch recap again</button>`,'final-recap-shirt-screen')
+      screen('','Thank you!','',`${thankYouStandings(data)}<button class="final-recap-replay" type="button" data-recap-replay>Rewatch recap again</button>`,'final-recap-shirt-screen')
     ];
   }
 
