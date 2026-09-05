@@ -1068,6 +1068,13 @@
     margin-bottom:8px;
   }
 
+
+  /* Shooting days single-line mobile title */
+  .final-recap-title-left .final-recap-title-line {
+    white-space:nowrap;
+    font-size:clamp(1.5rem,6.6vw,2.2rem);
+  }
+
 }
 @media (prefers-reduced-motion:reduce) {
   .final-recap,
