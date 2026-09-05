@@ -387,11 +387,24 @@
         }
       });
 
-      const leader = [...runningScores.entries()].sort((a,b) =>
+      const rankedLeaders = [...runningScores.entries()].sort((a,b) =>
         b[1]-a[1] ||
-        (runningWins.get(b[0]) || 0) - (runningWins.get(a[0]) || 0) ||
-        a[0].localeCompare(b[0])
-      )[0]?.[0] || null;
+        (runningWins.get(b[0]) || 0) - (runningWins.get(a[0]) || 0)
+      );
+
+      let leader = rankedLeaders[0]?.[0] || null;
+
+      if (previousLeader && leader && leader !== previousLeader) {
+        const topScore = runningScores.get(leader) || 0;
+        const topWins = runningWins.get(leader) || 0;
+        const previousScore = runningScores.get(previousLeader) || 0;
+        const previousWins = runningWins.get(previousLeader) || 0;
+
+        if (topScore === previousScore && topWins === previousWins) {
+          leader = previousLeader;
+        }
+      }
+
       if (previousLeader && leader && leader !== previousLeader) {
         leadChanges.push({dayIndex,from:previousLeader,to:leader});
       }
