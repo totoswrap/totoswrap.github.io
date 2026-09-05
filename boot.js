@@ -33,6 +33,7 @@
     'You miss 100% of the bets you don’t place.',
     'Your strategy is so confusing that it fooled even you.',
     '<span class="boot-phrase-right">"Let me fly!"\n- Conor Kennedy</span>',
+    '<span class="boot-phrase-right">"Let us play in pesce!"\n- Giulia Emiliani</span>',
     '<span class="boot-phrase-right">"Questa <u>non</u> è una dittatura!"</span>',
     'I love the smell of TotoWrap in the morning',
     'Facciamo un referendum?',
