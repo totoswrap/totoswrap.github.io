@@ -252,7 +252,7 @@
     return (await loadCogImages()).length;
   }
 
-  const MIN_STATS_BETS = 36;
+  const MIN_STATS_BETS = 12;
 
   function calculate(source) {
     const days = getCompletedDays(source);
