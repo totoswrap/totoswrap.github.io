@@ -676,8 +676,8 @@
         )}
       </div>`),
       screen('Caught on camera','Reaction replay','',`<div class="final-recap-reaction-grid">
-        ${reactionCard('Best reaction','media/best_reaction.mp4','green')}
-        ${reactionCard('Worst reaction','media/worst_reaction.mp4','red')}
+        ${reactionCard('Winner','media/edoardo-win-vertical.MP4','green')}
+        ${reactionCard('Loser','media/giulia-loss.MP4','red')}
       </div>`),
       screen('A very specific statistic','Enemies to lovers','',`<div class="final-recap-showcase-grid final-recap-single-showcase final-recap-cog-scene">
         <div class="final-recap-cog-stack" aria-hidden="true">
