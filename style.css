@@ -1070,3 +1070,11 @@ html.android-glass-fallback :is(.result-share-panel,.admin-dialog-panel) {
   object-fit: contain;
   vertical-align: -4px;
 }
+
+/* Compact History unit labels on phones */
+.hist-unit-label-mobile { display: none; }
+
+@media (max-width: 520px) {
+  .hist-unit-label-full { display: none; }
+  .hist-unit-label-mobile { display: inline; }
+}

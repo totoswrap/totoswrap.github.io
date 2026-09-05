@@ -7803,6 +7803,33 @@ async function deleteCurrentDayAndMatchingHistory() {
   render();
 }
 
+function formatHistoryMobileUnitLabel(unit) {
+  const units = [
+    'main',
+    'second',
+    'third',
+    'fourth',
+    'fifth',
+    'sixth',
+    'seventh',
+    'eighth',
+    'ninth',
+    'tenth'
+  ];
+
+  const unitKey = unit || 'main';
+  const index = units.indexOf(unitKey);
+
+  if (index !== -1) {
+    return index === 0 ? 'MU' : `${index + 1}U`;
+  }
+
+  const match = String(unitKey).match(/^unit-(\d+)$/);
+  if (match) return `${match[1]}U`;
+
+  return formatUnitLabel(unitKey);
+}
+
 function renderHistory() {
   const all = getHistoryEntries();
   if (!all.length) return '<div class="tab-page-frame"><div class="empty">No completed days yet</div></div>';
@@ -7825,8 +7852,9 @@ function renderHistory() {
       internalDayNumber === null
         ? 'History Day'
         : displayDayLabel(internalDayNumber);
+    const mobileUnitLabel = formatHistoryMobileUnitLabel(d.unit);
     const historyUnitTag =
-      `<span class="hist-unit-tag">${esc(unitLabel)}</span>`;
+      `<span class="hist-unit-tag"><span class="hist-unit-label-full">${esc(unitLabel)}</span><span class="hist-unit-label-mobile">${esc(mobileUnitLabel)}</span></span>`;
     const penaltiesByPlayer = dayPenaltyMap(d);
     const historyDayTag = canManage
       ? `<button
