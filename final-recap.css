@@ -961,6 +961,113 @@
   .final-recap-shirt-screen { padding-inline:14px; }
   .final-recap-thankyou-standings { width:100%; }
   .final-recap-thankyou-row { padding:6px 7px; gap:5px; }
+
+  /* Mobile Final Recap layout fixes */
+
+  /* Allow long titles to fit inside the phone viewport. */
+  .final-recap-title-nowrap,
+  .final-recap-title-line {
+    white-space:normal;
+  }
+
+  .final-recap-title {
+    max-width:100%;
+  }
+
+  /* Exact Bets: compact the screen and protect the progress-dot area. */
+  .final-recap-exact-screen {
+    overflow-y:auto;
+    padding-top:calc(96px + env(safe-area-inset-top));
+    padding-bottom:calc(110px + env(safe-area-inset-bottom));
+  }
+
+  .final-recap-exact-screen .final-recap-title {
+    font-size:clamp(1.65rem,7.2vw,2.6rem);
+  }
+
+  .final-recap-exact-stage {
+    margin-top:14px;
+    gap:6px;
+  }
+
+  .final-recap-exact-winner {
+    min-height:92px;
+    padding:11px;
+  }
+
+  .final-recap-exact-winner strong {
+    font-size:1.35rem;
+  }
+
+  .final-recap-exact-others {
+    gap:6px;
+  }
+
+  .final-recap-exact-others div {
+    min-height:56px;
+    padding:7px 6px;
+  }
+
+  /* Lead Changes: keep the final cards above the progress dots. */
+  .final-recap-lead-screen {
+    overflow-y:auto;
+    padding-top:calc(96px + env(safe-area-inset-top));
+    padding-bottom:calc(110px + env(safe-area-inset-bottom));
+  }
+
+  .final-recap-lead-screen .final-recap-title {
+    font-size:clamp(1.65rem,7.2vw,2.6rem);
+  }
+
+  .final-recap-lead-screen .final-recap-copy {
+    margin-top:6px;
+  }
+
+  .final-recap-lead-screen .final-recap-lead-grid {
+    margin-top:11px;
+    gap:6px;
+  }
+
+  .final-recap-lead-change {
+    min-height:74px;
+    padding:8px;
+  }
+
+  .final-recap-lead-names {
+    margin-top:6px;
+    gap:5px;
+  }
+
+  .final-recap-lead-names b,
+  .final-recap-lead-names strong {
+    font-size:.8rem;
+  }
+
+  /* Thank You: standings and Replay must flow instead of overlapping. */
+  .final-recap-shirt-screen {
+    overflow-y:auto;
+    padding-top:calc(96px + env(safe-area-inset-top));
+    padding-bottom:calc(110px + env(safe-area-inset-bottom));
+    gap:10px;
+  }
+
+  .final-recap-thankyou-standings {
+    width:100%;
+    flex:0 0 auto !important;
+    justify-content:flex-start !important;
+  }
+
+  .final-recap-thankyou-row {
+    padding:6px 7px;
+    gap:5px;
+  }
+
+  .final-recap-shirt-screen .final-recap-replay {
+    flex:0 0 auto;
+    margin-top:4px;
+    margin-bottom:8px;
+  }
+
 }
 @media (prefers-reduced-motion:reduce) {
   .final-recap,
