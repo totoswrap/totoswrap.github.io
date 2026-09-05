@@ -883,6 +883,12 @@ input::placeholder, textarea::placeholder { color: var(--dim); }
 .standings-scroll-list .board-player:last-child .board-row { padding-bottom:2px; }
 .accuracy-active-name { position:absolute; left:-58px; right:-4px; top:3%; color:var(--dim); font-family:'Alte Haas Grotesk', sans-serif; font-size:.58rem; line-height:1; text-align:center; pointer-events:none; z-index:3; }
 .closeness-graph { position:relative; height:256px; margin:2px 4px 28px 58px; overflow:visible; }
+.closeness-viewport { position:absolute; left:0; right:0; top:0; bottom:-28px; overflow:hidden; }
+.closeness-timeline { position:absolute; left:0; top:0; height:256px; width:100%; transform:translateX(0); transform-origin:left top; will-change:width, transform; }
+.closeness-graph.is-zoomed .closeness-viewport { touch-action:none; }
+.accuracy-zoom-reset { position:absolute; right:2px; top:0; z-index:6; display:none; border:1px solid rgba(var(--neutral-rgb), .16); border-radius:999px; padding:4px 7px; background:rgba(38,55,89,.82); color:var(--dim); font-family:'Alte Haas Grotesk', sans-serif; font-size:.48rem; line-height:1; }
+.closeness-graph.is-zoomed .accuracy-zoom-reset { display:block; }
+
 .closeness-y-axis,
 .closeness-x-axis { position:absolute; background:rgba(var(--neutral-rgb), .18); pointer-events:none; }
 .closeness-y-axis { left:0; top:10%; bottom:12%; width:1px; }

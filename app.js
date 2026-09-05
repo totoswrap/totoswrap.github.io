@@ -129,6 +129,7 @@ let _closenessArrowTurns = 0;
 let _swipeStart = null;
 let _suppressNextClick = false;
 let _dragState = null;
+let _accuracyZoomState = null;
 let _navIndicatorHideTO = null;
 let _inactiveAt = document.hidden ? Date.now() : null;
 let _inactivityTimer = null;
@@ -516,12 +517,196 @@ function injectNavIndicator(animate=false, showIndicator=false) {
 }
 
 function isSwipeIgnoredTarget(target) {
-  return Boolean(target?.closest?.('input, textarea, select, button, a, [contenteditable="true"]'));
+  return Boolean(
+    target?.closest?.('input, textarea, select, button, a, [contenteditable="true"]') ||
+    target?.closest?.('.closeness-graph.is-zoomed')
+  );
 }
 
 function isMobileSwipeSurface() {
   return matchMedia('(pointer: coarse), (max-width: 700px)').matches;
 }
+
+function accuracyTouchDistance(touches) {
+  if (touches.length < 2) return 0;
+  const dx = touches[0].clientX - touches[1].clientX;
+  const dy = touches[0].clientY - touches[1].clientY;
+  return Math.hypot(dx, dy);
+}
+
+function clampAccuracyZoom(value) {
+  return Math.max(1, Math.min(5, value));
+}
+
+function applyAccuracyZoom(graph, scale, panX=0) {
+  const viewport = graph?.querySelector('.closeness-viewport');
+  const timeline = graph?.querySelector('.closeness-timeline');
+  const reset = graph?.querySelector('[data-accuracy-zoom-reset]');
+  if (!viewport || !timeline) return;
+
+  const viewportWidth = viewport.clientWidth;
+  const timelineWidth = viewportWidth * scale;
+  const maxPan = Math.max(0, timelineWidth - viewportWidth);
+  const clampedPan = Math.max(0, Math.min(maxPan, panX));
+
+  timeline.style.width = `${scale * 100}%`;
+  timeline.style.transform = `translateX(${-clampedPan}px)`;
+
+  const zoomed = scale > 1.01;
+  graph.classList.toggle('is-zoomed', zoomed);
+
+  if (reset) {
+    reset.textContent = `${scale.toFixed(1).replace('.0','')}× · Reset`;
+  }
+
+  return clampedPan;
+}
+
+function resetAccuracyZoom(graph) {
+  if (!graph) return;
+  applyAccuracyZoom(graph, 1, 0);
+  _accuracyZoomState = null;
+}
+
+document.addEventListener('touchstart', e => {
+  const graph = e.target.closest?.('.closeness-graph');
+  if (!graph || !isMobileSwipeSurface()) return;
+
+  if (e.touches.length === 2) {
+    const currentScale = _accuracyZoomState?.graph === graph
+      ? _accuracyZoomState.scale
+      : 1;
+    const currentPan = _accuracyZoomState?.graph === graph
+      ? _accuracyZoomState.panX
+      : 0;
+
+    _accuracyZoomState = {
+      graph,
+      mode: 'pinch',
+      scale: currentScale,
+      panX: currentPan,
+      startScale: currentScale,
+      startPanX: currentPan,
+      startDistance: accuracyTouchDistance(e.touches)
+    };
+
+    _swipeStart = null;
+    _dragState = null;
+    e.preventDefault();
+    return;
+  }
+
+  if (
+    e.touches.length === 1 &&
+    graph.classList.contains('is-zoomed')
+  ) {
+    const currentScale = _accuracyZoomState?.graph === graph
+      ? _accuracyZoomState.scale
+      : 1;
+    const currentPan = _accuracyZoomState?.graph === graph
+      ? _accuracyZoomState.panX
+      : 0;
+
+    _accuracyZoomState = {
+      graph,
+      mode: 'pan',
+      scale: currentScale,
+      panX: currentPan,
+      startScale: currentScale,
+      startPanX: currentPan,
+      startX: e.touches[0].clientX
+    };
+
+    _swipeStart = null;
+    _dragState = null;
+  }
+}, { passive: false });
+
+document.addEventListener('touchmove', e => {
+  const state = _accuracyZoomState;
+  if (!state?.graph?.isConnected) return;
+
+  if (state.mode === 'pinch' && e.touches.length === 2) {
+    const distance = accuracyTouchDistance(e.touches);
+    if (!state.startDistance) return;
+
+    const scale = clampAccuracyZoom(
+      state.startScale * distance / state.startDistance
+    );
+
+    const viewport = state.graph.querySelector('.closeness-viewport');
+    const oldWidth = viewport?.clientWidth * state.startScale || 0;
+    const newWidth = viewport?.clientWidth * scale || 0;
+    const centerRatio = oldWidth
+      ? (state.startPanX + (viewport?.clientWidth || 0) / 2) / oldWidth
+      : 0.5;
+    const wantedPan = centerRatio * newWidth - (viewport?.clientWidth || 0) / 2;
+
+    state.scale = scale;
+    state.panX = applyAccuracyZoom(state.graph, scale, wantedPan) || 0;
+
+    _swipeStart = null;
+    _dragState = null;
+    e.preventDefault();
+    return;
+  }
+
+  if (state.mode === 'pan' && e.touches.length === 1) {
+    const dx = e.touches[0].clientX - state.startX;
+    state.panX = applyAccuracyZoom(
+      state.graph,
+      state.scale,
+      state.startPanX - dx
+    ) || 0;
+
+    _swipeStart = null;
+    _dragState = null;
+    e.preventDefault();
+  }
+}, { passive: false });
+
+document.addEventListener('touchend', e => {
+  const state = _accuracyZoomState;
+  if (!state?.graph?.isConnected) return;
+
+  if (state.mode === 'pinch') {
+    if (e.touches.length === 1 && state.scale > 1.01) {
+      state.mode = 'pan';
+      state.startX = e.touches[0].clientX;
+      state.startPanX = state.panX;
+    } else if (e.touches.length === 0) {
+      if (state.scale <= 1.01) {
+        resetAccuracyZoom(state.graph);
+      } else {
+        state.mode = null;
+      }
+    }
+    return;
+  }
+
+  if (state.mode === 'pan' && e.touches.length === 0) {
+    state.mode = null;
+  }
+}, { passive: true });
+
+document.addEventListener('touchcancel', () => {
+  if (_accuracyZoomState?.graph?.isConnected) {
+    if (_accuracyZoomState.scale <= 1.01) {
+      resetAccuracyZoom(_accuracyZoomState.graph);
+    } else {
+      _accuracyZoomState.mode = null;
+    }
+  }
+}, { passive: true });
+
+document.addEventListener('click', e => {
+  const reset = e.target.closest?.('[data-accuracy-zoom-reset]');
+  if (!reset) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+  resetAccuracyZoom(reset.closest('.closeness-graph'));
+});
 
 document.addEventListener('touchstart', e => {
   if (!isMobileSwipeSurface() || e.touches.length !== 1 || isSwipeIgnoredTarget(e.target)) {
@@ -4660,15 +4845,20 @@ function renderBoardCloseness(pl) {
   return `
   <div class="closeness-wrap">
     <div class="closeness-graph">
+      <button class="accuracy-zoom-reset" type="button" data-accuracy-zoom-reset aria-label="Reset Accuracy zoom">1× · Reset</button>
       <div class="accuracy-active-name" style="color:${colorOf(activePlayer)};">${esc(activePlayer)}</div>
       <div class="closeness-y-axis"></div>
-      <div class="closeness-x-axis"></div>
       <div class="closeness-y-label">Distance from wrap</div>
       ${yTicks}
-      ${dayTicks}
-      <div class="closeness-x-label">Days</div>
-      <svg class="closeness-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${lineSvg}</svg>
-      ${markerHtml}
+      <div class="closeness-viewport">
+        <div class="closeness-timeline">
+          <div class="closeness-x-axis"></div>
+          ${dayTicks}
+          <div class="closeness-x-label">Days</div>
+          <svg class="closeness-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${lineSvg}</svg>
+          ${markerHtml}
+        </div>
+      </div>
     </div>
     ${orderControl}
     <div class="board-legend">${legendHtml}</div>
