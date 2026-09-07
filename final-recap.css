@@ -937,6 +937,7 @@
 .final-recap-shirt-screen .final-recap-replay {
   flex:0 0 auto;
   width:min(330px,calc(100vw - 2cm));
+  margin-top:18px;
 }
 
 @media (max-width:420px) {
@@ -1046,7 +1047,7 @@
   /* Thank You: standings and Replay must flow instead of overlapping. */
   .final-recap-shirt-screen {
     overflow-y:auto;
-    padding-top:calc(96px + env(safe-area-inset-top));
+    padding-top:calc(64px + env(safe-area-inset-top));
     padding-bottom:calc(110px + env(safe-area-inset-bottom));
     gap:10px;
   }
