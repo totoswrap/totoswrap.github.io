@@ -5087,8 +5087,55 @@ function getBoardPlayerStats(name) {
   };
 }
 
+function getBoardPlayerMultiUnitBonus(name) {
+  const key = nameKey(name);
+  let total = 0;
+
+  Object.values(S.multiUnitBonuses || {}).forEach(dateRecord => {
+    if (!dateRecord || typeof dateRecord !== 'object') return;
+
+    const entry = dateRecord[key];
+
+    if (
+      entry &&
+      entry.status === 'awarded' &&
+      Number(entry.points) > 0
+    ) {
+      total += Number(entry.points);
+    }
+  });
+
+  return total;
+}
+
+function getBoardPlayerLostPoints(name) {
+  const key = nameKey(name);
+  let total = 0;
+
+  getHistoryEntries().forEach(day => {
+    dayPenalties(day).forEach(penalty => {
+      if (nameKey(penalty?.name) !== key) return;
+
+      const points = Number(penalty?.points) || 0;
+
+      if (points < 0) {
+        total += Math.abs(points);
+      }
+    });
+  });
+
+  return total;
+}
+
 function renderBoardPlayerStats(name) {
   const stats = getBoardPlayerStats(name);
+
+  const multiUnitBonus =
+    getBoardPlayerMultiUnitBonus(name);
+
+  const lostPoints =
+    getBoardPlayerLostPoints(name);
+
   const lastOffset = stats.lastGuess && stats.lastDay ? betMinuteOffsetFromWrap(stats.lastGuess, stats.lastDay) : null;
   const wrapGap = stats.lastGap === null
     ? 'No completed bets yet'
@@ -5097,19 +5144,13 @@ function renderBoardPlayerStats(name) {
       : lastOffset?.direction
         ? `Last bet was <span class="accent">${formatBoardGap(lastOffset.distance)}</span> ${lastOffset.direction} official wrap`
         : `Last bet was <span class="accent">${formatBoardGap(stats.lastGap)}</span> from official wrap`;
-  const closestWrongValue = stats.closestWrongGap === null ? '--' : formatBoardCompactGap(stats.closestWrongGap);
-  const closestWrongStat = stats.closestWrongDate
-    ? `<button class="board-stat board-stat-link" type="button" data-closest-wrong-date="${esc(stats.closestWrongDate)}" data-closest-wrong-unit="${esc(stats.closestWrongUnit || 'main')}" title="Open history day" aria-label="Open closest wrong bet history">
-        <strong>${closestWrongValue}</strong><span>Closest Wrong Bet</span>
-      </button>`
-    : `<div class="board-stat"><strong>${closestWrongValue}</strong><span>Closest Wrong Bet</span></div>`;
   return `<div class="board-player-stats">
     <div class="board-player-gap">${wrapGap}</div>
     <div class="board-stat-grid">
       <div class="board-stat"><strong>${stats.wins}</strong><span>Total Wins</span></div>
       <div class="board-stat"><strong>${stats.exact}</strong><span>Exact Bet</span></div>
-      <div class="board-stat"><strong>${stats.forgot}</strong><span>Forgot Bets</span></div>
-      ${closestWrongStat}
+      <div class="board-stat"><strong>${multiUnitBonus ? `+${multiUnitBonus}` : 0}</strong><span>Multi Unit Bonus</span></div>
+      <div class="board-stat"><strong>${lostPoints ? `-${lostPoints}` : 0}</strong><span>Lost Points</span></div>
     </div>
     <div class="board-win-rate">Win rate <span class="accent">${stats.rate}</span> - Won ${stats.wins} ${countWord(stats.wins, 'day', 'days')} out of ${stats.days}</div>
   </div>`;
