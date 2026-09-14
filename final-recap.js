@@ -417,8 +417,11 @@
       winRate:player.bets > 0 ? player.wins / player.bets : null
     }));
     const leaderboard = [...list].sort((a,b) => b.score-a.score || b.wins-a.wins || a.name.localeCompare(b.name));
-    const mostAccurate = [...list].filter(item => item.avgGap !== null && item.bets >= MIN_STATS_BETS).sort((a,b) => a.avgGap-b.avgGap || b.bets-a.bets)[0] || null;
-    const leastAccurate = [...list].filter(item => item.avgGap !== null && item.bets >= MIN_STATS_BETS).sort((a,b) => b.avgGap-a.avgGap || b.bets-a.bets)[0] || null;
+    const accuracyEligible = [...list].filter(item => item.avgGap !== null && item.bets >= MIN_STATS_BETS);
+    const mostAccurateRanking = [...accuracyEligible].sort((a,b) => a.avgGap-b.avgGap || b.bets-a.bets);
+    const leastAccurateRanking = [...accuracyEligible].sort((a,b) => b.avgGap-a.avgGap || b.bets-a.bets);
+    const mostAccurate = mostAccurateRanking[0] || null;
+    const leastAccurate = leastAccurateRanking[0] || null;
     const mostForgot = [...list].sort((a,b) => b.forgot-a.forgot || a.name.localeCompare(b.name))[0] || null;
     const exactPlayers = [...list].filter(item => item.exact > 0).sort((a,b) => b.exact-a.exact || b.wins-a.wins || a.name.localeCompare(b.name));
     const maxBets = Math.max(0,...list.map(item => item.bets));
@@ -430,18 +433,19 @@
     const winRateEligible = list.filter(
       item => item.winRate !== null && item.bets >= MIN_STATS_BETS
     );
-    const bestWinRatePlayer = [...winRateEligible].sort((a,b) =>
+    const winRateRanking = [...winRateEligible].sort((a,b) =>
       (b.wins * a.bets) - (a.wins * b.bets) ||
       b.wins-a.wins ||
       b.bets-a.bets ||
       a.name.localeCompare(b.name)
-    )[0] || null;
+    );
+    const bestWinRatePlayer = winRateRanking[0] || null;
     const bestWinRate = bestWinRatePlayer
       ? winRateEligible
           .filter(item => item.wins * bestWinRatePlayer.bets === bestWinRatePlayer.wins * item.bets)
           .sort((a,b) => b.wins-a.wins || b.bets-a.bets || a.name.localeCompare(b.name))
       : [];
-    return {days,list,leaderboard,totalBets,totalForgot,noWinnerEntries,exactDays,closestWrong,furthestNoWinner,furthestWinningDay,leadChanges,mostAccurate,leastAccurate,mostReliable,mostForgot,exactPlayers,longestStreak,closeWrongLeaders,bestWinRate};
+    return {days,list,leaderboard,totalBets,totalForgot,noWinnerEntries,exactDays,closestWrong,furthestNoWinner,furthestWinningDay,leadChanges,mostAccurate,leastAccurate,mostAccurateRanking,leastAccurateRanking,mostReliable,mostForgot,exactPlayers,longestStreak,closeWrongLeaders,bestWinRate,winRateRanking};
   }
 
   function stat(value, label) {
@@ -632,6 +636,17 @@
     }).join('')}</div>`;
     const accuracyTitle = label => `<span class="final-recap-title-nowrap">${esc(label)}</span>`;
     const accuracyName = (player, tone) => player ? `<div class="final-recap-title-player ${tone}">${esc(player.name)}</div>` : '';
+    const runnerUpRows = (players, valueFor) => {
+      const rows = (players || []).slice(1,3);
+      if (!rows.length) return '';
+      return `<div class="final-recap-runner-ups">${rows.map((player,index) => `
+        <div class="final-recap-runner-up">
+          <span>${index + 2}${index === 0 ? 'nd' : 'rd'}</span>
+          <strong>${esc(player.name)}</strong>
+          <b>${esc(valueFor(player))}</b>
+        </div>`).join('')}</div>`;
+    };
+
     const accuracyCopy = data.mostAccurate
       ? `Average distance was ${esc(compactTime(data.mostAccurate.avgGap))} from the official wrap across ${data.mostAccurate.bets} ${word(data.mostAccurate.bets,'bet','bets')}.`
       : 'There is not enough completed data to calculate accuracy yet.';
@@ -655,8 +670,8 @@
       screen('The project in numbers',projectDayTitle,'',`<div class="final-recap-stat-grid">${stat(players,word(players,'Assassin played','Assassins played'))}${stat(data.totalBets,word(data.totalBets,'Bet placed','Bets placed'))}${stat(data.totalForgot,word(data.totalForgot,'Forgotten bet','Forgotten bets'))}</div>`),
       screen('Perfect timing',`<span class="final-recap-number">${data.exactDays}</span> exact ${word(data.exactDays,'bet','bets')}`,'',exactCards,'final-recap-exact-screen'),
       screen('Nobody won',`<span class="final-recap-number">${data.noWinnerEntries.length}</span> no-winner ${word(data.noWinnerEntries.length,'day','days')}`,'Expected wrap compared with the official wrap.',noWinnerRows(data.noWinnerEntries)),
-      screen('Accuracy award',accuracyTitle('Most accurate'),accuracyCopy,`${accuracyGraph(data.mostAccurate)}<div class="final-recap-stat-grid">${stat(compactTime(data.mostAccurate?.avgGap),'Average distance')}${stat(data.mostAccurate?.bets || 0,word(data.mostAccurate?.bets || 0,'Bet measured','Bets measured'))}${stat(data.mostAccurate?.wins || 0,word(data.mostAccurate?.wins || 0,'Win','Wins'))}</div>`,'final-recap-accuracy-screen',accuracyName(data.mostAccurate,'is-green')),
-      screen('Least accurate',accuracyTitle('Least accurate'),leastAccuracyCopy,`${accuracyGraph(data.leastAccurate)}<div class="final-recap-stat-grid">${stat(compactTime(data.leastAccurate?.avgGap),'Average distance')}${stat(data.leastAccurate?.bets || 0,word(data.leastAccurate?.bets || 0,'Bet measured','Bets measured'))}${stat(data.leastAccurate?.wins || 0,word(data.leastAccurate?.wins || 0,'Win','Wins'))}</div>`,'final-recap-accuracy-screen',accuracyName(data.leastAccurate,'is-red')),
+      screen('Accuracy award',accuracyTitle('Most accurate'),accuracyCopy,`${runnerUpRows(data.mostAccurateRanking,player => compactTime(player.avgGap))}${accuracyGraph(data.mostAccurate)}<div class="final-recap-stat-grid">${stat(compactTime(data.mostAccurate?.avgGap),'Average distance')}${stat(data.mostAccurate?.bets || 0,word(data.mostAccurate?.bets || 0,'Bet measured','Bets measured'))}${stat(data.mostAccurate?.wins || 0,word(data.mostAccurate?.wins || 0,'Win','Wins'))}</div>`,'final-recap-accuracy-screen',accuracyName(data.mostAccurate,'is-green')),
+      screen('Least accurate',accuracyTitle('Least accurate'),leastAccuracyCopy,`${runnerUpRows(data.leastAccurateRanking,player => compactTime(player.avgGap))}${accuracyGraph(data.leastAccurate)}<div class="final-recap-stat-grid">${stat(compactTime(data.leastAccurate?.avgGap),'Average distance')}${stat(data.leastAccurate?.bets || 0,word(data.leastAccurate?.bets || 0,'Bet measured','Bets measured'))}${stat(data.leastAccurate?.wins || 0,word(data.leastAccurate?.wins || 0,'Win','Wins'))}</div>`,'final-recap-accuracy-screen',accuracyName(data.leastAccurate,'is-red')),
       screen('The highs and lows','Every second counted','',`<div class="final-recap-showcase-grid">
         ${splitShowcaseAward('Closest wrong bet',data.closestWrong?.name || '—',data.closestWrong ? compactTime(data.closestWrong.gap) : '—','green')}
         ${furthestComparisonCard(data.furthestNoWinner,data.furthestWinningDay)}
@@ -673,6 +688,10 @@
           data.bestWinRate.length ? data.bestWinRate.map(item => item.name).join(', ') : '—',
           data.bestWinRate.length ? `${(data.bestWinRate[0].winRate * 100).toFixed(1)}% · ${data.bestWinRate[0].wins} ${word(data.bestWinRate[0].wins,'win','wins')} / ${data.bestWinRate[0].bets} ${word(data.bestWinRate[0].bets,'game','games')}` : '—',
           'green'
+        )}
+        ${runnerUpRows(
+          data.winRateRanking,
+          player => `${(player.winRate * 100).toFixed(1)}% · ${player.wins} ${word(player.wins,'win','wins')} / ${player.bets} ${word(player.bets,'game','games')}`
         )}
       </div>`),
       screen('Caught on camera','Reaction replay','',`<div class="final-recap-reaction-grid">

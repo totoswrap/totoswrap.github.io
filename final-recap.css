@@ -286,7 +286,7 @@
 }
 .final-recap-exact-screen {
   justify-content:flex-start;
-  padding-top:calc(112px + env(safe-area-inset-top));
+  padding-top:calc(92px + env(safe-area-inset-top));
   padding-bottom:calc(72px + env(safe-area-inset-bottom));
 }
 
@@ -295,14 +295,14 @@
 }
 
 .final-recap-exact-stage {
-  width:min(640px,100%);
-  margin-top:18px;
+  width:min(620px,100%);
+  margin-top:12px;
   display:grid;
-  gap:8px;
+  gap:6px;
 }
 .final-recap-exact-winner {
-  min-height:104px;
-  padding:14px;
+  min-height:88px;
+  padding:11px 12px;
   border:1px solid rgba(var(--yellow-rgb),.58);
   border-radius:8px;
   background:linear-gradient(145deg,rgba(var(--yellow-rgb),.22),rgba(38,55,89,.64));
@@ -315,16 +315,16 @@
 .final-recap-exact-winner span,
 .final-recap-exact-winner b,
 .final-recap-exact-others span { color:var(--dim); font-size:.52rem; font-weight:normal; letter-spacing:.1em; line-height:1.2; text-transform:uppercase; }
-.final-recap-exact-winner strong { margin-top:5px; color:var(--accent); font-size:1.55rem; line-height:1; }
-.final-recap-exact-winner b { margin-top:8px; }
+.final-recap-exact-winner strong { margin-top:4px; color:var(--accent); font-size:1.38rem; line-height:1; }
+.final-recap-exact-winner b { margin-top:6px; }
 .final-recap-exact-others {
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:7px;
+  gap:5px;
 }
 .final-recap-exact-others div {
-  min-height:62px;
-  padding:9px 8px;
+  min-height:50px;
+  padding:6px 7px;
   border:1px solid rgba(var(--neutral-rgb),.18);
   border-radius:7px;
   background:rgba(38,55,89,.58);
@@ -334,11 +334,11 @@
 }
 .final-recap-exact-others div:last-child:nth-child(odd) {
   grid-column:1 / -1;
-  width:calc((100% - 7px) / 2);
+  width:calc((100% - 5px) / 2);
   justify-self:center;
 }
-.final-recap-exact-others strong { color:var(--accent); font-size:.86rem; line-height:1; }
-.final-recap-exact-others span { margin-top:5px; }
+.final-recap-exact-others strong { color:var(--accent); font-size:.78rem; line-height:1; }
+.final-recap-exact-others span { margin-top:3px; }
 .final-recap-empty {
   width:min(600px,100%);
   margin-top:22px;
@@ -440,6 +440,45 @@
 }
 .final-recap-award span { color:var(--dim); font-size:.62rem; text-transform:uppercase; }
 .final-recap-award strong { color:var(--accent); font-size:.82rem; text-align:right; }
+.final-recap-runner-ups {
+  width:min(460px,100%);
+  margin:10px auto 0;
+  display:grid;
+  gap:5px;
+}
+
+.final-recap-runner-up {
+  min-height:34px;
+  padding:6px 9px;
+  border-bottom:1px solid rgba(var(--neutral-rgb),.18);
+  display:grid;
+  grid-template-columns:30px minmax(0,1fr) auto;
+  align-items:center;
+  gap:8px;
+  text-align:left;
+}
+
+.final-recap-runner-up span {
+  color:var(--dim);
+  font-size:.5rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.final-recap-runner-up strong {
+  color:var(--text);
+  font-size:.72rem;
+  line-height:1.1;
+}
+
+.final-recap-runner-up b {
+  color:var(--accent);
+  font-size:.62rem;
+  font-weight:normal;
+  line-height:1.1;
+  text-align:right;
+}
+
 .final-recap-showcase-grid {
   width:min(620px,100%);
   margin-top:22px;
@@ -978,7 +1017,7 @@
   /* Exact Bets: compact the screen and protect the progress-dot area. */
   .final-recap-exact-screen {
     overflow-y:auto;
-    padding-top:calc(96px + env(safe-area-inset-top));
+    padding-top:calc(82px + env(safe-area-inset-top));
     padding-bottom:calc(110px + env(safe-area-inset-bottom));
   }
 
@@ -987,26 +1026,26 @@
   }
 
   .final-recap-exact-stage {
-    margin-top:14px;
-    gap:6px;
+    margin-top:10px;
+    gap:5px;
   }
 
   .final-recap-exact-winner {
-    min-height:92px;
-    padding:11px;
+    min-height:78px;
+    padding:9px;
   }
 
   .final-recap-exact-winner strong {
-    font-size:1.35rem;
+    font-size:1.22rem;
   }
 
   .final-recap-exact-others {
-    gap:6px;
+    gap:5px;
   }
 
   .final-recap-exact-others div {
-    min-height:56px;
-    padding:7px 6px;
+    min-height:46px;
+    padding:5px 6px;
   }
 
   /* Lead Changes: keep the final cards above the progress dots. */
