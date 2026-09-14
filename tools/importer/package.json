@@ -6,11 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node scripts/extract-days.js",
-    "setup": "node firestore/setup-firestore.js",
     "validate": "node scripts/validate-days.js",
-    "import": "node scripts/import-firestore.js",
     "results": "node scripts/update-results.js",
-    "state:import": "node scripts/import-state.js",
     "edoardo": "node scripts/extract-edoardo-messages.js",
     "migration": "node scripts/build-migration.js",
     "state:build-final": "node scripts/build-final-state.js"
