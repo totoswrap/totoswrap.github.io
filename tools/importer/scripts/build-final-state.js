@@ -10,9 +10,9 @@ const __dirname = path.dirname(__filename);
 // FILE
 // ======================================================
 
-const STATE_FILE = path.join(
+const PLAYERS_FILE = path.join(
     __dirname,
-    "../output/state.json"
+    "../output/players.json"
 );
 
 const MIGRATION_FILE = path.join(
@@ -45,9 +45,9 @@ const DAY_START_HOUR = 5;
 // LETTURA
 // ======================================================
 
-const currentState = JSON.parse(
+const players = JSON.parse(
     fs.readFileSync(
-        STATE_FILE,
+        PLAYERS_FILE,
         "utf8"
     )
 );
@@ -236,37 +236,51 @@ function normalizeWrapTime(time) {
 // ======================================================
 
 const playerRoster =
-    Array.isArray(currentState.playerRoster)
-        ? clone(currentState.playerRoster)
+    Array.isArray(players)
+        ? players.map(player => ({
+            name: player.name,
+            face: player.face
+        }))
         : [];
 
 
-// Giocatrici attive entrate dopo lo state di partenza
-const ACTIVE_PLAYERS_TO_ADD = [
-    "Chiara",
-    "Ivana"
-];
+// Manteniamo l'ordine storico del roster finale:
+// Chiara precede Ivana.
+const chiaraIndex =
+    playerRoster.findIndex(
+        player =>
+            String(player?.name || "")
+                .trim()
+                .toLowerCase() ===
+            "chiara"
+    );
 
+const ivanaIndex =
+    playerRoster.findIndex(
+        player =>
+            String(player?.name || "")
+                .trim()
+                .toLowerCase() ===
+            "ivana"
+    );
 
-for (const name of ACTIVE_PLAYERS_TO_ADD) {
+if (
+    chiaraIndex !== -1 &&
+    ivanaIndex !== -1 &&
+    chiaraIndex > ivanaIndex
+) {
 
-    const alreadyExists =
-        playerRoster.some(
-            player =>
-                String(player?.name || "")
-                    .trim()
-                    .toLowerCase() ===
-                name.toLowerCase()
+    const [chiara] =
+        playerRoster.splice(
+            chiaraIndex,
+            1
         );
 
-    if (!alreadyExists) {
-
-        playerRoster.push({
-            name,
-            face: name
-        });
-
-    }
+    playerRoster.splice(
+        ivanaIndex,
+        0,
+        chiara
+    );
 
 }
 
@@ -925,12 +939,6 @@ for (
 
 const finalState = {
 
-    /*
-     * Conserviamo eventuali campi aggiuntivi
-     * presenti nello state corrente.
-     */
-    ...clone(currentState),
-
     playerRoster,
 
     scores,
@@ -942,14 +950,11 @@ const finalState = {
         null,
 
     /*
-     * Non incrementiamo qui la versione.
-     * Sarà lo script di import / Firestore
-     * a gestire la scrittura vera.
+     * Questo builder ricostruisce lo state storico
+     * partendo da una base iniziale versione 1.
      */
     _version:
-        Number(
-            currentState._version
-        ) || 0
+        1
 
 };
 
