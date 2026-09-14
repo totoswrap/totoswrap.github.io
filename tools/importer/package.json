@@ -6,7 +6,6 @@
   "type": "module",
   "scripts": {
     "start": "node scripts/extract-days.js",
-    "validate": "node scripts/validate-days.js",
     "results": "node scripts/update-results.js",
     "edoardo": "node scripts/extract-edoardo-messages.js",
     "migration": "node scripts/build-migration.js",
