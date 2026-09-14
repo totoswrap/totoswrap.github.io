@@ -1,5 +1,24 @@
-tools/importer/firestore/firebase-service-account.json
-tools/importer/firestore/firebase-service-account.json
+# macOS
+.DS_Store
+
+# Local credentials and dependencies
 tools/importer/firestore/firebase-service-account.json
 tools/importer/node_modules/
-tools/importer/node_modules/
+
+# Local Firestore/importer backups
+backups/
+
+# Private/local importer material
+tools/importer/input/_chat 2.txt
+tools/importer/analyze-chat-words.js
+tools/importer/find-chat-catchphrases.js
+tools/importer/final-recap-running-gags-notes.md
+
+# Local alternate Final Recap videos
+media/edoardo-win-full.MP4
+media/edoardo-win.MP4
+media/flaminia-win.MP4
+media/sara-win.MP4
+
+# Accidental local artifact
+/=
