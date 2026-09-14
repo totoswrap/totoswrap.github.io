@@ -235,7 +235,7 @@
   };
   async function loadCogImages() {
     try {
-      const api = await fetchWithTimeout('https://api.github.com/repos/totowrap/totowrap.github.io/contents/cog',{cache:'no-store'});
+      const api = await fetchWithTimeout('https://api.github.com/repos/totoswrap/totoswrap.github.io/contents/cog',{cache:'no-store'});
       if (!api.ok) return fallbackCogImages;
       const entries = await api.json();
       if (!Array.isArray(entries)) return fallbackCogImages;
