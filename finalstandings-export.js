@@ -193,7 +193,7 @@
     const zeroNames = entries.filter(entry => entry.score <= 0).map(entry => entry.name.toUpperCase());
 
     if (!options.omitLogo) {
-      const logo = await loadImage(options.logoSrc || 'imgs/totoswrapbig.png');
+      const logo = await loadImage(options.logoSrc || 'imgs/totoswrap.png');
       if (logo) {
         const logoWidth = 860;
         const logoHeight = logoWidth * logo.height / logo.width;
