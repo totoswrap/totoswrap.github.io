@@ -284,6 +284,12 @@
   72% { opacity:1; transform:translate(-50%,-50%) scale(1.35); }
   100% { opacity:1; transform:translate(-50%,-50%) scale(1); }
 }
+.final-recap-opening-footnote {
+  font-size:.58em;
+  font-weight:normal;
+  line-height:1;
+}
+
 .final-recap-exact-screen {
   justify-content:flex-start;
   padding-top:calc(92px + env(safe-area-inset-top));
