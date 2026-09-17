@@ -468,7 +468,7 @@
 }
 
 .final-recap-accuracy-screen .final-recap-official-accuracy {
-  height:100px;
+  height:145px;
   margin-top:4px;
 }
 
@@ -478,12 +478,12 @@
 }
 
 .final-recap-accuracy-screen .final-recap-stat {
-  min-height:58px;
-  padding:6px;
+  min-height:50px;
+  padding:4px 6px;
 }
 
 .final-recap-accuracy-screen .final-recap-stat strong {
-  font-size:1.12rem;
+  font-size:1rem;
 }
 
 .final-recap-accuracy-screen .final-recap-stat span {
