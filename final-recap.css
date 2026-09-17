@@ -39,7 +39,7 @@
   width:min(82vw,430px);
   aspect-ratio:1;
   transform:translate(-50%,-50%);
-  background:url("imgs/tunacan.png") center/contain no-repeat;
+  background:url("imgs/totoswrap.png") center/contain no-repeat;
   filter:brightness(.5);
   opacity:.14;
   pointer-events:none;

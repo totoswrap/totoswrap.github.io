@@ -566,7 +566,7 @@
           </svg>
         </button>
         <div class="final-recap-reaction-placeholder">
-          <img src="imgs/tunacan.png" alt="">
+          <img src="imgs/totoswrap.png" alt="">
           <b>Reaction video pending</b>
         </div>
       </div>
