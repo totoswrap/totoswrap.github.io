@@ -635,11 +635,19 @@
     const accuracyTitle = label => `<span class="final-recap-title-nowrap">${esc(label)}</span>`;
     const accuracyName = (player, tone) => player ? `<div class="final-recap-title-player ${tone}">${esc(player.name)}</div>` : '';
     const runnerUpRows = (players, valueFor) => {
-      const rows = (players || []).slice(1,3);
+      const rows = (players || []).slice(1);
       if (!rows.length) return '';
+      const ordinal = place => {
+        const mod100 = place % 100;
+        if (mod100 >= 11 && mod100 <= 13) return `${place}th`;
+        if (place % 10 === 1) return `${place}st`;
+        if (place % 10 === 2) return `${place}nd`;
+        if (place % 10 === 3) return `${place}rd`;
+        return `${place}th`;
+      };
       return `<div class="final-recap-runner-ups">${rows.map((player,index) => `
         <div class="final-recap-runner-up">
-          <span>${index + 2}${index === 0 ? 'nd' : 'rd'}</span>
+          <span>${ordinal(index + 2)}</span>
           <strong>${esc(player.name)}</strong>
           <b>${esc(valueFor(player))}</b>
         </div>`).join('')}</div>`;
