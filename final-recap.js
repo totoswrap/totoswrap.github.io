@@ -649,7 +649,10 @@
         <div class="final-recap-runner-up">
           <span>${ordinal(index + 2)}</span>
           <strong>${esc(player.name)}</strong>
-          <b>${esc(valueFor(player))}</b>
+          <div class="final-recap-runner-value">
+            <b>${esc(valueFor(player))}</b>
+            <small>${player.bets} ${word(player.bets,'game','games')}</small>
+          </div>
         </div>`).join('')}</div>`;
     };
 
@@ -697,7 +700,7 @@
         )}
         ${runnerUpRows(
           data.winRateRanking,
-          player => `${(player.winRate * 100).toFixed(1)}% · ${player.wins} ${word(player.wins,'win','wins')} / ${player.bets} ${word(player.bets,'game','games')}`
+          player => `${(player.winRate * 100).toFixed(1)}% · ${player.wins} ${word(player.wins,'win','wins')}`
         )}
       </div>`),
       screen('Caught on camera','Reaction replay','',`<div class="final-recap-reaction-grid">
