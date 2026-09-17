@@ -252,8 +252,6 @@
     return (await loadCogImages()).length;
   }
 
-  const MIN_STATS_BETS = 12;
-
   function calculate(source) {
     const days = getCompletedDays(source);
     const players = (source.playerRoster || []).map(player => player.name).filter(Boolean);
@@ -417,7 +415,7 @@
       winRate:player.bets > 0 ? player.wins / player.bets : null
     }));
     const leaderboard = [...list].sort((a,b) => b.score-a.score || b.wins-a.wins || a.name.localeCompare(b.name));
-    const accuracyEligible = [...list].filter(item => item.avgGap !== null && item.bets >= MIN_STATS_BETS);
+    const accuracyEligible = [...list].filter(item => item.avgGap !== null);
     const mostAccurateRanking = [...accuracyEligible].sort((a,b) => a.avgGap-b.avgGap || b.bets-a.bets);
     const leastAccurateRanking = [...accuracyEligible].sort((a,b) => b.avgGap-a.avgGap || b.bets-a.bets);
     const mostAccurate = mostAccurateRanking[0] || null;
@@ -431,7 +429,7 @@
     const maxCloseWrong = Math.max(0,...list.map(item => item.closeWrong));
     const closeWrongLeaders = list.filter(item => item.closeWrong === maxCloseWrong && maxCloseWrong > 0).sort((a,b) => a.name.localeCompare(b.name));
     const winRateEligible = list.filter(
-      item => item.winRate !== null && item.bets >= MIN_STATS_BETS
+      item => item.winRate !== null
     );
     const winRateRanking = [...winRateEligible].sort((a,b) =>
       (b.wins * a.bets) - (a.wins * b.bets) ||
