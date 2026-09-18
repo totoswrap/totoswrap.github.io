@@ -1118,7 +1118,7 @@
   /* Opening screen: keep The Final Wrap safely below the global TotoWrap logo. */
   .final-recap-opening-screen {
     justify-content:flex-start;
-    padding-top:calc(108px + env(safe-area-inset-top));
+    padding-top:calc(88px + env(safe-area-inset-top));
     padding-bottom:calc(92px + env(safe-area-inset-bottom));
     transform:none;
   }
