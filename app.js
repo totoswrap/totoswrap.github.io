@@ -4682,7 +4682,7 @@ function didPlayerWinDay(name, day) {
   return winners.some(winnerName => nameKey(winnerName) === nameKey(name));
 }
 
-function renderBoardCloseness(pl) {
+function renderBoardCloseness(pl, recapMode=false) {
   const COLORS = [
     '#e3b74f', '#6dd87a', '#e06c6c', '#5bc8f5', '#f07dba',
     '#a374f7', '#fb8c5f', '#40e4e4', '#f9a8a8', '#7ede8a',
@@ -4721,12 +4721,18 @@ function renderBoardCloseness(pl) {
   });
 
   const maxDay = Math.max(0, completed.length - 1);
+  const maxRecapPoint = Math.max(0, points.length - 1);
+  points.forEach((point, index) => {
+    point.recapIndex = index;
+  });
   const allGaps = completed.flatMap(day => (day.guesses || [])
     .filter(guess => guess?.time)
     .map(guess => boardClosenessGap(guess, day)));
   const maxGap = points.length ? Math.max(...points.map(point => point.gap), 1) : Math.max(...allGaps, 1);
   const pointPosition = point => ({
-    left: maxDay ? (point.day / maxDay) * 96 : 0,
+    left: recapMode
+      ? (maxRecapPoint ? (point.recapIndex / maxRecapPoint) * 96 : 48)
+      : (maxDay ? (point.day / maxDay) * 96 : 0),
     top: 88 - (point.gap / maxGap) * 78
   });
   const grouped = new Map();
@@ -4741,7 +4747,7 @@ function renderBoardCloseness(pl) {
     let segment = [];
     sortedPoints.forEach(point => {
       const previous = segment[segment.length - 1];
-      if (previous && point.day !== previous.day + 1) {
+      if (!recapMode && previous && point.day !== previous.day + 1) {
         segments.push(segment);
         segment = [];
       }
@@ -4774,13 +4780,20 @@ function renderBoardCloseness(pl) {
   ].map(tick =>
     `<div class="closeness-y-tick" style="top:${tick.top}%"><span>${esc(formatBoardCompactGap(tick.value))}</span></div>`
   ).join('');
-  const dayTicks = completed.map((_, idx) => {
-    const displayDay = displayDayNumber(idx + 1);
-    if (Number(displayDay) % 5 !== 0) return '';
+  const dayTicks = recapMode
+    ? points.map((_, idx) => {
+        const betNumber = idx + 1;
+        if (betNumber !== 1 && betNumber !== points.length && betNumber % 5 !== 0) return '';
+        const left = maxRecapPoint ? (idx / maxRecapPoint) * 96 : 48;
+        return `<div class="closeness-x-tick" style="left:${left.toFixed(2)}%;"><span>${betNumber}</span></div>`;
+      }).join('')
+    : completed.map((_, idx) => {
+        const displayDay = displayDayNumber(idx + 1);
+        if (Number(displayDay) % 5 !== 0) return '';
 
-    const left = maxDay ? (idx / maxDay) * 96 : 0;
-    return `<div class="closeness-x-tick" style="left:${left.toFixed(2)}%;"><span>${esc(displayDay)}</span></div>`;
-  }).join('');
+        const left = maxDay ? (idx / maxDay) * 96 : 0;
+        return `<div class="closeness-x-tick" style="left:${left.toFixed(2)}%;"><span>${esc(displayDay)}</span></div>`;
+      }).join('');
 
   const compareAccuracyStats = (a, b) => {
     const arrowPointsUp = _closenessOrderDir === 'asc';
@@ -4854,7 +4867,7 @@ function renderBoardCloseness(pl) {
         <div class="closeness-timeline">
           <div class="closeness-x-axis"></div>
           ${dayTicks}
-          <div class="closeness-x-label">Days</div>
+          <div class="closeness-x-label">${recapMode ? 'Bets' : 'Days'}</div>
           <svg class="closeness-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${lineSvg}</svg>
           ${markerHtml}
         </div>
@@ -9328,7 +9341,8 @@ if (LOCAL_TEST_MODE) {
 
         holder.innerHTML =
           renderBoardCloseness(
-            getSortedPlayerRoster()
+            getSortedPlayerRoster(),
+            true
           );
 
         const graph =
@@ -9397,7 +9411,8 @@ if (LOCAL_TEST_MODE) {
 
         holder.innerHTML =
           renderBoardCloseness(
-            getSortedPlayerRoster()
+            getSortedPlayerRoster(),
+            true
           );
 
         const graph =
