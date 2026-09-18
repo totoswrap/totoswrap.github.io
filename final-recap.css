@@ -1115,6 +1115,37 @@
     max-width:100%;
   }
 
+  /* Best Win Rate: keep player names and statistics clearly separated on phones. */
+  .final-recap-win-rate-screen .final-recap-runner-up {
+    grid-template-columns:32px minmax(0,1fr) minmax(92px,auto);
+    gap:6px;
+  }
+
+  .final-recap-win-rate-screen .final-recap-runner-up strong {
+    min-width:0;
+    font-size:.68rem;
+    line-height:1.05;
+    overflow-wrap:normal;
+    word-break:normal;
+  }
+
+  .final-recap-win-rate-screen .final-recap-runner-value {
+    min-width:92px;
+    justify-items:end;
+  }
+
+  .final-recap-win-rate-screen .final-recap-runner-up b {
+    font-size:.54rem;
+    line-height:1.05;
+    white-space:nowrap;
+  }
+
+  .final-recap-win-rate-screen .final-recap-runner-up small {
+    font-size:.44rem;
+    line-height:1;
+    white-space:nowrap;
+  }
+
   /* Exact Bets: compact the screen and protect the progress-dot area. */
   .final-recap-exact-screen {
     overflow-y:auto;
