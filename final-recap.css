@@ -547,6 +547,12 @@
   text-align:left;
 }
 
+.final-recap-runner-up:last-child:nth-child(odd) {
+  grid-column:1 / -1;
+  width:calc((100% - 8px) / 2);
+  justify-self:center;
+}
+
 .final-recap-runner-up span {
   color:var(--dim);
   font-size:.5rem;
