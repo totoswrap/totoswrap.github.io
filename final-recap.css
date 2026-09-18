@@ -86,6 +86,17 @@
   text-transform:uppercase;
   transform-origin:center;
 }
+
+/* Best Win Rate: keep the title directly below the global TotoWrap logo. */
+.final-recap-win-rate-screen {
+  justify-content:flex-start;
+  padding-top:calc(82px + env(safe-area-inset-top));
+}
+
+.final-recap-win-rate-screen .final-recap-title {
+  font-size:clamp(1.85rem,8vw,3.8rem);
+}
+
 .final-recap-title-left { display:inline-block; text-align:left; }
 .final-recap-title-line { display:block; white-space:nowrap; }
 .final-recap-title-nowrap { display:block; white-space:nowrap; }

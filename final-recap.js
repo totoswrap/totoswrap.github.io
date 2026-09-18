@@ -697,7 +697,7 @@
           data.winRateRanking,
           player => `${(player.winRate * 100).toFixed(1)}% · ${player.wins} ${word(player.wins,'win','wins')}`
         )}
-      </div>`),
+      </div>`,'final-recap-win-rate-screen'),
       screen('Caught on camera','Reaction replay','',`<div class="final-recap-reaction-grid">
         ${reactionCard('Winner','media/edoardo-win-vertical.MP4','green')}
         ${reactionCard('Loser','media/giulia-loss.MP4','red')}
