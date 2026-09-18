@@ -447,11 +447,11 @@
 
 .final-recap-accuracy-screen .final-recap-runner-ups {
   margin-top:7px;
-  gap:3px 8px;
+  gap:2px 8px;
 }
 
 .final-recap-accuracy-screen .final-recap-runner-up {
-  min-height:34px;
+  min-height:31px;
   padding:4px 8px;
 }
 
