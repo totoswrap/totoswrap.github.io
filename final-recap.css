@@ -1127,6 +1127,12 @@
     flex:0 0 auto;
   }
 
+  /* Opening copy: recover vertical room while keeping the title clear of the logo. */
+  .final-recap-opening-screen .final-recap-copy {
+    margin-top:18px;
+    line-height:1.32;
+  }
+
   /* Accuracy screens: keep the full ranking above the progress dots. */
   .final-recap-accuracy-screen .final-recap-runner-ups {
     margin-top:10px;
