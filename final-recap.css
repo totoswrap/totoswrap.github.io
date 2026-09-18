@@ -97,6 +97,33 @@
   font-size:clamp(1.85rem,8vw,3.8rem);
 }
 
+.final-recap-win-rate-screen .final-recap-single-showcase {
+  margin-top:14px;
+}
+
+.final-recap-win-rate-screen .final-recap-showcase-card {
+  min-height:76px;
+  padding:11px 14px;
+}
+
+.final-recap-win-rate-screen .final-recap-showcase-card strong {
+  margin-top:5px;
+}
+
+.final-recap-win-rate-screen .final-recap-showcase-split b {
+  margin-top:5px;
+}
+
+.final-recap-win-rate-screen .final-recap-runner-ups {
+  margin-top:8px;
+  gap:3px 8px;
+}
+
+.final-recap-win-rate-screen .final-recap-runner-up {
+  min-height:34px;
+  padding:4px 8px;
+}
+
 .final-recap-title-left { display:inline-block; text-align:left; }
 .final-recap-title-line { display:block; white-space:nowrap; }
 .final-recap-title-nowrap { display:block; white-space:nowrap; }
