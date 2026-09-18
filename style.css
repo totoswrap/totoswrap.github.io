@@ -20,7 +20,7 @@ html, body { background: var(--bg); height: 100%; overflow: hidden; }
 .boot-crazy-title { display: inline-flex; justify-content: center; width: min(calc(100vw - 28px), 390px); margin-bottom: 54px; color: var(--accent); font-family: 'Alte Haas Grotesk', sans-serif; font-size: clamp(2.55rem, 12.4vw, 3.28rem); font-weight: bold; line-height: 1; letter-spacing: .105em; text-transform: uppercase; }
 .boot-crazy-title span { display: inline-block; animation: crazy-title-wave 2.2s cubic-bezier(.33,0,.2,1) infinite; animation-delay: calc(var(--i) * .07s); }
 .boot-crazy-title .space { width: .38em; }
-.boot-crazy-title-conor { font-size: clamp(1.45rem, 6.8vw, 2.65rem); }
+.boot-crazy-title-conor { font-size: clamp(1.1rem, 4.8vw, 1.85rem); letter-spacing: .055em; }
 .boot-crazy-logo-wrap { position: relative; width: min(78vw, 320px); height: min(78vw, 320px); transform-origin: center; animation: crazy-heartbeat 1.55s cubic-bezier(.34,0,.2,1) infinite; }
 .boot-crazy-logo { display: block; width: 100%; height: 100%; margin-top: 0; object-fit: contain; border-radius: 999px; filter: brightness(95%) drop-shadow(2px 0 0 var(--yellow)) drop-shadow(-2px 0 0 var(--yellow)) drop-shadow(0 2px 0 var(--yellow)) drop-shadow(0 -2px 0 var(--yellow)); }
 .boot-crazy-rules { display: grid; grid-template-columns: auto auto; gap: 13px 20px; justify-content: center; margin-top: 64px; width: min(calc(100vw - 28px), 390px); box-sizing: border-box; color: var(--accent); font-family: 'Alte Haas Grotesk', sans-serif; font-size: .82rem; font-weight: bold; line-height: 1.18; letter-spacing: .08em; text-align: left; text-transform: uppercase; }
