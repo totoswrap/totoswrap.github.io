@@ -470,6 +470,7 @@
 .final-recap-accuracy-screen .final-recap-official-accuracy {
   height:145px;
   margin-top:4px;
+  overflow:visible;
 }
 
 .final-recap-accuracy-screen .final-recap-stat-grid {
@@ -497,25 +498,15 @@
   pointer-events:none;
 }
 .final-recap-official-accuracy .closeness-graph {
-  height:100%;
-  margin:2px 4px 10px 48px;
+  width:calc(100% / .56);
+  height:256px;
+  margin:2px 4px 28px 58px;
+  transform:scale(.56);
+  transform-origin:top left;
 }
 
 .final-recap-official-accuracy .closeness-timeline {
-  height:100%;
-}
-
-.final-recap-official-accuracy .closeness-viewport {
-  bottom:-10px;
-}
-
-.final-recap-official-accuracy .closeness-y-label {
-  left:-44px;
-}
-
-.final-recap-official-accuracy .closeness-x-label {
-  left:-48px;
-  bottom:-8px;
+  height:256px;
 }
 
 .final-recap-official-accuracy .accuracy-active-name { display:none; }
