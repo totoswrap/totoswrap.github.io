@@ -446,13 +446,13 @@
 }
 
 .final-recap-accuracy-screen .final-recap-runner-ups {
-  margin-top:7px;
-  gap:2px 8px;
+  margin-top:12px;
+  gap:4px 8px;
 }
 
 .final-recap-accuracy-screen .final-recap-runner-up {
-  min-height:31px;
-  padding:4px 8px;
+  min-height:35px;
+  padding:5px 8px;
 }
 
 .final-recap-accuracy-screen .final-recap-runner-up strong {
@@ -474,13 +474,13 @@
 }
 
 .final-recap-accuracy-screen .final-recap-stat-grid {
-  margin-top:0;
-  gap:6px;
+  margin-top:10px;
+  gap:8px;
 }
 
 .final-recap-accuracy-screen .final-recap-stat {
-  min-height:46px;
-  padding:4px 6px;
+  min-height:62px;
+  padding:7px 8px;
 }
 
 .final-recap-accuracy-screen .final-recap-stat strong {
