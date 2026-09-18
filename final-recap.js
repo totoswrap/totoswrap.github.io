@@ -496,8 +496,14 @@
   }
   function thankYouStandings(data) {
     const ranked = rankedFinalLeaderboard(data);
-    const top = ranked.filter(entry => entry.score > 0 && Number(entry.rank) <= 3);
+    const topGroups = groupedFinalLeaderboard(data).filter(group => Number(group.rank) <= 3);
     const rest = ranked.filter(entry => !(entry.score > 0 && Number(entry.rank) <= 3));
+
+    const topRows = topGroups.map(group => `<div class="final-recap-thankyou-row">
+      <span class="final-recap-thankyou-rank">${esc(group.rank)}</span>
+      <strong class="final-recap-thankyou-names">${group.players.map(player => `<span>${esc(player.name)}</span>`).join('')}</strong>
+      <span>${group.score} ${word(group.score,'pt','pts')} · ${group.wins} ${word(group.wins,'win','wins')}</span>
+    </div>`).join('');
 
     const rows = entries => entries.map(entry => `<div class="final-recap-thankyou-row">
       <span class="final-recap-thankyou-rank">${esc(entry.rank)}</span>
@@ -506,7 +512,7 @@
     </div>`).join('');
 
     return `<div class="final-recap-thankyou-standings">
-      <div class="final-recap-thankyou-top">${rows(top)}</div>
+      <div class="final-recap-thankyou-top">${topRows}</div>
       <p class="final-recap-closing-copy">It was an honor to freerun with you</p>
       <div class="final-recap-thankyou-rest">${rows(rest)}</div>
     </div>`;
