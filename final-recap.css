@@ -425,7 +425,7 @@
 .final-recap-accuracy-screen {
   justify-content:flex-start;
   padding-top:calc(78px + env(safe-area-inset-top));
-  padding-bottom:calc(72px + env(safe-area-inset-bottom));
+  padding-bottom:calc(38px + env(safe-area-inset-bottom));
   transform:none;
 }
 
@@ -474,12 +474,12 @@
 }
 
 .final-recap-accuracy-screen .final-recap-stat-grid {
-  margin-top:5px;
+  margin-top:0;
   gap:6px;
 }
 
 .final-recap-accuracy-screen .final-recap-stat {
-  min-height:50px;
+  min-height:46px;
   padding:4px 6px;
 }
 
