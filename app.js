@@ -9315,35 +9315,6 @@ if (LOCAL_TEST_MODE) {
     window.__TOTOWRAP_RECAP_STATE__ =
       JSON.parse(JSON.stringify(S));
 
-    window.__TOTOWRAP_RECAP_ACCURACY_GRAPH__ =
-      playerName => {
-        const previousPlayer =
-          _closenessPlayer;
-
-        _closenessPlayer =
-          playerName;
-
-        const holder =
-          document.createElement('div');
-
-        holder.innerHTML =
-          renderBoardCloseness(
-            getSortedPlayerRoster()
-          );
-
-        const graph =
-          holder.querySelector(
-            '.closeness-graph'
-          );
-
-        _closenessPlayer =
-          previousPlayer;
-
-        return graph
-          ? graph.outerHTML
-          : '';
-      };
-
     window.dispatchEvent(
       new CustomEvent(
         'totowrap-recap-state-ready'
@@ -9383,35 +9354,6 @@ if (LOCAL_TEST_MODE) {
 
     window.__TOTOWRAP_RECAP_STATE__ =
       JSON.parse(JSON.stringify(S));
-
-    window.__TOTOWRAP_RECAP_ACCURACY_GRAPH__ =
-      playerName => {
-        const previousPlayer =
-          _closenessPlayer;
-
-        _closenessPlayer =
-          playerName;
-
-        const holder =
-          document.createElement('div');
-
-        holder.innerHTML =
-          renderBoardCloseness(
-            getSortedPlayerRoster()
-          );
-
-        const graph =
-          holder.querySelector(
-            '.closeness-graph'
-          );
-
-        _closenessPlayer =
-          previousPlayer;
-
-        return graph
-          ? graph.outerHTML
-          : '';
-      };
 
     window.dispatchEvent(
       new CustomEvent(

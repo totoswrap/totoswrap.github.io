@@ -163,7 +163,6 @@
 .final-recap-screen:not(.is-active):not(.is-leaving) :is(
   .final-recap-title-player,
   .final-recap-copy,
-  .final-recap-official-accuracy,
   .final-recap-stat,
   .final-recap-exact-winner,
   .final-recap-exact-others > div,
@@ -181,7 +180,6 @@
   opacity:0;
 }
 .final-recap-screen:not(.is-active):not(.is-leaving) :is(
-  .final-recap-official-accuracy,
   .final-recap-stat,
   .final-recap-exact-winner,
   .final-recap-exact-others > div,
@@ -211,7 +209,6 @@
   animation-delay:2.12s;
 }
 .final-recap-screen.is-active :is(
-  .final-recap-official-accuracy,
   .final-recap-stat,
   .final-recap-exact-winner,
   .final-recap-exact-others > div,
@@ -273,16 +270,6 @@
   0% { opacity:0; transform:translateY(22px) scale(.86); }
   68% { opacity:1; transform:translateY(-4px) scale(1.03); }
   100% { opacity:1; transform:translateY(0) scale(1); }
-}
-.final-recap-graph-sequence .closeness-lines > polyline { opacity:0!important; }
-.final-recap-graph-sequence .closeness-marker { opacity:0; }
-.final-recap-screen.is-active .final-recap-graph-sequence .final-recap-draw-marker {
-  animation:final-recap-graph-dot .38s cubic-bezier(.22,.74,.25,1) var(--graph-marker-delay) both;
-}
-@keyframes final-recap-graph-dot {
-  0% { opacity:0; transform:translate(-50%,-50%) scale(.25); }
-  72% { opacity:1; transform:translate(-50%,-50%) scale(1.35); }
-  100% { opacity:1; transform:translate(-50%,-50%) scale(1); }
 }
 .final-recap-opening-footnote {
   font-size:.58em;
@@ -467,12 +454,6 @@
   font-size:.43rem;
 }
 
-.final-recap-accuracy-screen .final-recap-official-accuracy {
-  height:145px;
-  margin-top:4px;
-  overflow:visible;
-}
-
 .final-recap-accuracy-screen .final-recap-stat-grid {
   margin-top:10px;
   gap:8px;
@@ -491,25 +472,6 @@
   font-size:.48rem;
 }
 
-.final-recap-official-accuracy {
-  width:min(620px,100%);
-  height:210px;
-  margin-top:8px;
-  pointer-events:none;
-}
-.final-recap-official-accuracy .closeness-graph {
-  width:calc(100% / .56);
-  height:256px;
-  margin:2px 4px 28px 58px;
-  transform:scale(.56);
-  transform-origin:top left;
-}
-
-.final-recap-official-accuracy .closeness-timeline {
-  height:256px;
-}
-
-.final-recap-official-accuracy .accuracy-active-name { display:none; }
 .final-recap-awards {
   width:min(600px,100%);
   margin-top:18px;
@@ -1224,7 +1186,6 @@
   .final-recap-screen:not(.is-active):not(.is-leaving) :is(
     .final-recap-title-player,
     .final-recap-copy,
-    .final-recap-official-accuracy,
     .final-recap-stat,
     .final-recap-exact-winner,
     .final-recap-exact-others > div,
@@ -1244,7 +1205,6 @@
   .final-recap-screen.is-active .final-recap-title-player,
   .final-recap-screen.is-active .final-recap-copy,
   .final-recap-screen.is-active :is(
-    .final-recap-official-accuracy,
     .final-recap-stat,
     .final-recap-exact-winner,
     .final-recap-exact-others > div,
@@ -1259,9 +1219,6 @@
     .final-recap-podium-place,
     .final-recap-replay
   ) { animation:none; }
-  .final-recap-graph-sequence .closeness-lines > polyline { opacity:1!important; }
-  .final-recap-graph-sequence .closeness-marker { opacity:1; }
-  .final-recap-screen.is-active .final-recap-graph-sequence .final-recap-draw-lines { display:none; }
 }
 
 html.android-glass-fallback .final-recap :is(

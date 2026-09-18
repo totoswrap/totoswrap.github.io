@@ -577,11 +577,6 @@
   function tiedNames(items, valueKey) {
     return items.length ? `${items.map(item => item.name).join(', ')} · ${items[0][valueKey]}` : '—';
   }
-  function accuracyGraph(player) {
-    if (!player) return '';
-    const graph = window.__TOTOWRAP_RECAP_ACCURACY_GRAPH__?.(player.name) || '';
-    return graph ? `<div class="final-recap-official-accuracy">${graph}</div>` : '';
-  }
   function noWinnerRows(entries) {
     if (!entries.length) return '<div class="final-recap-empty">Every completed day had a winner.</div>';
     return `<div class="final-recap-no-winner-grid">${entries.map(entry => `
@@ -725,91 +720,6 @@
     ];
   }
 
-  function prepareGraphDrawing(screen, revealCount) {
-    const graph = screen.querySelector('.final-recap-official-accuracy');
-    const svg = graph?.querySelector('.closeness-lines');
-    const markers = graph ? [...graph.querySelectorAll('.closeness-marker')] : [];
-    const polylines = svg ? [...svg.querySelectorAll('polyline')] : [];
-    if (!graph || !svg || !markers.length) return;
-
-    svg.querySelector('.final-recap-draw-lines')?.remove();
-    markers.forEach(marker => {
-      marker.classList.remove('final-recap-draw-marker');
-      marker.style.removeProperty('--graph-marker-delay');
-    });
-
-    const drawLayer = document.createElementNS('http://www.w3.org/2000/svg','g');
-    drawLayer.classList.add('final-recap-draw-lines');
-    const markerByPosition = new Map(markers.map(marker => [
-      `${parseFloat(marker.style.left).toFixed(2)},${parseFloat(marker.style.top).toFixed(2)}`,
-      marker
-    ]));
-    const markerPoints = markers
-      .map(marker => ({
-        marker,
-        left: parseFloat(marker.style.left),
-        top: parseFloat(marker.style.top)
-      }))
-      .filter(point => Number.isFinite(point.left) && Number.isFinite(point.top))
-      .sort((a,b) => a.left - b.left);
-    const drawStart = 1.82 + .82;
-    const stepDelay = .34;
-    const lineDrawMs = 280;
-    const markerDelayByPosition = new Map(markerPoints.map((point,index) => [
-      `${point.left.toFixed(2)},${point.top.toFixed(2)}`,
-      drawStart + index * stepDelay
-    ]));
-    const markMarker = point => {
-      const key = `${point[0].toFixed(2)},${point[1].toFixed(2)}`;
-      const marker = markerByPosition.get(`${point[0].toFixed(2)},${point[1].toFixed(2)}`);
-      if (!marker) return;
-      marker.classList.add('final-recap-draw-marker');
-      marker.style.setProperty('--graph-marker-delay',`${markerDelayByPosition.get(key) || drawStart}s`);
-    };
-    markerPoints.forEach(point => {
-      point.marker.classList.add('final-recap-draw-marker');
-      point.marker.style.setProperty('--graph-marker-delay',`${markerDelayByPosition.get(`${point.left.toFixed(2)},${point.top.toFixed(2)}`)}s`);
-    });
-
-    polylines.forEach(polyline => {
-      const points = polyline.getAttribute('points').trim().split(/\s+/).map(point => point.split(',').map(Number));
-      if (!points.length) return;
-      markMarker(points[0]);
-      points.slice(1).forEach((point,index) => {
-        const previous = points[index];
-        const line = document.createElementNS('http://www.w3.org/2000/svg','line');
-        line.setAttribute('x1',previous[0]);
-        line.setAttribute('y1',previous[1]);
-        line.setAttribute('x2',previous[0]);
-        line.setAttribute('y2',previous[1]);
-        line.setAttribute('stroke',polyline.getAttribute('stroke') || 'currentColor');
-        line.setAttribute('stroke-width',polyline.getAttribute('stroke-width') || '2.8');
-        line.setAttribute('stroke-linecap','round');
-        line.setAttribute('vector-effect','non-scaling-stroke');
-        line.style.opacity = 0;
-        drawLayer.appendChild(line);
-        const previousDelay = markerDelayByPosition.get(`${previous[0].toFixed(2)},${previous[1].toFixed(2)}`) || drawStart;
-        const lineDelay = (previousDelay + .08) * 1000;
-        setTimeout(() => {
-          if (!screen.classList.contains('is-active')) return;
-          line.style.opacity = 1;
-          const startedAt = performance.now();
-          const drawFrame = now => {
-            if (!screen.classList.contains('is-active')) return;
-            const progress = Math.min(1,(now - startedAt) / lineDrawMs);
-            line.setAttribute('x2',previous[0] + (point[0] - previous[0]) * progress);
-            line.setAttribute('y2',previous[1] + (point[1] - previous[1]) * progress);
-            if (progress < 1) requestAnimationFrame(drawFrame);
-          };
-          requestAnimationFrame(drawFrame);
-        },lineDelay);
-        markMarker(point);
-      });
-    });
-    svg.appendChild(drawLayer);
-    graph.classList.add('final-recap-graph-sequence');
-  }
-
   function updateScreen(next) {
     if (!recap) return;
     const screens = recap.querySelectorAll('.final-recap-screen');
@@ -839,7 +749,6 @@
       const titleRect = title.getBoundingClientRect();
       screen.style.setProperty('--recap-title-center-shift', `${window.innerHeight / 2 - (titleRect.top + titleRect.height / 2)}px`);
       const revealables = screen.querySelectorAll(`
-        .final-recap-official-accuracy,
         .final-recap-stat,
         .final-recap-exact-winner,
         .final-recap-exact-others > div,
@@ -863,7 +772,6 @@
           item.style.setProperty('--recap-reveal-index',podiumRevealOrder[place] ?? 0);
         });
       }
-      prepareGraphDrawing(screen,revealables.length);
       screen.classList.add('is-active');
     });
     recap.querySelectorAll('.final-recap-dot').forEach((dot,index) => dot.classList.toggle('on',index === screenIndex));
