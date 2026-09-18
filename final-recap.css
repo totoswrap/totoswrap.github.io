@@ -1115,6 +1115,29 @@
     max-width:100%;
   }
 
+  /* Opening screen: keep The Final Wrap safely below the global TotoWrap logo. */
+  .final-recap-opening-screen {
+    justify-content:flex-start;
+    padding-top:calc(108px + env(safe-area-inset-top));
+    padding-bottom:calc(92px + env(safe-area-inset-bottom));
+    transform:none;
+  }
+
+  .final-recap-opening-screen .final-recap-title {
+    flex:0 0 auto;
+  }
+
+  /* Accuracy screens: keep the full ranking above the progress dots. */
+  .final-recap-accuracy-screen .final-recap-runner-ups {
+    margin-top:10px;
+    row-gap:3px;
+  }
+
+  .final-recap-accuracy-screen .final-recap-runner-up {
+    min-height:32px;
+    padding:4px 8px;
+  }
+
   /* Best Win Rate: keep player names and statistics clearly separated on phones. */
   .final-recap-win-rate-screen .final-recap-runner-up {
     grid-template-columns:32px minmax(0,1fr) minmax(92px,auto);
