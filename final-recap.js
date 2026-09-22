@@ -682,16 +682,6 @@
       screen('Nobody won',`<span class="final-recap-number">${data.noWinnerEntries.length}</span> no-winner ${word(data.noWinnerEntries.length,'day','days')}`,'Expected wrap compared with the official wrap.',noWinnerRows(data.noWinnerEntries)),
       screen('Accuracy award',accuracyTitle('Most accurate'),accuracyCopy,`<div class="final-recap-stat-grid">${stat(compactTime(data.mostAccurate?.avgGap),'Average distance')}${stat(data.mostAccurate?.bets || 0,word(data.mostAccurate?.bets || 0,'Bet measured','Bets measured'))}${stat(data.mostAccurate?.wins || 0,word(data.mostAccurate?.wins || 0,'Win','Wins'))}</div>${runnerUpRows(data.mostAccurateRanking,player => compactTime(player.avgGap))}`,'final-recap-accuracy-screen',accuracyName(data.mostAccurate,'is-green')),
       screen('Least accurate',accuracyTitle('Least accurate'),leastAccuracyCopy,`<div class="final-recap-stat-grid">${stat(compactTime(data.leastAccurate?.avgGap),'Average distance')}${stat(data.leastAccurate?.bets || 0,word(data.leastAccurate?.bets || 0,'Bet measured','Bets measured'))}${stat(data.leastAccurate?.wins || 0,word(data.leastAccurate?.wins || 0,'Win','Wins'))}</div>${runnerUpRows(data.leastAccurateRanking,player => compactTime(player.avgGap))}`,'final-recap-accuracy-screen',accuracyName(data.leastAccurate,'is-red')),
-      screen('The highs and lows','Every second counted','',`<div class="final-recap-showcase-grid">
-        ${splitShowcaseAward('Closest wrong bet',data.closestWrong?.name || '—',data.closestWrong ? compactTime(data.closestWrong.gap) : '—','green')}
-        ${furthestComparisonCard(data.furthestNoWinner,data.furthestWinningDay)}
-        ${splitShowcaseAward('Most bets less than 1 minute away from winning',data.closeWrongLeaders.length ? data.closeWrongLeaders.map(item => item.name).join(', ') : '—',data.closeWrongLeaders.length ? `${data.closeWrongLeaders[0].closeWrong} ${word(data.closeWrongLeaders[0].closeWrong,'bet','bets')}` : '—','gold')}
-      </div>`),
-      screen('Showing up matters','The regulars','',`<div class="final-recap-showcase-grid">
-        ${splitShowcaseAward('Most bets placed',data.mostReliable.length ? data.mostReliable.map(item => item.name).join(', ') : '—',data.mostReliable.length ? `${data.mostReliable[0].bets} ${word(data.mostReliable[0].bets,'bet','bets')}` : '—','green')}
-        ${splitShowcaseAward('Most forgotten bets',data.mostForgot?.name || '—',data.mostForgot ? `${data.mostForgot.forgot} forgotten ${word(data.mostForgot.forgot,'bet','bets')}` : '—','red')}
-        ${splitShowcaseAward('Longest winning streak',data.longestStreak.length ? data.longestStreak.map(item => item.name).join(', ') : '—',data.longestStreak.length ? `${data.longestStreak[0].longestWinStreak} consecutive ${word(data.longestStreak[0].longestWinStreak,'win','wins')}` : '—','gold')}
-      </div>`),
       screen('Winning efficiency','Best win rate','',`<div class="final-recap-showcase-grid final-recap-single-showcase">
         ${splitShowcaseAward(
           'Best win rate',
@@ -704,6 +694,16 @@
           player => `${(player.winRate * 100).toFixed(1)}% · ${player.wins} ${word(player.wins,'win','wins')}`
         )}
       </div>`,'final-recap-win-rate-screen'),
+      screen('The highs and lows','Every second counted','',`<div class="final-recap-showcase-grid">
+        ${splitShowcaseAward('Closest wrong bet',data.closestWrong?.name || '—',data.closestWrong ? compactTime(data.closestWrong.gap) : '—','green')}
+        ${furthestComparisonCard(data.furthestNoWinner,data.furthestWinningDay)}
+        ${splitShowcaseAward('Most bets less than 1 minute away from winning',data.closeWrongLeaders.length ? data.closeWrongLeaders.map(item => item.name).join(', ') : '—',data.closeWrongLeaders.length ? `${data.closeWrongLeaders[0].closeWrong} ${word(data.closeWrongLeaders[0].closeWrong,'bet','bets')}` : '—','gold')}
+      </div>`),
+      screen('Showing up matters','The regulars','',`<div class="final-recap-showcase-grid">
+        ${splitShowcaseAward('Most bets placed',data.mostReliable.length ? data.mostReliable.map(item => item.name).join(', ') : '—',data.mostReliable.length ? `${data.mostReliable[0].bets} ${word(data.mostReliable[0].bets,'bet','bets')}` : '—','green')}
+        ${splitShowcaseAward('Most forgotten bets',data.mostForgot?.name || '—',data.mostForgot ? `${data.mostForgot.forgot} forgotten ${word(data.mostForgot.forgot,'bet','bets')}` : '—','red')}
+        ${splitShowcaseAward('Longest winning streak',data.longestStreak.length ? data.longestStreak.map(item => item.name).join(', ') : '—',data.longestStreak.length ? `${data.longestStreak[0].longestWinStreak} consecutive ${word(data.longestStreak[0].longestWinStreak,'win','wins')}` : '—','gold')}
+      </div>`),
       screen('Caught on camera','Reaction replay','',`<div class="final-recap-reaction-grid">
         ${reactionCard('Winner','media/edoardo-win-vertical.MP4','green')}
         ${reactionCard('Loser','media/giulia-loss.MP4','red')}
