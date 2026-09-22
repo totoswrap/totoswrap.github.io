@@ -940,6 +940,18 @@
 }
 
 .final-recap-thankyou-top {
+  order:1;
+}
+
+.final-recap-thankyou-standings .final-recap-closing-copy {
+  order:2;
+}
+
+.final-recap-thankyou-rest {
+  order:3;
+}
+
+.final-recap-thankyou-top {
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
   justify-content:center;
