@@ -1191,16 +1191,18 @@
   /* Accuracy screens: keep the full ranking above the progress dots. */
   .final-recap-accuracy-screen .final-recap-runner-ups {
     margin-top:10px;
-    row-gap:3px;
+    row-gap:2px;
   }
 
   .final-recap-accuracy-screen .final-recap-runner-up {
-    min-height:32px;
-    padding:4px 8px;
+    min-height:30px;
+    padding:3px 8px;
   }
 
   /* Best Win Rate: keep player names and statistics clearly separated on phones. */
   .final-recap-win-rate-screen .final-recap-runner-up {
+    min-height:30px;
+    padding:3px 8px;
     grid-template-columns:32px minmax(0,1fr) minmax(92px,auto);
     gap:6px;
   }
@@ -1285,8 +1287,8 @@
   }
 
   .final-recap-lead-change {
-    min-height:74px;
-    padding:8px;
+    min-height:70px;
+    padding:7px;
   }
 
   .final-recap-lead-names {
