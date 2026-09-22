@@ -213,6 +213,8 @@
   .final-recap-standings-image-frame,
   .final-recap-closing-copy,
   .final-recap-podium-place,
+  .final-recap-runner-up,
+  .final-recap-thankyou-row,
   .final-recap-replay
 ) {
   opacity:0;
@@ -230,6 +232,8 @@
   .final-recap-standings-image-frame,
   .final-recap-closing-copy,
   .final-recap-podium-place,
+  .final-recap-runner-up,
+  .final-recap-thankyou-row,
   .final-recap-replay
 ) {
   transform:translateY(22px) scale(.86);
@@ -259,6 +263,8 @@
   .final-recap-standings-image-frame,
   .final-recap-closing-copy,
   .final-recap-podium-place,
+  .final-recap-runner-up,
+  .final-recap-thankyou-row,
   .final-recap-replay
 ) {
   animation:final-recap-bubble-in .68s cubic-bezier(.2,.9,.25,1.18) calc(1.82s + var(--recap-reveal-index,0) * .42s) both;
@@ -1333,6 +1339,8 @@
     .final-recap-standings-image-frame,
     .final-recap-closing-copy,
     .final-recap-podium-place,
+    .final-recap-runner-up,
+    .final-recap-thankyou-row,
     .final-recap-replay
   ) { opacity:1; transform:none; }
   .final-recap-screen.is-active .final-recap-title,
@@ -1352,6 +1360,8 @@
     .final-recap-standings-image-frame,
     .final-recap-closing-copy,
     .final-recap-podium-place,
+    .final-recap-runner-up,
+    .final-recap-thankyou-row,
     .final-recap-replay
   ) { animation:none; }
 }

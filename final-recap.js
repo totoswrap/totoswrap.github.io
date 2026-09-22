@@ -514,8 +514,8 @@
 
     return `<div class="final-recap-thankyou-standings">
       <div class="final-recap-thankyou-top">${topRows}</div>
-      <p class="final-recap-closing-copy">It was an honor to freerun with you</p>
       <div class="final-recap-thankyou-rest">${rows(rest)}</div>
+      <p class="final-recap-closing-copy">It was an honor to freerun with you</p>
     </div>`;
   }
 
@@ -768,6 +768,8 @@
         .final-recap-standings-image-frame,
         .final-recap-closing-copy,
         .final-recap-podium-place,
+        .final-recap-runner-up,
+        .final-recap-thankyou-row,
         .final-recap-replay
       `);
       revealables.forEach((item,index) => item.style.setProperty('--recap-reveal-index',index));
