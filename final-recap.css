@@ -730,6 +730,15 @@
   line-height:1.2;
   text-transform:uppercase;
 }
+
+.final-recap-showcase-split small {
+  margin-top:5px;
+  color:var(--dim);
+  font-size:.48rem;
+  letter-spacing:.06em;
+  line-height:1.2;
+  text-transform:uppercase;
+}
 .final-recap-furthest-card { padding:14px; }
 .final-recap-furthest-card > div {
   margin-top:11px;

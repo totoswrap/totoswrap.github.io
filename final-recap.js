@@ -452,11 +452,12 @@
   function award(label, value) {
     return `<div class="final-recap-award"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`;
   }
-  function splitShowcaseAward(label, names, value, tone='gold') {
+  function splitShowcaseAward(label, names, value, tone='gold', detail='') {
     return `<div class="final-recap-showcase-card final-recap-showcase-split" data-tone="${tone}">
       <span>${esc(label)}</span>
       <strong>${esc(value)}</strong>
       <b>${esc(names)}</b>
+      ${detail ? `<small>${esc(detail)}</small>` : ''}
     </div>`;
   }
   function rankedFinalLeaderboard(data) {
@@ -695,7 +696,7 @@
         )}
       </div>`,'final-recap-win-rate-screen'),
       screen('The highs and lows','Every second counted','',`<div class="final-recap-showcase-grid">
-        ${splitShowcaseAward('Closest wrong bet',data.closestWrong?.name || '—',data.closestWrong ? compactTime(data.closestWrong.gap) : '—','green')}
+        ${splitShowcaseAward('Closest wrong bet',data.closestWrong?.name || '—',data.closestWrong ? compactTime(data.closestWrong.gap) : '—','green',data.closestWrong ? `Day ${data.closestWrong.dayIndex} · ${formatDate(data.closestWrong.date)}` : '')}
         ${furthestComparisonCard(data.furthestNoWinner,data.furthestWinningDay)}
         ${splitShowcaseAward('Most bets less than 1 minute away from winning',data.closeWrongLeaders.length ? data.closeWrongLeaders.map(item => item.name).join(', ') : '—',data.closeWrongLeaders.length ? `${data.closeWrongLeaders[0].closeWrong} ${word(data.closeWrongLeaders[0].closeWrong,'bet','bets')}` : '—','gold')}
       </div>`),
